@@ -105,6 +105,23 @@ router.route('/fetch/report/date/').get((req,res)=>{
     .then(analyst=>res.json(analyst))
     .catch(err=>res.status(400).json('err'+err))
 })
+router.route('/fetch/user-data/').get((req, res) => {
+    const empId = req.params.empId;
+    const sDate = req.query.sDate;
+    const eDate = req.query.eDate;
+    const team = req.query.team;
+
+    const query = {
+        empId: empId,
+        team: team,
+        createdAt: { $gte: new Date(sDate), $lte: new Date(eDate) }
+    };
+
+    Analyst.find(query)
+        .then(analyst => res.json(analyst))
+        .catch(err => res.status(400).json('err' + err));
+});
+
 
 router.route('/fetch').get((req,res)=>{
     Analyst.find(req.query)

@@ -126,7 +126,18 @@ function App() {
           <Route exact path="/create-team" element={<CreateTeam />} />
         </Route>
         {isLoggedIn ? (
-          <Route exact path="*" element={<Navigate to="/dashboard" isValid={(isLoggedIn&&role==='open')}/>} />
+        <Route
+        exact
+        path="*"
+        element={
+          isLoggedIn && (role === 'analyst' || role === 'admin') ? (
+            <Dashboard/>
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+      
         ) : (
           <Route exact path="/" element={<Navigate to="/authentication/sign-in" />} />
         )}

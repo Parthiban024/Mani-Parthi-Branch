@@ -616,26 +616,33 @@ function Report() {
           <MDBox sx={{ width: 250, p: 2 }}>
             <InputLabel htmlFor="hour">Daily Log</InputLabel>
 
-            <TextField
-              sx={{ width: 305, mt: 1 }}
-              select
-              fullWidth
-              id="hour"
-              name="sessionOne"
-              value={value.sessionOne}
-              onChange={handleInputchange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="">Select Hours</option>
-              <option value="1hour">1 Hour</option>
-              <option value="2hour">2 Hour</option>
-              <option value="3hour">3 Hour</option>
-              <option value="4hour">4 Hour</option>
-            </TextField>
+         <TextField
+  sx={{ width: 305, mt: 1 }}
+  select
+  fullWidth
+  id="hour"
+  name="sessionOne"
+  value={value.sessionOne}
+  onChange={handleInputchange}
+  variant="outlined"
+  InputLabelProps={{ shrink: true }}
+  SelectProps={{
+    native: true,
+  }}
+>
+  <option value="">Select Time</option>
+  {[...Array(8)].map((_, hour) => (
+    [0, 15, 30, 45].map((minute) => {
+      const time = `${hour + 1} Hour ${minute} Minute`;
+      const value = `${(hour + 1).toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      return (
+        <option key={value} value={value}>
+          {time}
+        </option>
+      );
+    })
+  ))}
+</TextField>
 
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Stack spacing={2} sx={{ width: 305, mt: 1}}>

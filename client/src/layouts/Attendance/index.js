@@ -31,6 +31,7 @@ function Attendance() {
   const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
+    // Fetch data on component mount
     fetch(`/attendance/fetch/att-data?empId=${empId}`)
       .then((response) => response.json())
       .then((data) => {
@@ -41,13 +42,10 @@ function Attendance() {
   }, [empId]);
 
   const columns = [
-    { field: 'id', headerName: 'ID',  editable: false,
-   },
-    // { field: 'name', headerName: 'Name', width: 120 }, // Add this line
-    // { field: 'empId', headerName: 'Employee ID', width: 120 }, // Add this line
-    { field: 'checkInTime', headerName: 'Check In', width: 150,  flex: 1,  },
-    { field: 'checkOutTime', headerName: 'Check Out', width: 150,  flex: 1,  },
-    { field: 'total', headerName: 'Total', width: 150,  flex: 1,  },
+    { field: 'id', headerName: 'ID',  editable: false },
+    { field: 'checkInTime', headerName: 'Check In', width: 150,  flex: 1 },
+    { field: 'checkOutTime', headerName: 'Check Out', width: 150,  flex: 1 },
+    { field: 'total', headerName: 'Total', width: 150,  flex: 1 },
     {
       field: 'currentDate',
       headerName: 'Date',
@@ -62,57 +60,35 @@ function Attendance() {
     name: item.name,
     empId: item.empId,
   }));
-  // const filteredData = selectedDate
-  //   ? mappedData.filter((entry) => entry.currentDate.includes(selectedDate))
-  //   : mappedData;
+
+
 
   const handleCheckin = async () => {
     const timeNow = moment().format('hh:mm a');
     setCheckinTime(timeNow);
-    setCheckinTimeForCheckout(timeNow); // Store check-in time for later use in checkout
-
-    // Save data to local storage
+    setCheckinTimeForCheckout(timeNow); // Set checkinTimeForCheckout here
+  
     localStorage.setItem("checkinTime", timeNow);
     localStorage.setItem("name", name);
     localStorage.setItem("empId", empId);
-
-    // Send data to the backend
-    // try {
-    //   const response = await fetch('/attendance/att', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ checkInTime: timeNow, name: name, empId: empId }),
-    //   });
-
-    //   if (response.ok) {
-    //     console.log('Attendance saved successfully');
-    //   } else {
-    //     console.error('Failed to save attendance');
-    //   }
-    // } catch (error) {
-    //   console.error('Error:', error);
-    // }
   };
-
+  
   const handleCheckout = async () => {
     const checkTime = moment().format('hh:mm a');
     setCheckoutTime(checkTime);
-
-    const checkinMoment = moment(checkinTimeForCheckout, 'hh:mm a'); // Use stored check-in time
+  
+    // Ensure checkinTimeForCheckout is set correctly, use the current time if not set
+    const checkinMoment = moment(checkinTimeForCheckout || moment(), 'hh:mm a');
     const checkoutMoment = moment(checkTime, 'hh:mm a');
     const overAll = moment.duration(checkoutMoment.diff(checkinMoment));
-
-    // Update the state
+  
     setTotal(`${overAll.hours()}hrs : ${overAll.minutes()}mins`);
-
-    // Send data to the backend
+  
     localStorage.setItem("checkoutTime", checkTime);
     localStorage.setItem("name", name);
     localStorage.setItem("empId", empId);
     localStorage.setItem('total', `${overAll.hours()}hrs : ${overAll.minutes()}mins`);
-
+  
     try {
       const response = await fetch('/attendance/att', {
         method: 'POST',
@@ -120,16 +96,28 @@ function Attendance() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          checkInTime: checkinTimeForCheckout, // Use stored check-in time
+          checkInTime: checkinTimeForCheckout || checkTime, // Use stored check-in time or current time
           checkOutTime: checkTime,
           name: name,
           empId: empId,
           total: `${overAll.hours()}hrs : ${overAll.minutes()}mins`,
         }),
       });
-
+  
       if (response.ok) {
         console.log('Checkout time saved successfully');
+  
+        // Reset function logic
+        const resetIntervalId = setInterval(() => {
+          setCheckinTime('');
+          setCheckoutTime('');
+          setTotal('');
+          setRemainingTime('');
+          localStorage.removeItem('checkinTime');
+          localStorage.removeItem('checkoutTime');
+          localStorage.removeItem('total');
+          clearInterval(resetIntervalId);
+        }, 10000);
       } else {
         console.error('Failed to save checkout time');
       }
@@ -137,74 +125,6 @@ function Attendance() {
       console.error('Error:', error);
     }
   };
-
-  const resetStateAndButtons = () => {
-    setCheckinTime('');
-    setCheckoutTime('');
-    setTotal('');
-    setRemainingTime('');
-    localStorage.removeItem('checkinTime');
-    localStorage.removeItem('checkoutTime');
-    localStorage.removeItem('total');
-  };
-
-  useEffect(() => {
-    const intervalId = setInterval(resetStateAndButtons, 60000);
-    return () => clearInterval(intervalId); // Cleanup on component unmount
-  }, []);
-
-  useEffect(() => {
-    const totalResetIntervalId = setInterval(() => {
-      localStorage.removeItem('total');
-      setTotal('');
-    }, 60000);
-
-    return () => clearInterval(totalResetIntervalId); // Cleanup on component unmount
-  }, []);
-
-  useEffect(() => {
-    const storedCheckinTime = localStorage.getItem("checkinTime");
-    const storedCheckoutTime = localStorage.getItem("checkoutTime");
-    const storedTotal = localStorage.getItem('total');
-    const storedName = localStorage.getItem("name");
-    const storedEmpId = localStorage.getItem("empId");
-
-    if (storedName) {
-      dispatch(updateUserName(storedName));
-
-      if (storedEmpId) {
-        dispatch(updateUserEmpId(storedEmpId));
-      }
-
-      if (storedTotal) {
-        setTotal(storedTotal);
-      }
-    }
-
-    if (storedCheckinTime) {
-      setCheckinTime(storedCheckinTime);
-    }
-
-    if (storedCheckoutTime) {
-      setCheckoutTime(storedCheckoutTime);
-    }
-  }, [dispatch]);
-
-  const calculateRemainingTime = () => {
-    const timeNow = moment();
-    const checkinMoment = moment(checkinTime, 'hh:mm a');
-    const checkoutMoment = moment(checkoutTime, 'hh:mm a');
-
-    const remainingDuration = checkoutMoment.diff(timeNow);
-    const remaining = moment.duration(remainingDuration);
-
-    setRemainingTime(`${remaining.hours()}hrs : ${remaining.minutes()}mins`);
-  };
-
-  useEffect(() => {
-    const remainingIntervalId = setInterval(calculateRemainingTime, 60000);
-    return () => clearInterval(remainingIntervalId);
-  }, [checkinTime, checkoutTime]);
 
   return (
     <DashboardLayout>
