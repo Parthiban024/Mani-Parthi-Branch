@@ -224,3 +224,39 @@ margin-bottom: 10px !important;
     /* Add other styling properties as needed */
   }
   
+/* 
+  .css-135f4hd-MuiOutlinedInput-notchedOutline {
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: -5px;
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    pointer-events: none;
+    border-radius: inherit;
+    border-bottom: 1px solid grey !important;
+    border: none ;
+} */
+.css-9igssw-MuiDialogContent-root {
+    padding: 4px 10px!important;
+    /* padding: 1rem; */
+    font-size: 15px!important;
+}
+.css-wa3mca-MuiTypography-root,.css-1premzb-MuiTypography-root,.css-1u62gv6-MuiTypography-root {
+    font-size: 12px!important;
+}
+.css-7pk1jl-MuiAutocomplete-root .MuiAutocomplete-inputRoot .MuiAutocomplete-input {
+    width: 60px!important;
+    min-width: 30px;
+}
+.css-13u83d8 {
+    padding-top: 16px!important; 
+}
+.css-9igssw-MuiDialogContent-root {
+  
+    border-bottom-right-radius: 8px;
+    color: #7b809a;
+    box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+}
