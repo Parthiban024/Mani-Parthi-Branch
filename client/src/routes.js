@@ -19,14 +19,22 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "CheckIn/out",
-    key: "checkIn-Out",
+    name: "Dashboard",
+    key: "Dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/checkIn-Out",
+    route: "/dashboard",
     component: <Dashboard />,
     role: "open",
   },
-
+  {
+    type: "collapse",
+    name: "Attendance",
+    key: "Attendance",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/attendance",
+    component: <Attendance />,
+    role: "analyst",
+  },
   {
     type: "collapse",
     name: "UserTask",
@@ -137,14 +145,6 @@ const routes = [
     route: "/authentication/forget",
     component: <Forgotpwd />,
   },
-  //   {
-  //   type: "collapse",
-  //   name: "Attandance",
-  //   key: "Attandance",
-  //   icon: <Icon fontSize="small">table_view</Icon>,
-  //   route: "/Attandance",
-  //   component: <Attendance />,
-  // },
 ];
 
 export default routes;

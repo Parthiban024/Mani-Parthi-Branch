@@ -31,7 +31,7 @@ import CreateTeam from "./layouts/create-team";
 import Profile from "./layouts/profile";
 import UserReport from "./layouts/UserReport";
 import Employee from "./layouts/employeeReport";
-// import Attendance from "layouts/Attendance";
+import Attendance from "layouts/Attendance";
 import EmployeeAtt from "layouts/Emp-Attendance"
 
 function App() {
@@ -101,7 +101,7 @@ function App() {
         <Route exact path="/authentication/forgotpwd" element={<Forgotpwd />} />
         {/* {getRoutes(routes)} */}
         <Route element={<Protected isValid={isLoggedIn}/>}>
-          <Route exact path="/checkIn-Out" element={<Dashboard/>}/>
+          <Route exact path="/dashboard" element={<Dashboard/>}/>
           <Route exact path="/profile" element={<Profile/>}/>
           {/* <Route exact path="/attendance" element={<Attendance/>}/> */}
         </Route>
@@ -114,9 +114,9 @@ function App() {
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
         </Route>
-        {/* <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
+        <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/attendance" element={<Attendance/>} />
-        </Route> */}
+        </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/user-task" element={<UserReport/>} />
         </Route> <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
@@ -126,7 +126,7 @@ function App() {
           <Route exact path="/create-team" element={<CreateTeam />} />
         </Route>
         {isLoggedIn ? (
-          <Route exact path="*" element={<Navigate to="/checkIn-Out" isValid={(isLoggedIn&&role==='open')}/>} />
+          <Route exact path="*" element={<Navigate to="/dashboard" isValid={(isLoggedIn&&role==='analyst')}/>} />
         ) : (
           <Route exact path="/" element={<Navigate to="/authentication/sign-in" />} />
         )}
