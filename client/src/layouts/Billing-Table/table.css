@@ -231,7 +231,7 @@ margin-bottom: 10px !important;
 
   .css-5usy00-MuiAutocomplete-root .MuiOutlinedInput-root {
     padding: 3px !important;
-    /* border: 1px solid #3a87ea; */
+     border: 1px solid #3a87ea; */
 
 .css-1bliq2b-MuiAutocomplete-root .MuiOutlinedInput-root {
     padding: 3px !important;
@@ -243,7 +243,7 @@ margin-bottom: 10px !important;
   
 }
 
-.css-135f4hd-MuiOutlinedInput-notchedOutline {
+/* .css-135f4hd-MuiOutlinedInput-notchedOutline {
 
     text-align: left;
     position: absolute;
@@ -257,7 +257,7 @@ margin-bottom: 10px !important;
     border-radius: inherit;
     border-bottom: 1px solid grey !important;
     border: none ;
-} */
+}  */
 .css-9igssw-MuiDialogContent-root {
     padding: 4px 10px!important;
     /* padding: 1rem; */
@@ -267,7 +267,7 @@ margin-bottom: 10px !important;
     font-size: 12px!important;
 }
 .css-7pk1jl-MuiAutocomplete-root .MuiAutocomplete-inputRoot .MuiAutocomplete-input {
-    width: 60px!important;
+    width: 100px!important;
     min-width: 30px;
 }
 .css-13u83d8 {
