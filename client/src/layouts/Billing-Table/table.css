@@ -224,3 +224,40 @@ margin-bottom: 10px !important;
     /* Add other styling properties as needed */
   }
   
+
+  .css-5usy00-MuiAutocomplete-root .MuiOutlinedInput-root {
+    padding: 3px !important;
+    /* border: 1px solid #3a87ea; */
+}
+.css-1bliq2b-MuiAutocomplete-root .MuiOutlinedInput-root {
+    padding: 3px !important;
+    /* border: 1px solid #3a87ea; */
+}
+.css-5mmmz-MuiInputBase-input-MuiOutlinedInput-input {
+ 
+    padding: 0.7rem;
+  
+}
+
+.css-135f4hd-MuiOutlinedInput-notchedOutline {
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: -5px;
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    pointer-events: none;
+    border-radius: inherit;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    min-width: 0%;
+    border-color: rgba(0, 0, 0, 0.23);
+    border-color: #a3c2eb !important;
+}
+.css-5mmmz-MuiInputBase-input-MuiOutlinedInput-input {
+
+    height: 1.23em !important;
+}

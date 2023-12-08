@@ -24,7 +24,16 @@ const routes = [
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
-    role: "open",
+    role: "analyst",
+  },
+  {
+    type: "collapse",
+    name: "dashboard",
+    key: "dashboard",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/dashboard",
+    component: <Dashboard />,
+    role: "admin",
   },
   {
     type: "collapse",

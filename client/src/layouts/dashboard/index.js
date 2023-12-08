@@ -36,7 +36,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import 'layouts/Billing-Table/table.css'
 
+// import Divider from "@mui/material/Divider";
+import Icon from "@mui/material/Icon";
 
+import cartoon from "assets/images/cartoon.png";
 
 const UserDataUpload = () => {
 
@@ -54,98 +57,99 @@ const UserDataUpload = () => {
     setDrawerOpen(false);
   }
 
+  let greet;
+  const date = new Date();
+  const hours = date.getHours();
+  const today = moment();
+
+  const styles = {
+    fontSize: 35,
+  };
+
+  if (hours < 12) {
+    greet = "morning";
+    styles.color = "#D90000";
+  } else if (hours >= 12 && hours < 17) {
+    greet = "afternoon";
+    styles.color = "#04733F";
+  } else if (hours >= 17 && hours < 20) {
+    greet = "evening";
+    styles.color = "#04756F";
+  } else {
+    greet = "night";
+    styles.color = "#04756F";
+  }
 
   return (
     <div>
       <DashboardLayout>
         <DashboardNavbar />
-        <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-        }}
-      >
-        <MDButton
-          variant="gradient"
-          color="success"
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={openDrawer}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            // padding: "6px 12px", // Adjusted padding
-            fontSize: "0.7rem", // Adjusted font size
-            borderRadius: "10px",
-            textAlign: "center",
-            minHeight: "10px", // Adjust the height as needed
-            minWidth: "120px",
-           // Adjust the width as needed
-          }}
-        >
-          Add Employee
-        </MDButton>
-      </div>
-        <Drawer anchor="right" PaperProps={{ style: { width: 712 } }} open={drawerOpen} onClose={closeDrawer}>
+
+      <Card lg={{ pb: "20px", height: "100%" }}>
+      <MDBox pt={3} px={2} mb={8}>
         <MDBox
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2, // Adjusted margin-bottom
-          }}
+          display="flex"
+          flexDirection="row"
+          // flexDirection="column"
+          alignItems="center"
+          justifyContent="space-between"
         >
-          <Typography variant="h6">New Task</Typography>
-          <IconButton
-            sx={{ position: "absolute", top: 10, right: 0 }} // Positioned to the top right corner
-            onClick={closeDrawer}
-          >
-            <CloseIcon />
-          </IconButton>
+          <MDTypography variant="h2" fontWeight="bold" color="info" textTransform="capitalize">
+            <div>Good {greet}</div>
+          </MDTypography>
+          <MDBox display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">
+            <MDBox color="text" mr={0.5} lineHeight={0}>
+              <Icon color="info" fontSize="large">
+                schedule
+              </Icon>
+            </MDBox>
+            <MDTypography color="Warning" fontWeight="regular">
+              <div> {today.format("LT")}</div>
+            </MDTypography>
+          </MDBox>
         </MDBox>
-
-        <MDBox pb={5} component="form" role="form" >
-
-          <MDBox sx={{ width: 250, p: 2 }}>
-            <InputLabel htmlFor="hour">Daily Log</InputLabel>
-
-            <TextField
-              sx={{ width: 305, mt: 1 }}
-              select
-              fullWidth
-              id="hour"
-              name="sessionOne"
-              // value={value.sessionOne}
-              // onChange={handleInputchange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="">Select Hours</option>
-              <option value="1hour">1 Hour</option>
-              <option value="2hour">2 Hour</option>
-              <option value="3hour">3 Hour</option>
-              <option value="4hour">4 Hour</option>
-            </TextField>
-
-
+        <MDBox
+          pt={3}
+          pb={2}
+          px={2}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="space-evenly"
+        >
+          <MDBox mb={2}>
+            <MDTypography variant="caption" color="success" fontWeight="bold">
+              <h1>Welcome to Objectways Dashboard</h1>
+            </MDTypography>
+            {/* <MDTypography variant="caption" color="success" fontWeight="bold">
+              <h2>Here whats happening in your account today</h2>
+            </MDTypography> */}
+            {/* <MDTypography component="a" href="#" type="button" color="info" fontWeight="medium">
+            <h4> Whats New</h4>
+          </MDTypography> */}
           </MDBox>
           <MDBox
-            pt={3}
-            px={2}
+            component="ul"
             display="flex"
-            justifyContent="end"
+            flexDirection="column"
             alignItems="center"
+            justifyContent="space-evenly"
+            p={0}
+            m={0}
+            sx={{ listStyle: "none" }}
           >
-            <MDButton type="submit" color="success">
-              Save
-            </MDButton>
+            <Grid container alignItems="center">
+              <Grid item>
+                <MDBox component="img" src={cartoon} alt="cartoon" width="100%" mt={1} />
+              </Grid>
+              <Grid item>
+                {/* <MDBox component="img" src={cartoon} alt="cartoon" width="100%" mt={1} /> */}
+              </Grid>
+            </Grid>
           </MDBox>
         </MDBox>
-
-
-      </Drawer>
+      </MDBox>
+    </Card>
       </DashboardLayout>
     </div>
   );
