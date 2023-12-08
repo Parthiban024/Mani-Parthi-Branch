@@ -1,0 +1,226 @@
+.filter-input{
+    /* display: flex; */
+    justify-content: center;
+    
+    flex-direction: column;
+}
+.css-tdxonj-MuiTableHead-root {
+    display: table-header-group;
+    display: revert !important;
+    text-align: center !important;
+    padding: 6rem 0rem 0 0rem;
+    border-radius: 0.75rem 0.75rem 0 0;
+}
+.css-5mmmz-MuiInputBase-input-MuiOutlinedInput-input {
+    font: inherit;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 4px 0 5px;
+    border: 0;
+    box-sizing: content-box;
+    background: none;
+    height: 1.375em;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+    padding: 16.5px 14px;
+    color: #8b9198 ;
+    padding: 0.75rem;
+
+
+  
+}
+.css-135f4hd-MuiOutlinedInput-notchedOutline {
+    text-align: left;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    top: -5px;
+    left: 0;
+    margin: 0;
+    padding: 0 8px;
+    pointer-events: none;
+    border-radius: 5px !important;
+    border-style: solid;
+    border-width: 1px;
+    overflow: hidden;
+    min-width: 0%;
+    border-color: rgba(0, 0, 0, 0.23);
+    border-color: #d2d6da;
+    /* background-color: #fff; */
+
+}
+
+.table{
+    margin-top: -120px !important;
+}
+
+.table-header {
+    background-color:#318bec!important;
+    font-size: medium!important;
+    
+  }
+
+
+.css-kcq757-MuiPaper-root-MuiDrawer-paper {
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.87);
+    -webkit-transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    box-shadow: 0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12);
+    overflow-y: auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+    -webkit-flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
+    z-index: 1200;
+    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    top: 0;
+    outline: 0;
+    right: 0;
+    /* width: 45.625rem !important; */
+    background-color: #ffffff;
+    /* height: calc(100vh - 4rem)!important; */
+    margin: 1rem;
+    padding-left: 35px;
+    padding-right: 35px;
+    padding-top: 45px;
+    border-radius: 0.75rem;
+    border: none;
+}
+
+.css-kcq757-MuiPaper-root-MuiDrawer-paper {
+
+    margin-top: 0px !important;
+    margin-right: 0px !important;
+    width: 15.625rem;
+    margin-bottom: 0px !important;
+    background-color: #ffffff;
+    /* height: calc(100vh - 2rem); */
+    /* margin: 1rem; */
+    border-radius: 0 !important;
+
+}
+
+.css-1as1wpd-MuiTableCell-root {
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 0.90rem !important;
+    letter-spacing: 0.01071em;
+    display: table-cell;
+    vertical-align: inherit;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    text-align: left;
+    padding: 16px;
+    color: rgba(0, 0, 0, 0.87);
+    padding: 0.75rem 1rem;
+    border-bottom: 0.0625rem solid #f0f2f5;
+}
+
+.css-1x3v3vy {
+    opacity: 1;
+    background: transparent;
+    color: #344767;
+    border-radius: none;
+    box-shadow: none;
+    background: linear-gradient(195deg, #49a3f1, #1A73E8);
+    color: #ffffff;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    margin: 0.09375rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    box-shadow: 0rem 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.1), 0rem 0.125rem 0.25rem -0.0625rem rgba(0, 0, 0, 0.06);
+}
+.css-gl260s-MuiDataGrid-columnHeadersInner {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: flex-start;
+    -webkit-box-align: flex-start;
+    -ms-flex-align: flex-start;
+    align-items: flex-start;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    color: #fff;
+    background-color: #3a87ea;
+}
+.css-8u4kx-MuiTableHead-root {
+    display: table-header-group;
+    display: block;
+    padding: 1rem 1rem 0 1rem;
+    border-radius: 0.75rem 0.75rem 0 0;
+    
+    background-color: #3a87ea;
+    display: table-header-group!important;
+}
+.css-ev8s7o-MuiTableCell-root {
+    color: #fff !important;
+}
+.css-1as1wpd-MuiTableCell-root {
+    color: #fff !important;
+}
+
+.color {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    background-color: #3a87ea;
+}
+.team-filter-icon{
+        fill: currentColor;
+        width: 1em;
+        height: 1em;
+        /* margin-top: 7px; */
+        display: inline-block;
+        font-size: 1.5rem;
+        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        flex-shrink: 0;
+        user-select: none;
+        margin-right: 10px;
+ 
+}
+.team-report-btn{
+margin-top: 10px !important;
+margin-bottom: 10px !important;
+    
+}
+.admin-drawer{
+    width: 2000px !important;
+}
+.filter-popup {
+    padding: 16px;
+    /* Add other styling properties as needed */
+  }
+  
