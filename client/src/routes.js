@@ -19,17 +19,17 @@ import Icon from "@mui/material/Icon";
 const routes = [
   {
     type: "collapse",
-    name: "Dashboard",
-    key: "Dashboard",
+    name: "dashboard",
+    key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
     component: <Dashboard />,
-    role: "open",
+    role: "analyst",
   },
   {
     type: "collapse",
-    name: "Attendance",
-    key: "Attendance",
+    name: "attendance",
+    key: "attendance",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "/attendance",
     component: <Attendance />,
