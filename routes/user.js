@@ -1,6 +1,6 @@
 import express from 'express';
 const router = express.Router();
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Key from '../config/key.js';
 // import passport from 'passport' ;
