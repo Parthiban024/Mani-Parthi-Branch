@@ -629,33 +629,33 @@ function Report() {
           <MDBox sx={{ width: 250, p: 2 }}>
             <InputLabel htmlFor="hour">Daily Log</InputLabel>
 
-         <TextField
-  sx={{ width: 305, mt: 1 }}
-  select
-  fullWidth
-  id="hour"
-  name="sessionOne"
-  value={value.sessionOne}
-  onChange={handleInputchange}
-  variant="outlined"
-  InputLabelProps={{ shrink: true }}
-  SelectProps={{
-    native: true,
-  }}
->
-  <option value="">Select Time</option>
-  {[...Array(8)].map((_, hour) => (
-    [0, 15, 30, 45].map((minute) => {
-      const time = `${hour + 1} Hour ${minute} Minute`;
-      const value = `${(hour + 1).toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-      return (
-        <option key={value} value={value}>
-          {time}
-        </option>
-      );
-    })
-  ))}
-</TextField>
+            <TextField
+              sx={{ width: 305, mt: 1 }}
+              select
+              fullWidth
+              id="hour"
+              name="sessionOne"
+              value={value.sessionOne}
+              onChange={handleInputchange}
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+              SelectProps={{
+                native: true,
+              }}
+            >
+              <option value="">Select Time</option>
+              {[...Array(8)].map((_, hour) => (
+                [0, 15, 30, 45].map((minute) => {
+                  const time = `${hour + 1} Hour ${minute} Minute`;
+                  const value = `${(hour + 1).toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                  return (
+                    <option key={value} value={value}>
+                      {time}
+                    </option>
+                  );
+                })
+              ))}
+            </TextField>
 
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Stack spacing={2} sx={{ width: 305, mt: 1}}>
@@ -690,131 +690,131 @@ function Report() {
       <Grid item xs={12} mt={1} mb={5}>
         {/* <Card> */}
         <Grid item xs={12} mt={4} mb={1}>
-        <Card>
-          <Box>
-            <Popper
-              open={popperOpen}
-              // anchorEl={/* Provide the reference to the element that triggers the popper */}
-              role={undefined}
-              transition
-              disablePortal
-              style={{
-                zIndex: 9999,
-                position: "absolute",
-                top: "116px",
-                left: "0px",
-               
-              }}
-            >
-              {({ TransitionProps, placement }) => (
-                <ClickAwayListener onClickAway={handlePopperClose}>
-                  <Paper>
-                    {/* <DialogTitle sx={{ textAlign: 'center' }}>Your Popper Title</DialogTitle> */}
-                    <DialogContent>
-                      <MDBox
-                        component="form"
-                        role="form"
-                        onSubmit={handleSubmit}
-                        className="filter-popup"
-                        sx={{ display: "flex",  padding:"0px" }}
-                      >
+          <Card>
+            <Box>
+              <Popper
+                open={popperOpen}
+                // anchorEl={/* Provide the reference to the element that triggers the popper */}
+                role={undefined}
+                transition
+                disablePortal
+                style={{
+                  zIndex: 9999,
+                  position: "absolute",
+                  top: "131px",
+                  left: "0px",
+
+                }}
+              >
+                {({ TransitionProps, placement }) => (
+                  <ClickAwayListener onClickAway={handlePopperClose}>
+                    <Paper>
+                      {/* <DialogTitle sx={{ textAlign: 'center' }}>Your Popper Title</DialogTitle> */}
+                      <DialogContent>
                         <MDBox
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            marginRight: 2,
-                          }}
+                          component="form"
+                          role="form"
+                          onSubmit={handleSubmit}
+                          className="filter-popup"
+                          sx={{ display: "flex", padding: "0px" }}
                         >
-                          <MDTypography
-                            variant="h6"
-                            fontWeight="medium"
-                            sx={{ fontSize: '15px' }}
+                          <MDBox
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginRight: 2,
+                            }}
                           >
-                            Start Date
-                          </MDTypography>
-                          <MDInput
-                            type="date"
-                            name="startDate"
-                            size="small"
-                            sx={{ width: "100%" }}
-                            value={values.startDate}
-                            onChange={handleInputChange}
-                          />
-                        </MDBox>
-                        <MDBox
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            marginRight: 2,
-                          }}
-                        >
-                          <MDTypography
-                            variant="h6"
-                            // fontWeight="medium"
-                            size="small"
+                            <MDTypography
+                              variant="h6"
+                              fontWeight="medium"
+                              sx={{ fontSize: '15px' }}
+                            >
+                              Start Date
+                            </MDTypography>
+                            <MDInput
+                              type="date"
+                              name="startDate"
+                              size="small"
+                              sx={{ width: "100%" }}
+                              value={values.startDate}
+                              onChange={handleInputChange}
+                            />
+                          </MDBox>
+                          <MDBox
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginRight: 2,
+                            }}
                           >
-                            End Date
-                          </MDTypography>
-                          <MDInput
-                           id="movie-customized-option-demo"
-                            type="date"
-                            name="endDate"
-                            size="small"
-                            sx={{ width: "100%", border: 'none !important' }}
-                            value={values.endDate}
-                            onChange={handleInputChange}
-                          />
-                        </MDBox>
-                        <MDBox
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            marginRight: 2,
-                          }}
-                        >
-                          <MDTypography variant="h6" fontWeight="medium">
-                            Team
-                          </MDTypography>
-                          <Autocomplete
-                            options={list}
-                            onChange={handleTeamChange}
-                            id="movie-customized-option-demo"
-                            disableCloseOnSelect
-                            sx={{ width: "100%" }}
-                            PopperComponent={(props) => (
-                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
-                                {props.children}
-                              </Popper>
-                            )}
-                            renderInput={(params) => (
-                              <TextField {...params} variant="standard" />
-                            )}
-                          />
-                        </MDBox>
-                        <Box
-                          display="flex"
-                          justifyContent="center"
-                          alignItems="center"
-                          pt={3}
-                        >
-                          <MDButton
-                            variant="gradient"
-                            size="small"
-                            color="info"
-                            type="submit"
+                            <MDTypography
+                              variant="h6"
+                              // fontWeight="medium"
+                              size="small"
+                            >
+                              End Date
+                            </MDTypography>
+                            <MDInput
+                              id="movie-customized-option-demo"
+                              type="date"
+                              name="endDate"
+                              size="small"
+                              sx={{ width: "100%", border: 'none !important' }}
+                              value={values.endDate}
+                              onChange={handleInputChange}
+                            />
+                          </MDBox>
+                          <MDBox
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              marginRight: 2,
+                            }}
                           >
-                            Search
-                          </MDButton>
-                        </Box>
-                      </MDBox>
-                    </DialogContent>
-                  </Paper>
-                </ClickAwayListener>
-              )}
-            </Popper>
-          </Box>
-        </Card>
-      </Grid>
+                            <MDTypography variant="h6" fontWeight="medium">
+                              Team
+                            </MDTypography>
+                            <Autocomplete
+                              options={list}
+                              onChange={handleTeamChange}
+                              id="movie-customized-option-demo"
+                              disableCloseOnSelect
+                              sx={{ width: "100%" }}
+                              PopperComponent={(props) => (
+                                <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                                  {props.children}
+                                </Popper>
+                              )}
+                              renderInput={(params) => (
+                                <TextField {...params} variant="standard" />
+                              )}
+                            />
+                          </MDBox>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            pt={3}
+                          >
+                            <MDButton
+                              variant="gradient"
+                              size="small"
+                              color="info"
+                              type="submit"
+                            >
+                              Search
+                            </MDButton>
+                          </Box>
+                        </MDBox>
+                      </DialogContent>
+                    </Paper>
+                  </ClickAwayListener>
+                )}
+              </Popper>
+            </Box>
+          </Card>
+        </Grid>
         {/* </Card> */}
         {/* {show ? ( */}
         <MDBox pt={4}>
@@ -864,13 +864,13 @@ function Report() {
                                 color: "#1a73e8",
                                 cursor: "pointer",
                                 fontSize: "12.1px",
-                                
+
                               }}
                             >
                               DATE FILTER
                             </MDTypography>
                           </div>
-                    
+
                           <GridToolbar />
                           <div
                             style={{
@@ -879,7 +879,7 @@ function Report() {
                               alignItems: "center",
                             }}
                           >
-                          {/* <MDButton
+                            {/* <MDButton
                             className="team-report-btn"
                             variant="outlined"
                             color="error"

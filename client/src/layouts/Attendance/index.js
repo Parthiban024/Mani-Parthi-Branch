@@ -16,6 +16,8 @@ import { updateUserName, updateUserEmpId } from './userActions';
 import { useDispatch } from 'react-redux';
 import { DataGrid } from '@mui/x-data-grid';
 import DatePicker from 'react-datepicker';
+import checkinImage from '../images/check-in.png'
+import checkoutImage from '../images/check-out.png';
 
 
 function Attendance() {
@@ -130,17 +132,17 @@ function Attendance() {
     <DashboardLayout>
       <DashboardNavbar />
       <Grid item xs={12} mt={1} >
-        <MDBox mt={4} mb={2}>
+        <MDBox mt={2} mb={2}>
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} lg={8}>
-              <Card mb={3}>
+             
                 <MDBox
                   display="flex"
                   flexDirection="column"
                   alignItems="center"
-                  justifyContent="center"
+                  justifyContent="space-between"
                 >
-                  <MDTypography mt={2} mb={3} variant="caption" color="info" fontWeight="regular">
+                  <MDTypography mb={3} style={{  marginRight: '80px' }} variant="caption" color="info" fontWeight="regular">
                     <h1>Employee Attendance</h1>
                   </MDTypography>
                   <MDBox
@@ -150,60 +152,49 @@ function Attendance() {
                     alignItems="center"
                     justifyContent="space-evenly"
                   >
-                    <Grid mt={3} item xs={12} md={6} lg={4}>
-                      <MDButton
-                        mb={3}
-                        type="submit"
-                        color="info"
-                        onClick={handleCheckin}
-                        disabled={!!checkinTime}
-                      >
-                        Check In!
-                      </MDButton>
-                      <MDBox display="flex" flexDirection="column">
-                        <MDTypography
-                          mt={3}
-                          variant="caption"
-                          color="dark"
-                          fontWeight="regular"
-                        >
-                          <h3>Time: {checkinTime}</h3>
-                        </MDTypography>
-                      </MDBox>
-                    </Grid>
-                    <Grid mt={3} item xs={12} md={6} lg={4}>
-                      <MDButton
-                        type="submit"
-                        color="success"
-                        onClick={handleCheckout}
-                        disabled={!!checkoutTime}
-                      >
-                        Check out!
-                      </MDButton>
-                      <MDBox display="flex" flexDirection="column">
-                        <MDTypography
-                          mt={3}
-                          variant="caption"
-                          color="dark"
-                          fontWeight="regular"
-                        >
-                          <h3>Time: {checkoutTime}</h3>
-                        </MDTypography>
-                      </MDBox>
-                    </Grid>
+<Grid mt={3} item xs={12} md={6} lg={4}>
+        <img
+          src={checkinImage}
+          alt="Check In"
+          display='flex'
+          style={{ cursor: 'pointer', marginBottom: '16px', marginLeft: '100px', width: '100%', maxWidth: '100px' }}
+          onClick={handleCheckin}
+          disabled={!!checkinTime}
+        />
+        <MDBox display="flex" flexDirection="column">
+          <MDTypography mt={3} variant="caption" color="dark" fontWeight="regular" style={{  marginLeft: '90px' }}>
+            <h3>Check-In Time: {checkinTime}</h3>
+          </MDTypography>
+        </MDBox>
+      </Grid>
+      <Grid mt={3} item xs={12} md={6} lg={4}>
+        <img
+          src={checkoutImage}
+          alt="Check Out"
+          style={{ cursor: 'pointer', marginBottom: '16px', width: '100%', maxWidth: '100px' }}
+          onClick={handleCheckout}
+          disabled={!!checkoutTime}
+        />
+        <MDBox display="flex" flexDirection="column">
+          <MDTypography mt={3} variant="caption" color="dark" fontWeight="regular" style={{  marginLeft: '0px' }}>
+            <h3>Check-Out Time: {checkoutTime}</h3>
+          </MDTypography>
+        </MDBox>
+      </Grid>
+
                   </MDBox>
                 </MDBox>
                 <MDBox mt={4} px={10} display="flex" flexDirection="column">
-                  <MDTypography mb={1} variant="caption" color="dark" fontWeight="regular">
-                    <h3>Over All Time: {total}</h3>
+                  <MDTypography mb={1} variant="h6" color="info" fontWeight="regular" style={{  marginLeft: '70px' }}>
+                    <h3>Working Hours: {total}</h3>
                   </MDTypography>
                 </MDBox>
-                <MDBox mt={4} px={10} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+                {/* <MDBox mt={4} px={10} display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                   <MDTypography mb={3} variant="caption" color="error" fontWeight="regular">
                     <h1>🚧 Under Development Process 🚧</h1>
                   </MDTypography>
-                </MDBox>
-              </Card>
+                </MDBox> */}
+             
             </Grid>
           </Grid>
         </MDBox>

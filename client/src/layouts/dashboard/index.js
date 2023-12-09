@@ -94,7 +94,7 @@ const UserDataUpload = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <MDTypography variant="h2" fontWeight="bold" color="info" textTransform="capitalize">
+          <MDTypography variant="h3" fontWeight="bold" color="info" textTransform="capitalize">
             <div>Good {greet}</div>
           </MDTypography>
           <MDBox display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">

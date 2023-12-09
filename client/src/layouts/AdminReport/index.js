@@ -329,82 +329,87 @@ function AdminReport() {
                   <Paper>
                     {/* <DialogTitle sx={{ textAlign: 'center' }}>Your Popper Title</DialogTitle> */}
                     <DialogContent>
-    <MDBox
-      component="form"
-      role="form"
-      onSubmit={handleSubmit}
-      className="filter-popup"
-      sx={{ display: "flex",  padding:"0px" }}
-    >
-      
-        {/* Row 1: Start Date and End Date */}
-        <MDBox
+                      <MDBox
+                        component="form"
+                        role="form"
+                        onSubmit={handleSubmit}
+                        className="filter-popup"
+                        sx={{ display: "flex",  padding:"0px" }}
+                      >
+                        <MDBox
                           sx={{
                             display: "flex",
                             flexDirection: "column",
                             marginRight: 2,
                           }}
                         >
-          <MDTypography variant="h6" fontWeight="medium" sx={{ fontSize: '15px' }}>
-            Start Date
-          </MDTypography>
-          <MDInput
-            type="date"
-            name="startDate"
-            size="small"
-            sx={{ width: '100%' }}
-            value={values.startDate}
-            onChange={handleInputChange}
-          />
-                  </MDBox>
-       
-                  <MDBox
+                          <MDTypography
+                            variant="h6"
+                            fontWeight="medium"
+                            sx={{ fontSize: '15px' }}
+                          >
+                            Start Date
+                          </MDTypography>
+                          <MDInput
+                            type="date"
+                            name="startDate"
+                            size="small"
+                            sx={{ width: "100%" }}
+                            value={values.startDate}
+                            onChange={handleInputChange}
+                          />
+                        </MDBox>
+                        <MDBox
                           sx={{
                             display: "flex",
                             flexDirection: "column",
                             marginRight: 2,
                           }}
                         >
-          <MDTypography variant="h6" size="small">
-            End Date
-          </MDTypography>
-          <MDInput
-            type="date"
-            name="endDate"
-            size="small"
-            sx={{ width: '100%', border: 'none !important' }}
-            value={values.endDate}
-            onChange={handleInputChange}
-          />
-      </MDBox>
-
-        {/* Row 2: Team and Name */}
-        <MDBox
+                          <MDTypography
+                            variant="h6"
+                            // fontWeight="medium"
+                            size="small"
+                          >
+                            End Date
+                          </MDTypography>
+                          <MDInput
+                           id="movie-customized-option-demo"
+                            type="date"
+                            name="endDate"
+                            size="small"
+                            sx={{ width: "100%", border: 'none !important' }}
+                            value={values.endDate}
+                            onChange={handleInputChange}
+                          />
+                        </MDBox>
+                        <MDBox
                           sx={{
                             display: "flex",
                             flexDirection: "column",
                             marginRight: 2,
                           }}
                         >
-          <MDTypography variant="h6" fontWeight="medium">
-            Team
-          </MDTypography>
-          <Autocomplete
-            
-            id="movie-customized-option-demo"
-            options={list}
-            disableCloseOnSelect
-            onChange={handleTeamChange}
-            sx={{ width: '100%' }}
-            PopperComponent={(props) => (
-              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
-                {props.children}
-              </Popper>
-            )}
-            renderInput={(params) => <TextField {...params} />}
-          />
-    </MDBox>
-    <MDBox
+                          <MDTypography variant="h6" fontWeight="medium">
+                            Team
+                          </MDTypography>
+                          <Autocomplete
+                            options={list}
+                            onChange={handleTeamChange}
+                            id="movie-customized-option-demo"
+                            disableCloseOnSelect
+                            sx={{ width: "100%" }}
+                            PopperComponent={(props) => (
+                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                                {props.children}
+                              </Popper>
+                            )}
+                            renderInput={(params) => (
+                              <TextField {...params} variant="standard" />
+                            )}
+                          />
+                        </MDBox>
+                        <MDBox
                           sx={{
                             display: "flex",
                             flexDirection: "column",
@@ -414,40 +419,40 @@ function AdminReport() {
           <MDTypography variant="h6" fontWeight="medium">
            User Name
           </MDTypography>
-          <Autocomplete
-            id="combo-box-demo"
-            options={name.map((option) => option.name)}
-            onChange={handleChange}
-            renderInput={(params) => <TextField {...params} size="medium" />}
-            sx={{ width: '100%' }}
-          />
-        </MDBox>  
 
-        {/* Row 3: Search Button */}
-       
-  <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    pt={3}
-  >
-    <MDButton variant="gradient" size="small" color="info" type="submit">
-      Search
-    </MDButton>
-    {/* <MDButton
-      variant="gradient"
-      size="small"
-      color="warning"
-      onClick={handleCancel}
-      style={{ marginLeft: '10px' }}
-    >
-      Cancel
-    </MDButton> */}
-  </Box>
-
-     
-    </MDBox>
-  </DialogContent>
+                   <Autocomplete
+                            options={name.map((option) => option.name)}
+                            onChange={handleChange}
+                            id="movie-customized-option-demo"
+                            disableCloseOnSelect
+                            sx={{ width: "100%" }}
+                            PopperComponent={(props) => (
+                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                                {props.children}
+                              </Popper>
+                            )}
+                            renderInput={(params) => (
+                              <TextField {...params} variant="standard" />
+                            )}
+                          />
+        </MDBox> 
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          pt={3}
+                        >
+                          <MDButton
+                            variant="gradient"
+                            size="small"
+                            color="info"
+                            type="submit"
+                          >
+                            Search
+                          </MDButton>
+                        </Box>
+                      </MDBox>
+                    </DialogContent>
                   </Paper>
                 </ClickAwayListener>
               )}
