@@ -41,6 +41,9 @@ import Stack from '@mui/material/Stack';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 function Report() {
 
 
@@ -455,6 +458,16 @@ function Report() {
     "CM",
   ];
 
+
+  const [popperOpen, setPopperOpen] = useState(false);
+
+  const handlePopperToggle = () => {
+    setPopperOpen((prev) => !prev);
+  };
+
+  const handlePopperClose = () => {
+    setPopperOpen(false);
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -676,95 +689,132 @@ function Report() {
       </Drawer>
       <Grid item xs={12} mt={1} mb={5}>
         {/* <Card> */}
-        <Dialog
-          open={filterDialogOpen}
-          onClose={closeFilterDialog}
-          fullWidth
-          maxWidth="md"
-        >
-          <DialogTitle sx={{ textAlign: 'left' }}>Your Dialog Title</DialogTitle>
-          <DialogContent>
-            <MDBox
-              component="form"
-              role="form"
-              onSubmit={handleSubmit}
-              className="filter-popup"
+        <Grid item xs={12} mt={4} mb={1}>
+        <Card>
+          <Box>
+            <Popper
+              open={popperOpen}
+              // anchorEl={/* Provide the reference to the element that triggers the popper */}
+              role={undefined}
+              transition
+              disablePortal
+              style={{
+                zIndex: 9999,
+                position: "absolute",
+                top: "116px",
+                left: "0px",
+               
+              }}
             >
-              <Grid container spacing={3}>
-                {/* Row 1: Start Date and End Date */}
-                <Grid item xs={6}>
-                  <MDTypography variant="h6" fontWeight="medium">
-                    Start Date
-                  </MDTypography>
-                  <MDInput
-                    type="date"
-                    name="startDate"
-                    sx={{ width: '100%' }}
-                    value={values.startDate}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <MDTypography variant="h6" fontWeight="medium">
-                    End Date
-                  </MDTypography>
-                  <MDInput
-                    type="date"
-                    name="endDate"
-                    sx={{ width: '100%' }}
-                    value={values.endDate}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-
-                {/* Row 2: Team and Name */}
-                <Grid item xs={6}>
-                  <MDTypography variant="h6" fontWeight="medium">
-                    Team
-                  </MDTypography>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={list}
-                    onChange={handleTeamChange}
-                    sx={{ width: '100%' }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </Grid>
-
-
-                {/* Row 3: Search Button */}
-                <Grid item xs={12}>
-                  <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    pt={3}
-                  >
-                    <MDButton variant="gradient" size="small" color="success" type="submit">
-                      Search
-                    </MDButton>
-                    <MDButton
-                      variant="gradient"
-                      size="small"
-                      color="warning"
-                      onClick={handleCancel}
-                      style={{ marginLeft: '10px' }}
-                    >
-                      Cancel
-                    </MDButton>
-                  </Box>
-                </Grid>
-              </Grid>
-            </MDBox>
-          </DialogContent>
-          {/* <DialogActions>
-    Add a close button or any other UI element to close the filter popup
-    <IconButton onClick={closeFilterDialog}>
-      <CloseIcon />
-    </IconButton>
-  </DialogActions> */}
-        </Dialog>
+              {({ TransitionProps, placement }) => (
+                <ClickAwayListener onClickAway={handlePopperClose}>
+                  <Paper>
+                    {/* <DialogTitle sx={{ textAlign: 'center' }}>Your Popper Title</DialogTitle> */}
+                    <DialogContent>
+                      <MDBox
+                        component="form"
+                        role="form"
+                        onSubmit={handleSubmit}
+                        className="filter-popup"
+                        sx={{ display: "flex",  padding:"0px" }}
+                      >
+                        <MDBox
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            marginRight: 2,
+                          }}
+                        >
+                          <MDTypography
+                            variant="h6"
+                            fontWeight="medium"
+                            sx={{ fontSize: '15px' }}
+                          >
+                            Start Date
+                          </MDTypography>
+                          <MDInput
+                            type="date"
+                            name="startDate"
+                            size="small"
+                            sx={{ width: "100%" }}
+                            value={values.startDate}
+                            onChange={handleInputChange}
+                          />
+                        </MDBox>
+                        <MDBox
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            marginRight: 2,
+                          }}
+                        >
+                          <MDTypography
+                            variant="h6"
+                            // fontWeight="medium"
+                            size="small"
+                          >
+                            End Date
+                          </MDTypography>
+                          <MDInput
+                           id="movie-customized-option-demo"
+                            type="date"
+                            name="endDate"
+                            size="small"
+                            sx={{ width: "100%", border: 'none !important' }}
+                            value={values.endDate}
+                            onChange={handleInputChange}
+                          />
+                        </MDBox>
+                        <MDBox
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            marginRight: 2,
+                          }}
+                        >
+                          <MDTypography variant="h6" fontWeight="medium">
+                            Team
+                          </MDTypography>
+                          <Autocomplete
+                            options={list}
+                            onChange={handleTeamChange}
+                            id="movie-customized-option-demo"
+                            disableCloseOnSelect
+                            sx={{ width: "100%" }}
+                            PopperComponent={(props) => (
+                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                                {props.children}
+                              </Popper>
+                            )}
+                            renderInput={(params) => (
+                              <TextField {...params} variant="standard" />
+                            )}
+                          />
+                        </MDBox>
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          pt={3}
+                        >
+                          <MDButton
+                            variant="gradient"
+                            size="small"
+                            color="info"
+                            type="submit"
+                          >
+                            Search
+                          </MDButton>
+                        </Box>
+                      </MDBox>
+                    </DialogContent>
+                  </Paper>
+                </ClickAwayListener>
+              )}
+            </Popper>
+          </Box>
+        </Card>
+      </Grid>
         {/* </Card> */}
         {/* {show ? ( */}
         <MDBox pt={4}>
@@ -795,25 +845,50 @@ function Report() {
                     disableSelectionOnClick
                     components={{
                       Toolbar: () => (
-                        <div style={{ display: 'flex' }}>
-                          <GridToolbar />
-                          {/* Custom filter icon with aria-label */}
-
-
-                          <div style={{ display: 'flex', marginLeft: 'auto', alignItems: 'center' }} >
-
+                        <div style={{ display: "flex" }}>
+                          <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginLeft: "10px", }}>
                             <FilterListIcon
                               className="team-filter-icon"
-                              // style={{ cursor: 'pointer', color: '#3a87ea', fontSize: '20px' }}
-                              // onClick={openDrawer}
-                              style={{ cursor: 'pointer', color: '#3a87ea', fontSize: '20px' }}
-                              onClick={openFilterDialog}
+                              style={{
+                                cursor: "pointer",
+                                color: "#1a73e8",
+                                fontSize: "20px",
+                              }}
+                              onClick={handlePopperToggle}
                               aria-label="Team Filter"
                             />
-                            <MDTypography variant="h6" onClick={openFilterDialog} style={{ color: '#3a87ea', cursor: 'pointer', fontSize: '12.1px', marginRight: '10px', }}>
-                              TEAM FILTER
+                            <MDTypography
+                              variant="h6"
+                              onClick={handlePopperToggle}
+                              style={{
+                                color: "#1a73e8",
+                                cursor: "pointer",
+                                fontSize: "12.1px",
+                                
+                              }}
+                            >
+                              DATE FILTER
                             </MDTypography>
-
+                          </div>
+                    
+                          <GridToolbar />
+                          <div
+                            style={{
+                              display: "flex",
+                              marginLeft: "auto",
+                              alignItems: "center",
+                            }}
+                          >
+                          {/* <MDButton
+                            className="team-report-btn"
+                            variant="outlined"
+                            color="error"
+                            size="small"
+                            style={{ marginRight: "13px" }}
+                            onClick={allReport}
+                          >
+                            &nbsp;All Report
+                          </MDButton> */}
                           </div>
                         </div>
                       ),
