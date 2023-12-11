@@ -185,8 +185,14 @@ export default function ColumnGroupingTable() {
     };
     axios
       .post("/billing/new", billData)
-      .then((res) => toast.success(res.data))
+      // .then((res) => toast.success(res.data))
       // .then(() => (window.location = "/project-report"))
+      .then((res) => {
+        toast.success(res.data);
+        axios.get(`/billing/`).then((response) => {
+          setData(response.data);
+        });
+      })
       .catch((err) => toast.error(err));
     closeDrawer();
     // console.log(bill.tDate)
@@ -240,10 +246,16 @@ export default function ColumnGroupingTable() {
   const [initialData, setInitialData] = useState([]);
 
   // Fetch initial data without filter
+  // useEffect(() => {
+  //   axios.get(`/billing/`).then((response) => {
+  //     // Update initial data
+  //     setInitialData(response.data);
+  //   });
+  // }, []);
   useEffect(() => {
     axios.get(`/billing/`).then((response) => {
-      // Update initial data
       setInitialData(response.data);
+      setData(response.data);
     });
   }, []);
   const handleSubmit = (e) => {
@@ -384,6 +396,7 @@ export default function ColumnGroupingTable() {
                   },
                 }}
                 renderInput={(params) => <TextField {...params} />}
+                required
               />
             </MDBox>
           </MDBox>
@@ -433,6 +446,7 @@ export default function ColumnGroupingTable() {
               fullWidth
               name="batch"
               value={bill.batch}
+              required
               onChange={handleInputChange}
             />
           </MDBox>

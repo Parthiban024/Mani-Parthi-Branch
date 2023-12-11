@@ -51,6 +51,7 @@ function Edit() {
   // Function to handle closing the drawer
   const closeDrawer1 = () => {
     setDrawerOpen1(false);
+    navigate("/projects");
   };
 
   const handleCancel = () => {
@@ -58,7 +59,7 @@ function Edit() {
     // const navigate = useNavigate();
 
     // Navigate to the "project-report" page
-    navigate("/project-report");
+    navigate("/projects");
   };
   const empId = useSelector((state) => state.auth.user.empId);
   const name = useSelector((state) => state.auth.user.name);
@@ -144,9 +145,10 @@ function Edit() {
     axios
       .post("/billing/update/" + id, billData)
       .then((res) => toast.success(res.data))
-      .then(() => (window.location = "/project-report"))
+      // .then(() => (window.location = "/projects"))
       .catch((err) => toast.error(err));
     // console.log(billData)
+    navigate("/projects");
   };
   return (
     <DashboardLayout>
@@ -165,7 +167,7 @@ function Edit() {
             <Typography variant="h6">Update Project</Typography>
             <IconButton
               sx={{ position: "absolute", top: 10, right: 0 }} 
-              // onClick={closeDrawer}
+              onClick={closeDrawer1}
             >
               <CloseIcon />
             </IconButton>
