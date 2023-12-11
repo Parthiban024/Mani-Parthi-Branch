@@ -24,7 +24,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Typography from "@mui/material/Typography";
-import "layouts/Billing-Table/table.css";
 import { useNavigate } from "react-router-dom";
 
 function Edit() {

@@ -29,12 +29,10 @@ import { ToastContainer, toast } from "react-toastify";
 import InputLabel from "@mui/material/InputLabel";
 import Pagination from '@mui/material/Pagination';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import 'layouts/Billing-Table/table.css'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import 'layouts/Billing-Table/table.css'
 
 // import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";

@@ -45,7 +45,6 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import DialogActions from "@mui/material/DialogActions";
 import { useHistory } from 'react-router-dom';
 
-import "layouts/Billing-Table/table.css"; // Replace with the actual path to your MyTable component.
 
 const columns = [
   // { id: "date", label: "Date", minWidth: 100 },

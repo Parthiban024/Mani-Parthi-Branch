@@ -33,7 +33,7 @@ import UserReport from "./layouts/UserReport";
 import Employee from "./layouts/employeeReport";
 import Attendance from "layouts/Attendance";
 import EmployeeAtt from "layouts/Emp-Attendance"
-import "layouts/Billing-Table/table.css";
+
 
 function App() {
   const [controller] = useMaterialUIController();

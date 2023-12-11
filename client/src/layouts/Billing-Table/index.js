@@ -45,7 +45,6 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import DialogActions from "@mui/material/DialogActions";
 import { useHistory } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import "layouts/Billing-Table/table.css";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 

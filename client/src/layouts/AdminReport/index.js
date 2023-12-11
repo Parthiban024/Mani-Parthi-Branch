@@ -21,7 +21,6 @@ import axios from "axios";
 import moment from "moment";
 import Drawer from "@mui/material/Drawer";
 import FilterListIcon from '@material-ui/icons/FilterList';
-import 'layouts/Billing-Table/table.css'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from "@mui/icons-material/Close";
