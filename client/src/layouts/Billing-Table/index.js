@@ -47,7 +47,7 @@ import { useHistory } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
-
+ 
 export default function ColumnGroupingTable() {
   // drawer code
   const columns = [
@@ -58,7 +58,7 @@ export default function ColumnGroupingTable() {
     { field: "jobs.cDate", headerName: "EndDate", flex: 1 },
     { field: "jobs.managerTeam", headerName: "Manager", flex: 1 },
     { field: "jobs.status1", headerName: "Status", flex: 1 },
-
+ 
     {
       field: "action",
       headerName: "Action",
@@ -82,7 +82,7 @@ export default function ColumnGroupingTable() {
       ),
     },
   ];
-
+ 
   const [count, setCount] = useState({ aTotal: "" });
   const [bill, setBill] = useState({
     tDate: "",
@@ -95,42 +95,42 @@ export default function ColumnGroupingTable() {
       cDate: "",
     },
   });
-
+ 
   const [drawerOpen, setDrawerOpen] = useState(false);
-
+ 
   const openDrawer = () => {
     setDrawerOpen(true);
   };
-
+ 
   const closeDrawer = () => {
     setDrawerOpen(false);
   };
-
+ 
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
-
+ 
   const openFilterDialog = () => {
     setFilterDialogOpen(true);
   };
-
+ 
   const closeFilterDialog = () => {
     setFilterDialogOpen(false);
   };
   const handleCancel = () => {
     setValues(initialValues);
     setTeamList(null);
-
+ 
     // Close the filter popup
     closeFilterDialog();
   };
-
+ 
   const empId = useSelector((state) => state.auth.user.empId);
   const name = useSelector((state) => state.auth.user.name);
-
+ 
   const [teamList, setTeamList] = useState(null);
-
+ 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
+ 
     setBill({
       ...bill,
       [name]: value,
@@ -139,9 +139,9 @@ export default function ColumnGroupingTable() {
       // status1: status,
     });
   };
-
+ 
   const handleTeamChange = (event, value) => setTeamList(value);
-
+ 
   const handleManagerTeamChange = (event, value) => {
     setBill({
       ...bill,
@@ -151,7 +151,7 @@ export default function ColumnGroupingTable() {
       },
     });
   };
-
+ 
   const handleStatusChange = (event) => {
     setBill({
       ...bill,
@@ -161,7 +161,7 @@ export default function ColumnGroupingTable() {
       },
     });
   };
-
+ 
   useEffect(() => {
     setCount({
       ...count,
@@ -197,22 +197,22 @@ export default function ColumnGroupingTable() {
     closeDrawer();
     // console.log(bill.tDate)
   };
-
+ 
   // drawer code end
-
+ 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [data, setData] = useState([]);
-
+ 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+ 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
+ 
   const handleDelete = (id) => {
     axios
       .delete("/billing/" + id)
@@ -220,7 +220,7 @@ export default function ColumnGroupingTable() {
       .catch((err) => console.log(err));
     setData(data.filter((el) => el._id !== id));
   };
-
+ 
   // card
   const initialValues = {
     startDate: "",
@@ -228,13 +228,13 @@ export default function ColumnGroupingTable() {
     team: "",
   };
   const [values, setValues] = useState(initialValues);
-
+ 
   const [teamlist, setTeamlist] = useState(null);
   // const [report, setReport] = useState([]);
-
+ 
   const handleInputchange = (e) => {
     const { name, value } = e.target;
-
+ 
     setValues({
       ...values,
       [name]: value,
@@ -242,9 +242,9 @@ export default function ColumnGroupingTable() {
   };
   // const handleChange = (event, value) => setEmpName(value);
   const handleTeamchange = (event, value) => setTeamlist(value);
-
+ 
   const [initialData, setInitialData] = useState([]);
-
+ 
   // Fetch initial data without filter
   // useEffect(() => {
   //   axios.get(`/billing/`).then((response) => {
@@ -260,11 +260,11 @@ export default function ColumnGroupingTable() {
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
-
+ 
     const sDate = values.startDate;
     const eDate = values.endDate;
     const team = teamlist;
-
+ 
     if (team == null) {
       axios
         .get("billing/fetch/date/?sDate=" + sDate + "&eDate=" + eDate)
@@ -304,11 +304,11 @@ export default function ColumnGroupingTable() {
   // Team List
   const List = ["CV", "NLP", "CM", "Sourcing"];
   const [popperOpen, setPopperOpen] = useState(false);
-
+ 
   const handlePopperToggle = () => {
     setPopperOpen((prev) => !prev);
   };
-
+ 
   const handlePopperClose = () => {
     setPopperOpen(false);
   };
@@ -356,7 +356,7 @@ export default function ColumnGroupingTable() {
             <CloseIcon />
           </IconButton>
         </MDBox>
-
+ 
         <MDBox pb={5} component="form" role="form" onSubmit={submit}>
           <MDBox
             sx={{
@@ -437,7 +437,7 @@ export default function ColumnGroupingTable() {
               <option value="Naveen">Naveen</option>
               <option value="Sowmiya">Sowmiya</option>
             </TextField>
-
+ 
             <TextField
               sx={{ width: 305, ml: 2 }}
               type="number"
@@ -666,7 +666,7 @@ export default function ColumnGroupingTable() {
           </Box>
         </Card>
       </Grid>
-
+ 
       <Grid item xs={12} mt={1} mb={10}>
         <Card>
           <Box sx={{ height: 480, width: "100%" }}>
@@ -684,7 +684,7 @@ export default function ColumnGroupingTable() {
                     ),
                   };
                 }
-
+ 
                 if (column.field === "jobs.managerTeam") {
                   return {
                     ...column,
@@ -695,7 +695,7 @@ export default function ColumnGroupingTable() {
                     ),
                   };
                 }
-
+ 
                 if (column.field === "jobs.status1") {
                   return {
                     ...column,
@@ -716,7 +716,7 @@ export default function ColumnGroupingTable() {
                     ),
                   };
                 }
-
+ 
                 return column;
               })}
               pageSize={10}
@@ -744,13 +744,13 @@ export default function ColumnGroupingTable() {
                           color: "#1a73e8",
                           cursor: "pointer",
                           fontSize: "12.1px",
-                          
+                         
                         }}
                       >
                         DATE FILTER
                       </MDTypography>
                     </div>
-              
+             
                     <GridToolbar />
                     {/* <div
                       style={{
@@ -777,7 +777,7 @@ export default function ColumnGroupingTable() {
           </Box>
         </Card>
       </Grid>
-
+ 
       <Footer />
       <ToastContainer />
     </DashboardLayout>
