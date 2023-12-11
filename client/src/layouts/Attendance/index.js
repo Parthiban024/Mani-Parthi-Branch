@@ -119,7 +119,7 @@ function Attendance() {
           localStorage.removeItem('checkoutTime');
           localStorage.removeItem('total');
           clearInterval(resetIntervalId);
-        }, 1000);
+        }, 10000);
       } else {
         console.error('Failed to save checkout time');
       }

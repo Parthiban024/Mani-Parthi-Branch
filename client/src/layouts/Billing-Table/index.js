@@ -282,7 +282,7 @@ export default function ColumnGroupingTable() {
   //     .get("/billing/")
   //     .then((res) => setData(res.data))
   //     .catch((err) => console.log(err));
-  //   // setData(data.filter((el) => el._id !== id));
+  //   // setData(data.filter((el) = > el._id !== id));
   // };
   const formattedData = data.map((row) => ({
     ...row,
