@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -296,11 +297,14 @@ export default function ColumnGroupingTable() {
   //     .catch((err) => console.log(err));
   //   // setData(data.filter((el) = > el._id !== id));
   // };
-  const formattedData = data.map((row) => ({
-    ...row,
-    id: row._id,
-    // Assuming _id is the unique identifier
-  }));
+  const formattedData = useMemo(() => {
+    const reversedData = data.map((row) => ({
+      ...row,
+      id: row._id,
+    }));
+    reversedData.reverse();
+    return reversedData;
+  }, [data]);
   // Team List
   const List = ["CV", "NLP", "CM", "Sourcing"];
   const [popperOpen, setPopperOpen] = useState(false);
@@ -336,7 +340,7 @@ export default function ColumnGroupingTable() {
             minWidth: "120px",
           }}
         >
-          Add Project
+          Create Project
         </MDButton>
       </div>
       <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius: "0", padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
@@ -671,58 +675,59 @@ export default function ColumnGroupingTable() {
         <Card>
           <Box sx={{ height: 480, width: "100%" }}>
             <DataGrid
-              rows={data.length === 0 ? initialData : formattedData}
-              getRowId={(row) => row._id}
-              columns={columns.map((column) => {
-                if (column.field === "reportDate") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {moment(params.row.reportDate).format("DD/MM/YYYY")}
-                      </TableCell>
-                    ),
-                  };
-                }
- 
-                if (column.field === "jobs.managerTeam") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {params.row.jobs?.managerTeam}
-                      </TableCell>
-                    ),
-                  };
-                }
- 
-                if (column.field === "jobs.status1") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {params.row.jobs?.status1}
-                      </TableCell>
-                    ),
-                  };
-                }
-                if (column.field === "jobs.cDate") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
-                      </TableCell>
-                    ),
-                  };
-                }
- 
-                return column;
-              })}
-              pageSize={10}
-              rowsPerPageOptions={[10, 25, 50, 100]}
-              checkboxSelection
-              disableSelectionOnClick
+             rows={formattedData}
+             getRowId={(row) => row._id}
+             columns={columns.map((column) => {
+               if (column.field === "reportDate") {
+                 return {
+                   ...column,
+                   renderCell: (params) => (
+                     <TableCell style={{ padding: 0 }}>
+                       {moment(params.row.reportDate).format("DD/MM/YYYY")}
+                     </TableCell>
+                   ),
+                 };
+               }
+           
+               if (column.field === "jobs.managerTeam") {
+                 return {
+                   ...column,
+                   renderCell: (params) => (
+                     <TableCell style={{ padding: 0 }}>
+                       {params.row.jobs?.managerTeam}
+                     </TableCell>
+                   ),
+                 };
+               }
+           
+               if (column.field === "jobs.status1") {
+                 return {
+                   ...column,
+                   renderCell: (params) => (
+                     <TableCell style={{ padding: 0 }}>
+                       {params.row.jobs?.status1}
+                     </TableCell>
+                   ),
+                 };
+               }
+               if (column.field === "jobs.cDate") {
+                 return {
+                   ...column,
+                   renderCell: (params) => (
+                     <TableCell style={{ padding: 0 }}>
+                       {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
+                     </TableCell>
+                   ),
+                 };
+               }
+           
+               return column;
+             })}
+             pageSize={10}
+             rowsPerPageOptions={[10, 25, 50, 100]}
+             checkboxSelection
+             disableSelectionOnClick
+            //  disableColumnMenu
               components={{
                 Toolbar: () => (
                   <div style={{ display: "flex" }}>
@@ -783,3 +788,4 @@ export default function ColumnGroupingTable() {
     </DashboardLayout>
   );
 }
+ 
