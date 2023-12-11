@@ -339,6 +339,16 @@ function Report() {
   };
   const handleTeamChange = (event, value) => setTeamList(value);
   const [show, setShow] = useState(false);
+
+  const [initialData, setInitialData] = useState([]);
+
+  // Fetch initial data without filter
+  useEffect(() => {
+    axios.get(`/analyst/fetch/userdata/?empId=${empId}`).then((response) => {
+      // Update initial data
+      setInitialData(response.data);
+    });
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -365,8 +375,8 @@ function Report() {
   };
 
   // tabel report
-  const columns = [
-    { field: "id", headerName: "ID", width: 50 },
+
+  const initialDataColumns = [
     {
       field: "name",
       headerName: "Name",
@@ -382,17 +392,18 @@ function Report() {
       flex: 1,
     },
     {
-      field: "date",
+      field: "dateTask",
       headerName: "Date",
-      // type: 'date',
       width: 130,
       editable: false,
       flex: 1,
+      valueFormatter: (params) => {
+        return moment(params.value).format("DD-MM-YYYY");
+      },
     },
     {
       field: "projectName",
       headerName: "Project Name",
-      // type: 'time',
       width: 150,
       editable: false,
       flex: 1,
@@ -400,7 +411,6 @@ function Report() {
     {
       field: "task",
       headerName: "Task",
-      // type: 'time',
       width: 150,
       editable: false,
       flex: 1,
@@ -408,7 +418,6 @@ function Report() {
     {
       field: "managerTask",
       headerName: "Project Manager",
-      // type: 'number',
       width: 150,
       editable: false,
       flex: 1,
@@ -416,11 +425,14 @@ function Report() {
     {
       field: "sessionOne",
       headerName: "Hours",
-      // type: 'number',
       width: 150,
       editable: false,
       flex: 1,
     },
+  ];
+  const columns = [
+    { field: "id", headerName: "ID", width: 50 },
+    ...initialDataColumns,
   ];
 
   const rows = useMemo(
@@ -497,7 +509,7 @@ function Report() {
           Add Task
         </MDButton>
       </div>
-      <Drawer anchor="right" PaperProps={{ style: { width: 712 } }} open={drawerOpen} onClose={closeDrawer}>
+      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius:'0', padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
         <MDBox
           sx={{
             display: "flex",
@@ -837,16 +849,17 @@ function Report() {
               <MDBox pt={0}>
                 <Box sx={{ height: 500, width: "100%", display: "flex", borderRadius: 20 }}>
                   <DataGrid
-                    rows={rows}
-                    columns={columns}
+                   rows={report.length === 0 ? initialData : rows} // Use initialData when report is empty
+                   columns={report.length === 0 ? initialDataColumns : columns} // Use initialDataColumns when report is empty
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     checkboxSelection
+                     getRowId={(row) => row._id}
                     disableSelectionOnClick
                     components={{
                       Toolbar: () => (
                         <div style={{ display: "flex" }}>
-                          <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginLeft: "10px", }}>
+                          <div style={{ display: "flex", alignItems: "center", marginLeft: "10px", }}>
                             <FilterListIcon
                               className="team-filter-icon"
                               style={{

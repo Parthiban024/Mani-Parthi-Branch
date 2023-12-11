@@ -152,12 +152,7 @@ function Edit() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Drawer
-        anchor="right"
-        PaperProps={{ style: { width: 712 } }}
-        open={drawerOpen1}
-        onClose={closeDrawer1}
-      >
+<Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius:'0', padding: "23px" } }} open={drawerOpen1} onClose={closeDrawer1}>
         <div>
           <MDBox
             sx={{
@@ -207,7 +202,7 @@ function Edit() {
                 </InputLabel>
                 <Autocomplete
                   disablePortal
-                  sx={{ width: 280, mt: 1,  "& .MuiOutlinedInput-root": {
+                  sx={{ width: 305, mt: 1,  "& .MuiOutlinedInput-root": {
                     padding: 0.5,
                   },}}
                   id="combo-box-demo"
@@ -268,7 +263,7 @@ function Edit() {
               </TextField>
 
               <TextField
-                sx={{ width: 280, ml: 2 }}
+                sx={{ width: 305, ml: 2 }}
                 type="number"
                 id="members"
                 variant="outlined"
@@ -295,7 +290,7 @@ function Edit() {
             </MDBox>
             <MDBox sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
               <TextField
-                sx={{ width: 1010, ml: 2 }}
+                sx={{ width: 305, ml: 2 }}
                 type="date"
                 variant="outlined"
                 id="start-date"
@@ -306,7 +301,7 @@ function Edit() {
                 required
               />
               <TextField
-                sx={{ width: 910, ml: 2, mr: 3 }}
+                sx={{ width: 305, ml: 2, mr: 3 }}
                 variant="outlined"
                 id="end-date"
                 type="date"

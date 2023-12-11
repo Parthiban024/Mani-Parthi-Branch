@@ -238,6 +238,15 @@ export default function ColumnGroupingTable() {
   // const handleChange = (event, value) => setEmpName(value);
   const handleTeamchange = (event, value) => setTeamlist(value);
 
+  const [initialData, setInitialData] = useState([]);
+
+  // Fetch initial data without filter
+  useEffect(() => {
+    axios.get(`/billing/`).then((response) => {
+      // Update initial data
+      setInitialData(response.data);
+    });
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -269,13 +278,13 @@ export default function ColumnGroupingTable() {
         .catch((err) => console.log(`Error:${err}`));
     }
   };
-  const allReport = (e) => {
-    axios
-      .get("/billing/")
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
-    // setData(data.filter((el) => el._id !== id));
-  };
+  // const allReport = (e) => {
+  //   axios
+  //     .get("/billing/")
+  //     .then((res) => setData(res.data))
+  //     .catch((err) => console.log(err));
+  //   // setData(data.filter((el) => el._id !== id));
+  // };
   const formattedData = data.map((row) => ({
     ...row,
     id: row._id,
@@ -319,12 +328,7 @@ export default function ColumnGroupingTable() {
           Add Project
         </MDButton>
       </div>
-      <Drawer
-        anchor="right"
-        PaperProps={{ style: { width: 712 } }}
-        open={drawerOpen}
-        onClose={closeDrawer}
-      >
+      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius: "0", padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
         <MDBox
           sx={{
             display: "flex",
@@ -374,7 +378,7 @@ export default function ColumnGroupingTable() {
                 options={list}
                 onChange={handleTeamChange}
                 sx={{
-                  width: 280,
+                  width: 305,
                   mt: 1,
                   "& .MuiOutlinedInput-root": {
                     padding: 0.5,
@@ -392,10 +396,10 @@ export default function ColumnGroupingTable() {
               mt: 1,
             }}
           >
-            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="manager">
+            <InputLabel sx={{ mt: 2, ml: 2 }} htmlFor="manager">
               Manager
             </InputLabel>
-            <InputLabel sx={{ mt: 2, mr: 25 }} htmlFor="members">
+            <InputLabel sx={{ mt: 2, mr: 28 }} htmlFor="members">
               No.of.Resources
             </InputLabel>
           </MDBox>
@@ -423,7 +427,7 @@ export default function ColumnGroupingTable() {
             </TextField>
 
             <TextField
-              sx={{ width: 280, ml: 2 }}
+              sx={{ width: 305, ml: 2 }}
               type="number"
               id="members"
               variant="outlined"
@@ -444,13 +448,13 @@ export default function ColumnGroupingTable() {
             <InputLabel sx={{ mt: 2, ml: 2 }} htmlFor="start-date">
               Start date
             </InputLabel>
-            <InputLabel sx={{ mt: 2, mr: 30.5 }} htmlFor="end-date">
+            <InputLabel sx={{ mt: 2, mr: 34 }} htmlFor="end-date">
               End date
             </InputLabel>
           </MDBox>
-          <MDBox sx={{ display: "flex", flexDirection: "row", mt: 1 }}>
+          <MDBox sx={{ p: 1, ml: 1 }}>
             <TextField
-              sx={{ width: 685, ml: 2, mr: 2 }}
+              sx={{ width: 305 }}
               type="date"
               variant="outlined"
               id="start-date"
@@ -461,7 +465,7 @@ export default function ColumnGroupingTable() {
               required
             />
             <TextField
-              sx={{ width: 620, mr: 2.5 }}
+              sx={{ width: 305, ml:2 }}
               type="date"
               variant="outlined"
               id="end-date"
@@ -476,7 +480,7 @@ export default function ColumnGroupingTable() {
           <MDBox sx={{ width: 200, p: 1, mt: 3, ml: 1 }}>
             <InputLabel htmlFor="status">Status</InputLabel>
             <TextField
-              sx={{ width: 610, mt: 1, mr: 1 }}
+              sx={{ width: 625, mt: 1, mr: 1 }}
               select
               fullWidth
               id="status"
@@ -523,7 +527,7 @@ export default function ColumnGroupingTable() {
           </MDBox>
         </MDBox>
       </Drawer>
-      <Grid item xs={12} mt={4} mb={1}>
+      <Grid item xs={12} mt={2} mb={1}>
         <Card>
           <Box>
             <Popper
@@ -535,7 +539,7 @@ export default function ColumnGroupingTable() {
               style={{
                 zIndex: 9999,
                 position: "absolute",
-                top: "116px",
+                top: "100px",
                 left: "0px",
                
               }}
@@ -654,7 +658,8 @@ export default function ColumnGroupingTable() {
         <Card>
           <Box sx={{ height: 480, width: "100%" }}>
             <DataGrid
-              rows={formattedData}
+              rows={data.length === 0 ? initialData : formattedData}
+              getRowId={(row) => row._id}
               columns={columns.map((column) => {
                 if (column.field === "reportDate") {
                   return {
@@ -734,11 +739,11 @@ export default function ColumnGroupingTable() {
                     </div>
               
                     <GridToolbar />
-                    <div
+                    {/* <div
                       style={{
                         display: "flex",
                         marginLeft: "auto",
-                        alignItems: "center",
+                        alignItems: "center"
                       }}
                     >
                     <MDButton
@@ -751,7 +756,7 @@ export default function ColumnGroupingTable() {
                     >
                       &nbsp;All Report
                     </MDButton>
-                    </div>
+                    </div> */}
                   </div>
                 ),
               }}

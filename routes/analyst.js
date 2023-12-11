@@ -59,6 +59,15 @@ router.route('/fetch/user-data/').get((req,res)=>{
     .then(analyst=>res.json(analyst))
     .catch(err=>res.status(400).json('err'+err))
 })
+router.route('/fetch/userdata/').get((req,res)=>{
+
+    const empId = req.query.empId
+
+
+    Analyst.find({empId:empId})
+    .then(analyst=>res.json(analyst))
+    .catch(err=>res.status(400).json('err'+err))
+})
 
 //Fetch report of user particular team
 
@@ -72,6 +81,7 @@ router.route('/fetch/report/').get((req,res)=>{
     .then(analyst=>res.json(analyst))
     .catch(err=>res.status(400).json('err'+err))
 })
+
 
 //Fetch report by team
 

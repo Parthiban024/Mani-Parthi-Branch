@@ -43,7 +43,7 @@ function Attendance() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Grid item xs={12} mt={1} >
+      {/* <Grid item xs={12} mt={1} >
         <MDBox mt={4} mb={8}>
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} lg={8}>
@@ -62,9 +62,9 @@ function Attendance() {
             </Grid>
           </Grid>
         </MDBox>
-      </Grid>
+      </Grid> */}
 
-      <Grid >
+      <Grid mt={4} mb={10}>
         <Card>
         <div style={{ height: 370, width: '100%' }}>
           <DataGrid rows={attendanceData} columns={columns} pageSize={5} />

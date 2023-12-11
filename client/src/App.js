@@ -33,6 +33,7 @@ import UserReport from "./layouts/UserReport";
 import Employee from "./layouts/employeeReport";
 import Attendance from "layouts/Attendance";
 import EmployeeAtt from "layouts/Emp-Attendance"
+import "layouts/Billing-Table/table.css";
 
 function App() {
   const [controller] = useMaterialUIController();
@@ -108,9 +109,9 @@ function App() {
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/team-report" element={<AdminReport/>} />
         </Route>
-        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        {/* <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee" element={<Employee/>} />
-        </Route>
+        </Route> */}
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
         </Route>

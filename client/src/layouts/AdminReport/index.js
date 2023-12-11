@@ -646,7 +646,7 @@ function AdminReport() {
                             variant="outlined"
                             color="error"
                             size="small"
-                            style={{ marginRight: "13px" }}
+                            style={{ marginRight: "13px", marginTop: "15px" }}
                             onClick={allReport}
                           >
                             &nbsp;All Report
