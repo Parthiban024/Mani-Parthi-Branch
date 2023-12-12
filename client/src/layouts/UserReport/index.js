@@ -469,9 +469,9 @@ function Report() {
     ...initialDataColumns,
   ];
 
-  const rows = useMemo( 
-    () => {
-       const reversedData = report.map((item, index) => ({
+  const rows = useMemo(
+    () =>
+      report.map((item, index) => ({
         ...item,
         id: index + 1,
         name: item.name,
@@ -495,10 +495,8 @@ function Report() {
         // others: item.others,
         // comments: item.comments,
         // total: item.total,
-      }));
-      reversedData.reverse();
-      return reversedData;
-    },[report]
+      })),
+    [report]
   );
   // Team List
   const list = [
