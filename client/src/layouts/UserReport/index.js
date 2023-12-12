@@ -264,12 +264,14 @@ function Report() {
     };
 
     axios
-      .post("/analyst/add", userData)
-      .then(() => toast.success("Successfully Data Submitted 👌"))
-      .catch((err) => toast.error(`Try Again Followed Error Acquired: ${err}☹️`));
-
-    // console.log(userData);
-    closeDrawer()
+    .post("/analyst/add", userData)
+    .then(() => {
+      toast.success("Successfully Data Submitted 👌");
+      closeDrawer();
+      // Fetch data again after submitting a new task
+      fetchData();
+    })
+    .catch((err) => toast.error(`Try Again Followed Error Acquired: ${err}☹️`));
   };
 
   // useEffect(() => {
@@ -353,12 +355,24 @@ function Report() {
   const [initialData, setInitialData] = useState([]);
 
   // Fetch initial data without filter
+  // Fetch initial data
   useEffect(() => {
     axios.get(`/analyst/fetch/userdata/?empId=${empId}`).then((response) => {
-      // Update initial data
       setInitialData(response.data);
     });
-  }, []);
+  }, [empId]);
+
+  // Fetch data when a new task is submitted
+  const fetchData = () => {
+    axios
+      .get(
+        `analyst/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
+      )
+      .then((res) => {
+        setReport(res.data);
+      })
+      .catch((err) => console.log(`Error:${err}`));
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -714,21 +728,6 @@ function Report() {
               <option value="45minutes">45 minutes</option>
               <option value="60minutes">60 minutes</option>
             </TextField>
-
-            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Stack spacing={2} sx={{ width: 305, mt: 1}}>
-        <TimePicker
-        id="hour"
-         name="sessionOne"
-         value={value.sessionOne}
-         onChange={handleInputchange}
-          referenceDate={dayjs('2022-04-17')}
-        />
-        <Typography>
-          Stored value: {values == null ? 'null' : values.format()}
-        </Typography>
-      </Stack>
-    </LocalizationProvider> */}
           </MDBox>
           <MDBox
             pt={3}
