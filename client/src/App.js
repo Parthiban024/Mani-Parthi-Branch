@@ -114,7 +114,7 @@ function App() {
         </Route> */}
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
-        </Route>
+        </Route>     
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/attendance" element={<Attendance/>} />
         </Route>
