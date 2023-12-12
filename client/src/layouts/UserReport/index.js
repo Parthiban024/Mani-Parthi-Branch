@@ -270,6 +270,10 @@ function Report() {
       closeDrawer();
       // Fetch data again after submitting a new task
       fetchData();
+      axios.get(`/analyst/fetch/userdata/?empId=${empId}`).then((response) => {
+        setInitialData(response.data);
+      });
+      // setReport((prevReport) => [userData, ...prevReport]);
     })
     .catch((err) => toast.error(`Try Again Followed Error Acquired: ${err}☹️`));
   };
@@ -465,9 +469,9 @@ function Report() {
     ...initialDataColumns,
   ];
 
-  const rows = useMemo(
-    () =>
-      report.map((item, index) => ({
+  const rows = useMemo( 
+    () => {
+       const reversedData = report.map((item, index) => ({
         ...item,
         id: index + 1,
         name: item.name,
@@ -491,8 +495,10 @@ function Report() {
         // others: item.others,
         // comments: item.comments,
         // total: item.total,
-      })),
-    [report]
+      }));
+      reversedData.reverse();
+      return reversedData;
+    },[report]
   );
   // Team List
   const list = [
