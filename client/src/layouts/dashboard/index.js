@@ -33,14 +33,14 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-
+import PropTypes from "prop-types";
 // import Divider from "@mui/material/Divider";
 import Icon from "@mui/material/Icon";
 
 import cartoon from "assets/images/cartoon.png";
 
-const UserDataUpload = () => {
-
+const UserDataUpload = (props) => {
+  const name = useSelector((state)=>state.auth.user.name);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -93,7 +93,7 @@ const UserDataUpload = () => {
           justifyContent="space-between"
         >
           <MDTypography variant="h3" fontWeight="bold" color="info" textTransform="capitalize">
-            <div>Good {greet}</div>
+            <div>Good {greet}<span style={{ marginLeft: '10px' }}>{name}</span></div>
           </MDTypography>
           <MDBox display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end">
             <MDBox color="text" mr={0.5} lineHeight={0}>
@@ -117,7 +117,7 @@ const UserDataUpload = () => {
         >
           <MDBox mb={2}>
             <MDTypography variant="caption" color="success" fontWeight="bold">
-              <h1>Welcome to Objectways Dashboard</h1>
+              <h1>Welcome to Objectways </h1>
             </MDTypography>
             {/* <MDTypography variant="caption" color="success" fontWeight="bold">
               <h2>Here whats happening in your account today</h2>

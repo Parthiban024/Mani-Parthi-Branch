@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -48,7 +47,10 @@ import { useHistory } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
- 
+import CheckIcon from '@mui/icons-material/Check';
+import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'; 
+
 export default function ColumnGroupingTable() {
   // drawer code
   const columns = [
@@ -315,6 +317,18 @@ export default function ColumnGroupingTable() {
  
   const handlePopperClose = () => {
     setPopperOpen(false);
+  };
+  const statusIcons = {
+    'POC': <SelfImprovementIcon/>,              
+    'In-Progress': <DirectionsRunIcon />,
+    'Completed-Won': <CheckIcon />,
+    'Completed-Lost': <CloseIcon />,
+  };
+  const statusColors = {
+    'POC': '#2196F3',        // Blue
+    'In-Progress': '#FF9800', // orange
+    'Completed-Won': '#8BC34A', // Light Green
+    'Completed-Lost': '#FF5722', // Deep Orange
   };
   return (
     <DashboardLayout>
@@ -701,15 +715,20 @@ export default function ColumnGroupingTable() {
                }
            
                if (column.field === "jobs.status1") {
-                 return {
-                   ...column,
-                   renderCell: (params) => (
-                     <TableCell style={{ padding: 0 }}>
-                       {params.row.jobs?.status1}
-                     </TableCell>
-                   ),
-                 };
-               }
+                return {
+                  ...column,
+                  renderCell: (params) => (
+                 //   <TableCell style={{ backgroundColor: statusColors[params.row.jobs?.status1] }}>
+                 //   {statusIcons[params.row.jobs?.status1]} 
+                 //   {params.row.jobs?.status1} 
+                 // </TableCell>
+                    <TableCell style={{ padding: '2px', borderBottom: `2px solid`,   color: statusColors[params.row.jobs?.status1] }}>
+                   {statusIcons[params.row.jobs?.status1]} 
+                  {params.row.jobs?.status1} 
+                  </TableCell>
+                  ),
+                };
+              }
                if (column.field === "jobs.cDate") {
                  return {
                    ...column,
