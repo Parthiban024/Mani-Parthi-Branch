@@ -42,13 +42,14 @@ import Analyst from './routes/analyst.js'
 import Attendance from './routes/attendance.js';
 import Billing from './routes/billing.js'
 import Team from './routes/team.js'
+import Task from './routes/task.js'
 // For Routers
 app.use('/authentication/user',User);
 app.use('/analyst',Analyst);
-app.use('/attendance',Attendance);
+app.use('/emp-attendance',Attendance);
 app.use('/billing',Billing);
 app.use('/team',Team);
-
+app.use('/create-task',Task);
 // app.post('/api/saveAttendance', async (req, res) => {
 //     try {
 //       const { checkInTime } = req.body;

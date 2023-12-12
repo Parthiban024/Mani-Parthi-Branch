@@ -34,7 +34,7 @@ function Attendance() {
 
   useEffect(() => {
     // Fetch data on component mount
-    fetch(`/attendance/fetch/att-data?empId=${empId}`)
+    fetch(`/emp-attendance/fetch/att-data?empId=${empId}`)
       .then((response) => response.json())
       .then((data) => {
         const mappedData = data.map((item) => ({ ...item, id: item._id }));
@@ -92,7 +92,7 @@ function Attendance() {
     localStorage.setItem('total', `${overAll.hours()}hrs : ${overAll.minutes()}mins`);
 
     try {
-      const response = await fetch('/attendance/att', {
+      const response = await fetch('/emp-attendance/att', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

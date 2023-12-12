@@ -64,6 +64,7 @@ function Report() {
     managerTask: "",
     dateTask: "",
     sessionOne: "",
+    sessionMinute: ""
     // sessionTwo: 0,
     // others: 0,
     // comments: "",
@@ -106,10 +107,20 @@ function Report() {
       ...prevValues,
       projectName: '',
       managerTask: '',
-      sessionOne: ''
+      sessionOne: '',
+      sessionMinute: ''
     }));
   };
 
+
+
+  // Fetch task data
+  useEffect(() => {
+    // Assuming you have an API endpoint to fetch task data
+    axios.get("/create-task/fetch/task-data").then((response) => {
+      setTaskList(response.data);
+    });
+  }, []);
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
 
   // Function to handle opening the filter popup
@@ -241,6 +252,7 @@ function Report() {
       dateTask: value.dateTask,
       // dailyLog: values.dailyLog,
       sessionOne: value.sessionOne,
+      sessionMinute: value.sessionMinute,
       // sessionTwo: value.sessionTwo,
       // others: value.others,
       // comments: value.comments,
@@ -423,9 +435,15 @@ function Report() {
     {
       field: "sessionOne",
       headerName: "Hours",
-      width: 150,
+      width: 110,
       editable: false,
-      flex: 1,
+    },
+    {
+      field: "sessionMinute",
+      headerName: "Minutes",
+      width: 110,
+      editable: false,
+
     },
   ];
   const columns = [
@@ -454,6 +472,7 @@ function Report() {
         task: item.task,
         managerTask: item.managerTask,
         sessionOne: item.sessionOne,
+        sessionMinute: item.sessionMinute,
         // sessionTwo: item.sessionTwo,
         // others: item.others,
         // comments: item.comments,
@@ -507,7 +526,7 @@ function Report() {
           Create Task
         </MDButton>
       </div>
-      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius:'0', padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
+      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius: '0', padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
         <MDBox
           sx={{
             display: "flex",
@@ -577,11 +596,13 @@ function Report() {
             <Autocomplete
               disablePortal
               id="task"
-              options={tasklist}
+              name="createTask"
+              options={(Array.isArray(taskList) ? taskList : []).map((task) => task.createTask)}
               onChange={handleTaskChange}
               sx={{ width: 626, mt: 1 }}
               renderInput={(params) => <TextField {...params} />}
             />
+
 
 
           </MDBox>
@@ -595,7 +616,7 @@ function Report() {
           >
 
             <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="manager">Manager</InputLabel>
-            <InputLabel sx={{ mt: 1, mr: 33 }} htmlFor="date">Date</InputLabel>
+            <InputLabel sx={{ mt: 1, mr: 37 }} htmlFor="date">Date</InputLabel>
           </MDBox>
           <MDBox sx={{ p: 1, ml: 1 }}
             style={{
@@ -635,12 +656,22 @@ function Report() {
 
 
           </MDBox>
+          <MDBox
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              mt: 1,
+            }}
+          >
 
+            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">Daily Log</InputLabel>
+            <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel>
+          </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
-            <InputLabel htmlFor="hour">Daily Log</InputLabel>
 
             <TextField
-              sx={{ width: 305, mt: 1 }}
+              sx={{ width: 305 }}
               select
               fullWidth
               id="hour"
@@ -654,17 +685,34 @@ function Report() {
               }}
             >
               <option value="">Select Time</option>
-              {[...Array(8)].map((_, hour) => (
-                [0, 15, 30, 45].map((minute) => {
-                  const time = `${hour + 1} Hour ${minute} Minute`;
-                  const value = `${(hour + 1).toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-                  return (
-                    <option key={value} value={value}>
-                      {time}
-                    </option>
-                  );
-                })
-              ))}
+              <option value="1hour">1 Hour</option>
+              <option value="2hours">2 Hours</option>
+              <option value="3hours">3 Hours</option>
+              <option value="4hours">4 Hours</option>
+              <option value="5hours">5 Hours</option>
+              <option value="6hours">6 Hours</option>
+              <option value="7hours">7 Hours</option>
+              <option value="8hours">8 Hours</option>
+            </TextField>
+            <TextField
+              sx={{ width: 305, ml: 2 }}
+              select
+              fullWidth
+              id="minutes"
+              name="sessionMinute"
+              value={value.sessionMinute}
+              onChange={handleInputchange}
+              variant="outlined"
+              InputLabelProps={{ shrink: true }}
+              SelectProps={{
+                native: true,
+              }}
+            >
+              <option value="">Select Time</option>
+              <option value="15minutes">15 minutes</option>
+              <option value="30minutes">30 minutes</option>
+              <option value="45minutes">45 minutes</option>
+              <option value="60minutes">60 minutes</option>
             </TextField>
 
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -847,12 +895,12 @@ function Report() {
               <MDBox pt={0}>
                 <Box sx={{ height: 500, width: "100%", display: "flex", borderRadius: 20 }}>
                   <DataGrid
-                   rows={report.length === 0 ? initialData : rows} // Use initialData when report is empty
-                   columns={report.length === 0 ? initialDataColumns : columns} // Use initialDataColumns when report is empty
+                    rows={report.length === 0 ? initialData : rows} // Use initialData when report is empty
+                    columns={report.length === 0 ? initialDataColumns : columns} // Use initialDataColumns when report is empty
                     pageSize={10}
                     rowsPerPageOptions={[10]}
                     checkboxSelection
-                     getRowId={(row) => row._id}
+                    getRowId={(row) => row._id}
                     disableSelectionOnClick
                     components={{
                       Toolbar: () => (

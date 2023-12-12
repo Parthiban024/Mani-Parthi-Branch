@@ -12,7 +12,7 @@ import BillingTable from "layouts/Billing-Table";
 // import CreateTeam from "layouts/create-team";
 // import Edit from 'layouts/Billing-report/Edit'
 import Attendance from "layouts/Attendance";
-import Employee from "layouts/employeeReport"
+import TaskCreation from "layouts/employeeReport"
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -37,10 +37,19 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Employee Attendance",
+    key: "employee-attendance",
+    icon: <Icon fontSize="small">create_new_folder</Icon>,
+    route: "/employee-attendance",
+    component: <EmployeeAtt/>,
+    role: "admin",
+  },
+  {
+    type: "collapse",
     name: "attendance",
     key: "attendance",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/attendance",
+    route: "attendance",
     component: <Attendance />,
     role: "analyst",
   },
@@ -55,22 +64,14 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Team Report",
-    key: "team-report",
+    name: "Task Report",
+    key: "task-report",
     icon: <Icon fontSize="small">switch_account</Icon>,
-    route: "/team-report",
+    route: "/task-report",
     component: <AdminReport />,
     role: "admin",
   },
-  // {
-  //   type: "collapse",
-  //   name: "Attendance",
-  //   key: "attendance",
-  //   icon: <Icon fontSize="small">table_view</Icon>,
-  //   route: "/attendance",
-  //   component: <Attendance />,
-  //   role: "analyst",
-  // },
+
   // {
   //   type: "collapse",
   //   name: "Employee",
@@ -80,15 +81,7 @@ const routes = [
   //   component: <Employee />,
   //   role: "admin",
   // },
-  {
-    type: "collapse",
-    name: "Employee Attendance",
-    key: "employee-attendance",
-    icon: <Icon fontSize="small">create_new_folder</Icon>,
-    route: "/employee-attendance",
-    component: <EmployeeAtt/>,
-    role: "admin",
-  },
+
   // {
   //   type: "collapse",
   //   name: "BillingReport",
@@ -111,6 +104,15 @@ const routes = [
     icon: <Icon fontSize="small">trending_up</Icon>,
     route: "/projects",
     component: <BillingTable />,
+    role: "admin",
+  },
+  {
+    type: "collapse",
+    name: "Settings",
+    key: "Settings",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/Settings",
+    component: <TaskCreation />,
     role: "admin",
   },
   // {
