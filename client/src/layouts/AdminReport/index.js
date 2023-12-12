@@ -10,7 +10,7 @@ import MDInput from "components/MDInput";
 import * as React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton";
 // import FormControl from "@mui/material/FormControl";
 // import Select from "@mui/material/Select";
 import { useState, useEffect, useMemo } from "react";
@@ -20,17 +20,16 @@ import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 import moment from "moment";
 import Drawer from "@mui/material/Drawer";
-import FilterListIcon from '@material-ui/icons/FilterList';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Dialog from '@mui/material/Dialog';
+import FilterListIcon from "@material-ui/icons/FilterList";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Paper from "@mui/material/Paper";
-
 
 function AdminReport() {
   const initialValues = {
@@ -56,12 +55,13 @@ function AdminReport() {
   const handleTeamChange = (event, value) => setTeamList(value);
 
   const allReport = (e) => {
-    axios.get('analyst/')
+    axios
+      .get("analyst/")
       .then((res) => {
         setReport(res.data);
       })
       .catch((err) => console.log(err));
-  }
+  };
   // console.log(values.endDate)
   // console.log(empName)
 
@@ -93,7 +93,7 @@ function AdminReport() {
     setValues(initialValues);
     setEmpName(null);
     setTeamList(null);
-  
+
     // Close the filter popup
     closeFilterDialog();
   };
@@ -114,15 +114,17 @@ function AdminReport() {
     const team = teamList;
     // console.log(name !== "");
     if (name == null && team == null) {
-      axios.get('analyst/fetch/report/date/?sDate=' + sDate + '&eDate=' + eDate)
+      axios
+        .get("analyst/fetch/report/date/?sDate=" + sDate + "&eDate=" + eDate)
         .then((res) => {
           setReport(res.data);
         })
-        .catch(err => console.log(err))
-    }
-    else if (name === null) {
+        .catch((err) => console.log(err));
+    } else if (name === null) {
       axios
-        .get(`analyst/fetch/report/team/?sDate=${sDate}&eDate=${eDate}&team=${team}`)
+        .get(
+          `analyst/fetch/report/team/?sDate=${sDate}&eDate=${eDate}&team=${team}`
+        )
         .then((res) => {
           // console.log(res.data);
           setReport(res.data);
@@ -130,7 +132,9 @@ function AdminReport() {
         .catch((err) => console.log(`Error:${err}`));
     } else if (team === null) {
       axios
-        .get(`analyst/fetch/report/user/?sDate=${sDate}&eDate=${eDate}&name=${name}`)
+        .get(
+          `analyst/fetch/report/user/?sDate=${sDate}&eDate=${eDate}&name=${name}`
+        )
         .then((res) => {
           // console.log(res.data);
           setReport(res.data);
@@ -138,7 +142,9 @@ function AdminReport() {
         .catch((err) => console.log(`Error:${err}`));
     } else {
       axios
-        .get(`analyst/fetch/report/?sDate=${sDate}&eDate=${eDate}&name=${name}&team=${team}`)
+        .get(
+          `analyst/fetch/report/?sDate=${sDate}&eDate=${eDate}&name=${name}&team=${team}`
+        )
         .then((res) => {
           // console.log(res.data);
           setReport(res.data);
@@ -148,7 +154,7 @@ function AdminReport() {
     setValues(initialValues);
     setEmpName(null);
     setTeamList(null);
-  
+
     closeFilterDialog();
   };
 
@@ -283,11 +289,7 @@ function AdminReport() {
   );
 
   // Team List
-  const list = [
-    "CV",
-    "NLP",
-    "CM",
-  ];
+  const list = ["CV", "NLP", "CM"];
 
   const [popperOpen, setPopperOpen] = useState(false);
 
@@ -298,7 +300,6 @@ function AdminReport() {
   const handlePopperClose = () => {
     setPopperOpen(false);
   };
-
 
   return (
     <DashboardLayout>
@@ -318,7 +319,6 @@ function AdminReport() {
                 position: "absolute",
                 top: "140px",
                 left: "0px",
-               
               }}
             >
               {({ TransitionProps, placement }) => (
@@ -331,7 +331,7 @@ function AdminReport() {
                         role="form"
                         onSubmit={handleSubmit}
                         className="filter-popup"
-                        sx={{ display: "flex",  padding:"0px" }}
+                        sx={{ display: "flex", padding: "0px" }}
                       >
                         <MDBox
                           sx={{
@@ -343,7 +343,7 @@ function AdminReport() {
                           <MDTypography
                             variant="h6"
                             fontWeight="medium"
-                            sx={{ fontSize: '15px' }}
+                            sx={{ fontSize: "15px" }}
                           >
                             Start Date
                           </MDTypography>
@@ -371,11 +371,11 @@ function AdminReport() {
                             End Date
                           </MDTypography>
                           <MDInput
-                           id="movie-customized-option-demo"
+                            id="movie-customized-option-demo"
                             type="date"
                             name="endDate"
                             size="small"
-                            sx={{ width: "100%", border: 'none !important' }}
+                            sx={{ width: "100%", border: "none !important" }}
                             value={values.endDate}
                             onChange={handleInputChange}
                           />
@@ -397,7 +397,10 @@ function AdminReport() {
                             disableCloseOnSelect
                             sx={{ width: "100%" }}
                             PopperComponent={(props) => (
-                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                              <Popper
+                                {...props}
+                                style={{ zIndex: 99999, position: "relative" }}
+                              >
                                 {props.children}
                               </Popper>
                             )}
@@ -413,18 +416,21 @@ function AdminReport() {
                             marginRight: 2,
                           }}
                         >
-          <MDTypography variant="h6" fontWeight="medium">
-           User Name
-          </MDTypography>
+                          <MDTypography variant="h6" fontWeight="medium">
+                            User Name
+                          </MDTypography>
 
-                   <Autocomplete
+                          <Autocomplete
                             options={name.map((option) => option.name)}
                             onChange={handleChange}
                             id="movie-customized-option-demo"
                             disableCloseOnSelect
                             sx={{ width: "100%" }}
                             PopperComponent={(props) => (
-                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                              <Popper
+                                {...props}
+                                style={{ zIndex: 99999, position: "relative" }}
+                              >
                                 {props.children}
                               </Popper>
                             )}
@@ -432,7 +438,7 @@ function AdminReport() {
                               <TextField {...params} variant="standard" />
                             )}
                           />
-        </MDBox> 
+                        </MDBox>
                         <Box
                           display="flex"
                           justifyContent="center"
@@ -464,107 +470,116 @@ function AdminReport() {
         <Card>
           {/* <Drawer className="admin-drawer"  PaperProps={{ style: { width: 400 } }} anchor="right" open={drawerOpen} onClose={closeDrawer}> */}
           <Dialog
-  open={filterDialogOpen}
-  onClose={closeFilterDialog}
-  fullWidth
-  maxWidth="md"
->
-  <DialogTitle sx={{ textAlign: 'left' }}>Individual Team Filter</DialogTitle>
-  <DialogContent>
-    <MDBox
-      component="form"
-      role="form"
-      onSubmit={handleSubmit}
-      className="filter-popup"
-    >
-      <Grid container spacing={3}>
-        {/* Row 1: Start Date and End Date */}
-        <Grid item xs={6}>
-          <MDTypography variant="h6" fontWeight="medium">
-            Start Date
-          </MDTypography>
-          <MDInput
-            type="date"
-            name="startDate"
-            sx={{ width: '100%' }}
-            value={values.startDate}
-            onChange={handleInputChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <MDTypography variant="h6" fontWeight="medium">
-            End Date
-          </MDTypography>
-          <MDInput
-            type="date"
-            name="endDate"
-            sx={{ width: '100%' }}
-            value={values.endDate}
-            onChange={handleInputChange}
-          />
-        </Grid>
+            open={filterDialogOpen}
+            onClose={closeFilterDialog}
+            fullWidth
+            maxWidth="md"
+          >
+            <DialogTitle sx={{ textAlign: "left" }}>
+              Individual Team Filter
+            </DialogTitle>
+            <DialogContent>
+              <MDBox
+                component="form"
+                role="form"
+                onSubmit={handleSubmit}
+                className="filter-popup"
+              >
+                <Grid container spacing={3}>
+                  {/* Row 1: Start Date and End Date */}
+                  <Grid item xs={6}>
+                    <MDTypography variant="h6" fontWeight="medium">
+                      Start Date
+                    </MDTypography>
+                    <MDInput
+                      type="date"
+                      name="startDate"
+                      sx={{ width: "100%" }}
+                      value={values.startDate}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <MDTypography variant="h6" fontWeight="medium">
+                      End Date
+                    </MDTypography>
+                    <MDInput
+                      type="date"
+                      name="endDate"
+                      sx={{ width: "100%" }}
+                      value={values.endDate}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
 
-        {/* Row 2: Team and Name */}
-        <Grid item xs={6}>
-          <MDTypography variant="h6" fontWeight="medium">
-            Team
-          </MDTypography>
-          <Autocomplete
-            disablePortal
-            id="combo-box-demo"
-            options={list}
-            onChange={handleTeamChange}
-            sx={{ width: '100%' }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <MDTypography variant="h6" fontWeight="medium">
-           User Name
-          </MDTypography>
-          <Autocomplete
-            id="combo-box-demo"
-            options={name.map((option) => option.name)}
-            onChange={handleChange}
-            renderInput={(params) => <TextField {...params} size="medium" />}
-            sx={{ width: '100%' }}
-          />
-        </Grid>
+                  {/* Row 2: Team and Name */}
+                  <Grid item xs={6}>
+                    <MDTypography variant="h6" fontWeight="medium">
+                      Team
+                    </MDTypography>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={list}
+                      onChange={handleTeamChange}
+                      sx={{ width: "100%" }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <MDTypography variant="h6" fontWeight="medium">
+                      User Name
+                    </MDTypography>
+                    <Autocomplete
+                      id="combo-box-demo"
+                      options={name.map((option) => option.name)}
+                      onChange={handleChange}
+                      renderInput={(params) => (
+                        <TextField {...params} size="medium" />
+                      )}
+                      sx={{ width: "100%" }}
+                    />
+                  </Grid>
 
-        {/* Row 3: Search Button */}
-        <Grid item xs={12}>
-  <Box
-    display="flex"
-    justifyContent="center"
-    alignItems="center"
-    pt={3}
-  >
-    <MDButton variant="gradient" size="small" color="success" type="submit">
-      Search
-    </MDButton>
-    <MDButton
-      variant="gradient"
-      size="small"
-      color="warning"
-      onClick={handleCancel}
-      style={{ marginLeft: '10px' }}
-    >
-      Cancel
-    </MDButton>
-  </Box>
-</Grid>
-      </Grid>
-    </MDBox>
-  </DialogContent>
-  {/* <DialogActions>
+                  {/* Row 3: Search Button */}
+                  <Grid item xs={12}>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      pt={3}
+                    >
+                      <MDButton
+                        variant="gradient"
+                        size="small"
+                        color="success"
+                        type="submit"
+                      >
+                        Search
+                      </MDButton>
+                      <MDButton
+                        variant="gradient"
+                        size="small"
+                        color="warning"
+                        onClick={handleCancel}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Cancel
+                      </MDButton>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </MDBox>
+            </DialogContent>
+            {/* <DialogActions>
     Add a close button or any other UI element to close the filter popup
     <IconButton onClick={closeFilterDialog}>
       <CloseIcon />
     </IconButton>
   </DialogActions> */}
-</Dialog>
+          </Dialog>
 
-<Box>
+          <Box>
             <Popper
               open={popperOpen}
               // anchorEl={/* Provide the reference to the element that triggers the popper */}
@@ -576,7 +591,6 @@ function AdminReport() {
                 position: "absolute",
                 top: "116px",
                 left: "0px",
-               
               }}
             >
               {({ TransitionProps, placement }) => (
@@ -589,7 +603,7 @@ function AdminReport() {
                         role="form"
                         onSubmit={handleSubmit}
                         className="filter-popup"
-                        sx={{ display: "flex",  padding:"0px" }}
+                        sx={{ display: "flex", padding: "0px" }}
                       >
                         <MDBox
                           sx={{
@@ -601,7 +615,7 @@ function AdminReport() {
                           <MDTypography
                             variant="h6"
                             fontWeight="medium"
-                            sx={{ fontSize: '15px' }}
+                            sx={{ fontSize: "15px" }}
                           >
                             Start Date *
                           </MDTypography>
@@ -629,13 +643,13 @@ function AdminReport() {
                             End Date *
                           </MDTypography>
                           <MDInput
-                           id="movie-customized-option-demo"
+                            id="movie-customized-option-demo"
                             type="date"
                             name="endDate"
                             size="small"
-                            sx={{ width: "100%", border: 'none !important' }}
+                            sx={{ width: "100%", border: "none !important" }}
                             value={values.endDate}
-            onChange={handleInputChange}
+                            onChange={handleInputChange}
                           />
                         </MDBox>
                         <MDBox
@@ -655,7 +669,10 @@ function AdminReport() {
                             disableCloseOnSelect
                             sx={{ width: "100%" }}
                             PopperComponent={(props) => (
-                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                              <Popper
+                                {...props}
+                                style={{ zIndex: 99999, position: "relative" }}
+                              >
                                 {props.children}
                               </Popper>
                             )}
@@ -675,20 +692,23 @@ function AdminReport() {
                             User Name
                           </MDTypography>
                           <Autocomplete
-            id="combo-box-demo"
-            options={name.map((option) => option.name)}
-            onChange={handleChange}
-            disableCloseOnSelect
-            sx={{ width: "100%" }}
-            PopperComponent={(props) => (
-              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
-                {props.children}
-              </Popper>
-            )}
-            renderInput={(params) => (
-              <TextField {...params} variant="standard" />
-            )}
-          />
+                            id="combo-box-demo"
+                            options={name.map((option) => option.name)}
+                            onChange={handleChange}
+                            disableCloseOnSelect
+                            sx={{ width: "100%" }}
+                            PopperComponent={(props) => (
+                              <Popper
+                                {...props}
+                                style={{ zIndex: 99999, position: "relative" }}
+                              >
+                                {props.children}
+                              </Popper>
+                            )}
+                            renderInput={(params) => (
+                              <TextField {...params} variant="standard" />
+                            )}
+                          />
                         </MDBox>
 
                         <Box
@@ -742,7 +762,7 @@ function AdminReport() {
                   showTotalEntries={false}
                   noEndBorder
                 /> */}
-                
+
                 <Box sx={{ height: 480, width: "100%" }}>
                   <DataGrid
                     rows={row}
@@ -754,7 +774,14 @@ function AdminReport() {
                     components={{
                       Toolbar: () => (
                         <div style={{ display: "flex" }}>
-                          <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginLeft: "10px", }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              marginTop: "5px",
+                              marginLeft: "10px",
+                            }}
+                          >
                             <FilterListIcon
                               className="team-filter-icon"
                               style={{
@@ -772,13 +799,12 @@ function AdminReport() {
                                 color: "#1a73e8",
                                 cursor: "pointer",
                                 fontSize: "12.1px",
-                                
                               }}
                             >
                               DATE FILTER
                             </MDTypography>
                           </div>
-                    
+
                           <GridToolbar />
                           <div
                             style={{
@@ -787,19 +813,16 @@ function AdminReport() {
                               alignItems: "center",
                             }}
                           >
-                          <MDButton
-                            className="team-report-btn"
-                            variant="outlined"
-                            color="error"
-                            size="small"
-
-                            style={{ marginRight: "13px", marginTop: "15px" }}
-
-
-                            onClick={allReport}
-                          >
-                            &nbsp;All Report
-                          </MDButton>
+                            <MDButton
+                              className="team-report-btn"
+                              variant="outlined"
+                              color="error"
+                              size="small"
+                              style={{ marginRight: "13px", marginTop: "15px" }}
+                              onClick={allReport}
+                            >
+                              &nbsp;All Report
+                            </MDButton>
                           </div>
                         </div>
                       ),
@@ -809,7 +832,6 @@ function AdminReport() {
                     //     <div style={{ display: 'flex' }}>
                     //       <GridToolbar />
                     //       {/* Custom filter icon with aria-label */}
-
 
                     //       <div style={{ display: 'flex', marginLeft: 'auto', alignItems: 'center' }} >
 
