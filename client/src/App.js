@@ -33,7 +33,7 @@ import UserReport from "./layouts/UserReport";
 import Employee from "./layouts/employeeReport";
 import Attendance from "layouts/Attendance";
 import EmployeeAtt from "layouts/Emp-Attendance"
-
+import TaskCreation from "layouts/Task-creation"
 
 function App() {
   const [controller] = useMaterialUIController();
@@ -107,16 +107,19 @@ function App() {
           {/* <Route exact path="/attendance" element={<Attendance/>}/> */}
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
-          <Route exact path="/team-report" element={<AdminReport/>} />
+          <Route exact path="/task-report" element={<AdminReport/>} />
         </Route>
-        {/* <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee" element={<Employee/>} />
-        </Route> */}
+        </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
         </Route>     
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/attendance" element={<Attendance/>} />
+        </Route>
+        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+          <Route exact path="/Settings" element={<TaskCreation/>} />
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/user-task" element={<UserReport/>} />
@@ -142,7 +145,7 @@ function App() {
         ) : (
           <Route exact path="/" element={<Navigate to="/authentication/sign-in" />} />
         )}
-        <Route exact path={"/sign"} element={<SignIn/>}/>
+        <Route exact path={"/authentication/sign-in"} element={<SignIn/>}/>
       </Routes>
     </ThemeProvider>
   );

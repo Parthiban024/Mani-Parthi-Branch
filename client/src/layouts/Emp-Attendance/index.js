@@ -16,7 +16,7 @@ function Attendance() {
   const [attendanceData, setAttendanceData] = useState([]);
 
   useEffect(() => {
-    fetch(`/attendance`)
+    fetch(`/emp-attendance`)
       .then((response) => response.json())
       .then((data) => {
         const mappedData = data.map((item, index) => ({ ...item, id: index + 1 }));
