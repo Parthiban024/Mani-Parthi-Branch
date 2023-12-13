@@ -22,15 +22,16 @@ import checkoutImage from '../images/check-out.png';
 
 function Attendance() {
   const dispatch = useDispatch();
-  const [checkinTime, setCheckinTime] = useState(localStorage.getItem("checkinTime") || "");
-  const [checkoutTime, setCheckoutTime] = useState(localStorage.getItem("checkoutTime") || "");
+  const [checkinTime, setCheckinTime] = useState(localStorage.getItem('checkinTime') || '');
+  const [checkoutTime, setCheckoutTime] = useState(localStorage.getItem('checkoutTime') || '');
   const [checkinTimeForCheckout, setCheckinTimeForCheckout] = useState('');
   const [total, setTotal] = useState(localStorage.getItem('total') || '');
-  const [remainingTime, setRemainingTime] = useState();
+  const [remainingTime, setRemainingTime] = useState('');
   const name = useSelector((state) => state.auth.user.name);
   const empId = useSelector((state) => state.auth.user.empId);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [attendanceData, setAttendanceData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(null);
+
 
   useEffect(() => {
     // Fetch data on component mount
@@ -38,10 +39,16 @@ function Attendance() {
       .then((response) => response.json())
       .then((data) => {
         const mappedData = data.map((item) => ({ ...item, id: item._id }));
-        setAttendanceData(mappedData);
+
+        // Filter data based on selected date if it's set
+        const filteredData = selectedDate
+          ? mappedData.filter((item) => moment(item.currentDate).isSame(selectedDate, 'day'))
+          : mappedData;
+
+        setAttendanceData(filteredData);
       })
       .catch((error) => console.error('Error fetching data:', error));
-  }, [empId]);
+  }, [empId, selectedDate]);
 
   const columns = [
     { field: 'id', headerName: 'ID', editable: false },
@@ -119,7 +126,7 @@ function Attendance() {
           localStorage.removeItem('checkoutTime');
           localStorage.removeItem('total');
           clearInterval(resetIntervalId);
-        }, 120000);
+        }, 20000);
       } else {
         console.error('Failed to save checkout time');
       }
@@ -214,28 +221,31 @@ function Attendance() {
           </Grid>
         </MDBox>
       </Grid>
-
-      <Grid>
-        <Card>
-          {/* Date Picker for filtering */}
-          {/* <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="yyyy-MM-dd"
-          isClearable
-          placeholderText="Select Date"
-        /> */}
-
-          {/* DataGrid for displaying attendance data */}
-
-          <div style={{ height: 370, width: '100%' }}>
-
-            <DataGrid rows={mappedData} columns={columns} pageSize={5} />
-
-          </div>
-        </Card>
+      <Grid container spacing={3} justifyContent="center">
+        <Grid item xs={12} lg={4}>
+          <MDBox
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              dateFormat="yyyy-MM-dd"
+              isClearable
+              placeholderText="Select Date"
+            />
+          </MDBox>
+        </Grid>
+        <Grid item xs={12} lg={8}>
+          <Card>
+            <div style={{ height: 370, width: '100%' }}>
+              <DataGrid rows={mappedData} columns={columns} pageSize={5} />
+            </div>
+          </Card>
+        </Grid>
       </Grid>
-
       <Footer />
     </DashboardLayout>
   );

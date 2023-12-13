@@ -64,7 +64,7 @@ function Report() {
     managerTask: "",
     dateTask: "",
     sessionOne: "",
-    sessionMinute: ""
+    // sessionMinute: ""
     // sessionTwo: 0,
     // others: 0,
     // comments: "",
@@ -108,7 +108,7 @@ function Report() {
       projectName: '',
       managerTask: '',
       sessionOne: '',
-      sessionMinute: ''
+      // sessionMinute: ''
     }));
   };
 
@@ -248,7 +248,7 @@ function Report() {
       dateTask: value.dateTask,
       // dailyLog: values.dailyLog,
       sessionOne: value.sessionOne,
-      sessionMinute: value.sessionMinute,
+      // sessionMinute: value.sessionMinute,
       // sessionTwo: value.sessionTwo,
       // others: value.others,
       // comments: value.comments,
@@ -305,6 +305,7 @@ function Report() {
   const [values, setValues] = useState(initialValues);
   const [report, setReport] = useState([]);
   const [teamList, setTeamList] = useState(null);
+  const [reversedRows, setReversedRows] = useState([]);
   const empId = useSelector((state) => state.auth.user.empId);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -417,48 +418,38 @@ function Report() {
       width: 110,
       editable: false,
     },
-    {
-      field: "sessionMinute",
-      headerName: "Minutes",
-      width: 110,
-      editable: false,
+    // {
+    //   field: "sessionMinute",
+    //   headerName: "Minutes",
+    //   width: 110,
+    //   editable: false,
 
-    },
+    // },
   ];
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
     ...initialDataColumns,
   ];
 
-  const rows = useMemo(
-    () =>
-      report.map((item, index) => ({
-        ...item,
-        id: index + 1,
-        name: item.name,
-        team: item.team,
-        date: moment(item.createdAt).format("DD-MM-YYYY"),
-        // TotalTime: moment
-        //   .utc(moment.duration(item.TotalTime, "seconds").as("milliseconds"))
-        //   .format("HH:mm:ss"),
-        // ActiveTime: moment
-        //   .utc(moment.duration(item.ActiveTime, "seconds").as("milliseconds"))
-        //   .format("HH:mm:ss"),
-        // EntityTime: moment
-        //   .utc(moment.duration(item.EntityTime, "seconds").as("milliseconds"))
-        //   .format("HH:mm:ss"),
-        projectName: item.projectName,
-        task: item.task,
-        managerTask: item.managerTask,
-        sessionOne: item.sessionOne,
-        sessionMinute: item.sessionMinute,
-        // sessionTwo: item.sessionTwo,
-        // others: item.others,
-        // comments: item.comments,
-        // total: item.total,
-      })),
-    [report]
-  );
+  useEffect(() => {
+    const reversedRowsData =
+      report.length === 0
+        ? initialData.slice().reverse().map((item, index) => ({
+            ...item,
+            id: index + 1,
+            name: item.name,
+            team: item.team,
+            date: moment(item.createdAt).format("DD-MM-YYYY"),
+            projectName: item.projectName,
+            task: item.task,
+            managerTask: item.managerTask,
+            sessionOne: item.sessionOne,
+            // sessionMinute: item.sessionMinute,
+          }))
+          : report.slice().reverse() || [];
+
+    setReversedRows(reversedRowsData);
+  }, [report, initialData]);
   // Team List
   const list = [
     "CV",
@@ -645,12 +636,24 @@ function Report() {
           >
 
             <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">Daily Log</InputLabel>
-            <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel>
+            {/* <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel> */}
           </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
-          <input type="time" id="appt"    name="sessionOne"
-              value={value.sessionOne}
-              onChange={handleInputchange} min="00:00" max="12:00" />
+          <TextField
+  type="time"
+  id="appt"
+  name="sessionOne"
+  sx={{ width: 305 }}
+  value={value.sessionOne}
+  onChange={handleInputchange}
+  InputProps={{
+    inputProps: {
+      min: "00:00",
+      max: "12:00",
+    },
+  }}
+/>
+
             {/* <TextField
               sx={{ width: 305 }}
               select
@@ -675,7 +678,7 @@ function Report() {
               <option value="7hours">7 Hours</option>
               <option value="8hours">8 Hours</option>
             </TextField> */}
-            <TextField
+            {/* <TextField
               sx={{ width: 305, ml: 2 }}
               select
               fullWidth
@@ -694,7 +697,7 @@ function Report() {
               <option value="30minutes">30 minutes</option>
               <option value="45minutes">45 minutes</option>
               <option value="60minutes">60 minutes</option>
-            </TextField>
+            </TextField> */}
           </MDBox>
           <MDBox
             pt={3}
@@ -861,7 +864,7 @@ function Report() {
               <MDBox pt={0}>
                 <Box sx={{ height: 500, width: "100%", display: "flex", borderRadius: 20 }}>
                   <DataGrid
-                    rows={report.length === 0 ? initialData : rows} // Use initialData when report is empty
+                    rows={reversedRows}
                     columns={report.length === 0 ? initialDataColumns : columns} // Use initialDataColumns when report is empty
                     pageSize={10}
                     rowsPerPageOptions={[10]}
