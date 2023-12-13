@@ -145,7 +145,7 @@ function App() {
         ) : (
           <Route exact path="/" element={<Navigate to="/authentication/sign-in" />} />
         )}
-        <Route exact path={"/authentication/sign-in"} element={<SignIn/>}/>
+     <Route exact path="/" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );
