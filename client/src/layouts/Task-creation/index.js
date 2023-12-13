@@ -24,6 +24,15 @@ function TaskCreation() {
     const [task, setTask] = useState({
         createTask: "",
       });
+      const [addManager, setAddManager] = useState({
+        createManager: "",
+      });
+      const [addTeam, setAddTeam] = useState({
+        createTeam: "",
+      });
+      const [addStatus, setAddStatus] = useState({
+        createStatus: "",
+      });
       const handleInputChange = (e) => {
         const { name, value } = e.target;
      
@@ -34,35 +43,134 @@ function TaskCreation() {
           // status1: status,
         });
       };
+      const handleInputChangeTwo = (e) => {
+        const { name, value } = e.target;
+     
+        setAddManager({
+          ...addManager,
+          [name]: value,
+          // managerTeam: managerTeamList,
+          // status1: status,
+        });
+      };
+      const handleInputChangeThree = (e) => {
+        const { name, value } = e.target;
+     
+        setAddTeam({
+          ...addTeam,
+          [name]: value,
+          // managerTeam: managerTeamList,
+          // status1: status,
+        });
+      };
+      const handleInputChangeFour = (e) => {
+        const { name, value } = e.target;
+     
+        setAddStatus({
+          ...addStatus,
+          [name]: value,
+          // managerTeam: managerTeamList,
+          // status1: status,
+        });
+      };
   const handleSubmit = () => {
     const taskData = {
         createTask: task.createTask,
       };
-      axios.post("/create-task/new", taskData)
+      axios.post("/create/new", taskData)
       .then((res) => {
       toast.success(res.data);
       })
       .catch((err) => toast.error(err));
     // Handle form submission logic here
   };
-
+  const handleSubmitTwo = () => {
+    const managerData = {
+      createManager: addManager.createManager,
+      };
+      axios.post("/create/add-manager/new", managerData)
+      .then((res) => {
+      toast.success(res.data);
+      })
+      .catch((err) => toast.error(err));
+    // Handle form submission logic here
+  };
+  const handleSubmitThree = () => {
+    const teamData = {
+        createTeam: addTeam.createTeam,
+      };
+      axios.post("/create/add-team/new", teamData)
+      .then((res) => {
+      toast.success(res.data);
+      })
+      .catch((err) => toast.error(err));
+    // Handle form submission logic here
+  };
+  const handleSubmitFour = () => {
+    const statusData = {
+        createStatus: addStatus.createStatus,
+      };
+      axios.post("/create/add-status/new", statusData)
+      .then((res) => {
+      toast.success(res.data);
+      })
+      .catch((err) => toast.error(err));
+    // Handle form submission logic here
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <Grid container justifyContent="center" alignItems="center" style={{ height: "80vh" }}>
-        <Grid item>
-          <Card>
-            <Box p={2}>
-              {/* Your input box */}
-              <TextField label="Task Name" name="createTask" value={task.createTask} onChange={handleInputChange} variant="outlined" fullWidth />
-              {/* Submit button */}
-              <MDButton variant="contained" color="primary" onClick={handleSubmit}>
-                Submit
-              </MDButton>
-            </Box>
-          </Card>
-        </Grid>
-      </Grid>
+      <Grid container justifyContent="center" alignItems="center" style={{ height: "80vh" }} spacing={2}>
+  <Grid item>
+    <Card>
+      <Box p={2}>
+        {/* Your input box */}
+        <TextField label="Task Name" name="createTask" value={task.createTask} onChange={handleInputChange} variant="outlined" fullWidth />
+        {/* Submit button */}
+        <MDButton variant="contained" color="primary" onClick={handleSubmit}>
+          Submit
+        </MDButton>
+      </Box>
+    </Card>
+  </Grid>
+  <Grid item>
+    <Card>
+      <Box p={2}>
+        {/* Your input box */}
+        <TextField label="Manager Name" name="createManager" value={addManager.createManager} onChange={handleInputChangeTwo} variant="outlined" fullWidth />
+        {/* Submit button */}
+        <MDButton variant="contained" color="primary" onClick={handleSubmitTwo}>
+          Submit
+        </MDButton>
+      </Box>
+    </Card>
+  </Grid>
+  <Grid item>
+    <Card>
+      <Box p={2}>
+        {/* Your input box */}
+        <TextField label="Team Name" name="createTeam" value={addTeam.createTeam} onChange={handleInputChangeThree} variant="outlined" fullWidth />
+        {/* Submit button */}
+        <MDButton variant="contained" color="primary" onClick={handleSubmitThree}>
+          Submit
+        </MDButton>
+      </Box>
+    </Card>
+  </Grid>
+  <Grid item>
+    <Card>
+      <Box p={2}>
+        {/* Your input box */}
+        <TextField label="Status Name" name="createStatus" value={addStatus.createStatus} onChange={handleInputChangeFour} variant="outlined" fullWidth />
+        {/* Submit button */}
+        <MDButton variant="contained" color="primary" onClick={handleSubmitFour}>
+          Submit
+        </MDButton>
+      </Box>
+    </Card>
+  </Grid>
+</Grid>
+
       <Footer />
       <ToastContainer />
     </DashboardLayout>

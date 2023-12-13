@@ -49,7 +49,7 @@ app.use('/analyst',Analyst);
 app.use('/emp-attendance',Attendance);
 app.use('/billing',Billing);
 app.use('/team',Team);
-app.use('/create-task',Task);
+app.use('/create',Task);
 // app.post('/api/saveAttendance', async (req, res) => {
 //     try {
 //       const { checkInTime } = req.body;

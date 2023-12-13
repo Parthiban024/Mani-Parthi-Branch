@@ -152,7 +152,7 @@ function Report() {
     axios.get("/billing/").then((response) => {
       const projects = response.data.map((item) => item.projectname);
       const managers = response.data.map((item) => item.jobs?.managerTeam).filter(Boolean);
-      axios.get("/create-task/fetch/task-data").then((response) => {
+      axios.get("/create/fetch/task-data").then((response) => {
         setTaskList(response.data);
       });
       setProjectNames(projects);

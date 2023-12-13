@@ -177,7 +177,9 @@ export default function ColumnGroupingTable() {
   const name = useSelector((state) => state.auth.user.name);
 
   const [teamList, setTeamList] = useState(null);
-
+  const handleTeamChange = (event, value) => setTeamList(value);
+  const [managers, setManagers] = useState([]);
+  const handleManagerChange = (event, value) => setManagers(value);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -190,7 +192,7 @@ export default function ColumnGroupingTable() {
     });
   };
 
-  const handleTeamChange = (event, value) => setTeamList(value);
+ 
 
   const handleManagerTeamChange = (event, value) => {
     setBill({
@@ -222,13 +224,14 @@ export default function ColumnGroupingTable() {
     e.preventDefault();
     const billData = {
       name: name,
-      team: bill.team,
+      team: teamList,
       empId: empId,
       batch: bill.batch,
       reportDate: bill.tDate,
       projectname: bill.projectname,
       jobs: {
-        managerTeam: bill.jobs.managerTeam,
+        // managerTeam: bill.jobs.managerTeam,
+        managerTeam: managers,
         status1: bill.jobs.status1,
         cDate: bill.jobs.cDate,
       },
@@ -253,7 +256,7 @@ export default function ColumnGroupingTable() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [data, setData] = useState([]);
-
+  
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -306,6 +309,12 @@ export default function ColumnGroupingTable() {
     axios.get(`/billing/`).then((response) => {
       setInitialData(response.data);
       setData(response.data);
+    });
+    axios.get("/create/fetch/addteam-data").then((response) => {
+      setTeamList(response.data);
+    });
+    axios.get("/create/fetch/manager-data").then((response) => {
+      setManagers(response.data);
     });
   }, []);
   const handleSubmit = (e) => {
@@ -476,7 +485,7 @@ export default function ColumnGroupingTable() {
             </MDBox>
             <MDBox sx={{ width: 730, ml: 2, mt: 1 }}>
               <InputLabel htmlFor="department">Department</InputLabel>
-              <Autocomplete
+              {/* <Autocomplete
                 disablePortal
                 id="department"
                 options={list}
@@ -490,7 +499,22 @@ export default function ColumnGroupingTable() {
                 }}
                 renderInput={(params) => <TextField {...params} />}
                 required
-              />
+              /> */}
+                  <Autocomplete
+              disablePortal
+              id="department"
+              name="team"
+              options={(Array.isArray(teamList) ? teamList : []).map((addteam) => addteam.createTeam)}
+              onChange={handleTeamChange}
+              sx={{
+                width: 305,
+                mt: 1,
+                "& .MuiOutlinedInput-root": {
+                  padding: 0.5,
+                },
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
             </MDBox>
           </MDBox>
           <MDBox
@@ -509,7 +533,7 @@ export default function ColumnGroupingTable() {
             </InputLabel>
           </MDBox>
           <MDBox sx={{ p: 1, ml: 1 }}>
-            <TextField
+            {/* <TextField
               sx={{ width: 305 }}
               select
               fullWidth
@@ -529,8 +553,22 @@ export default function ColumnGroupingTable() {
               <option value="Rajesh">Rajesh</option>
               <option value="Naveen">Naveen</option>
               <option value="Sowmiya">Sowmiya</option>
-            </TextField>
-
+            </TextField> */}
+             <Autocomplete
+              disablePortal
+              id="manager"
+              name="managerTeam"
+              options={(Array.isArray(managers) ? managers : []).map((addmanager) => addmanager.createManager)}
+              onChange={handleManagerChange}
+              sx={{
+                width: 305,
+                mt: 1,
+                "& .MuiOutlinedInput-root": {
+                  padding: 0.5,
+                },
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
             <TextField
               sx={{ width: 305, ml: 2 }}
               type="number"
