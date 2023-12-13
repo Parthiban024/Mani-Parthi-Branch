@@ -11,7 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Grid from "@mui/material/Grid";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+// import Footer from "examples/Footer";
 import axios from "axios";
 import Drawer from "@mui/material/Drawer";
 import moment from "moment";
@@ -722,7 +722,7 @@ export default function ColumnGroupingTable() {
               height: 480,
               width: "100%",
               "@media screen and (min-width: 768px)": {
-                height: 680,
+                height: 670,
               },
             }}
           >
@@ -787,7 +787,7 @@ export default function ColumnGroupingTable() {
 
                 return column;
               })}
-              rowsPerPageOptions={[10, 25, 50, 100]}
+              rowsPerPageOptions={[5,10, 25, 50, 100]}
               checkboxSelection
               disableSelectionOnClick
               //  disableColumnMenu
@@ -852,7 +852,7 @@ export default function ColumnGroupingTable() {
         </Card>
       </Grid>
 
-      <Footer />
+      {/* <Footer /> */}
       <ToastContainer />
     </DashboardLayout>
   );
