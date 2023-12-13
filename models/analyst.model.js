@@ -20,10 +20,11 @@ const analystSchema = new Schema({
   projectName: {
     type: String,
     required: true
-  },sessionMinute: {
-    type: String,
-    required: true
   },
+  // sessionMinute: {
+  //   type: String,
+  //   required: true
+  // },
   task: {
     type: String,
     required: true
