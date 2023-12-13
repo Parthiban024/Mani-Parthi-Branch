@@ -648,10 +648,10 @@ function Report() {
             <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel>
           </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
-          {/* <input type="time" id="appt"    name="sessionOne"
+          <input type="time" id="appt"    name="sessionOne"
               value={value.sessionOne}
-              onChange={handleInputchange} min="00:00" max="12:00" /> */}
-            <TextField
+              onChange={handleInputchange} min="00:00" max="12:00" />
+            {/* <TextField
               sx={{ width: 305 }}
               select
               fullWidth
@@ -674,7 +674,7 @@ function Report() {
               <option value="6hours">6 Hours</option>
               <option value="7hours">7 Hours</option>
               <option value="8hours">8 Hours</option>
-            </TextField>
+            </TextField> */}
             <TextField
               sx={{ width: 305, ml: 2 }}
               select
