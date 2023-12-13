@@ -57,11 +57,58 @@ export default function ColumnGroupingTable() {
     { field: "projectname", headerName: "Projectname", flex: 1 },
     { field: "team", headerName: "Department", flex: 1 },
     { field: "batch", headerName: "No.of.Members", flex: 1 },
-    { field: "reportDate", headerName: "StartDate", flex: 1 },
-    { field: "jobs.cDate", headerName: "EndDate", flex: 1 },
-    { field: "jobs.managerTeam", headerName: "Manager", flex: 1 },
-    { field: "jobs.status1", headerName: "Status", flex: 1 },
-
+    // { field: "reportDate", headerName: "StartDate", flex: 1 },
+    // { field: "jobs.cDate", headerName: "EndDate", flex: 1 },
+    // { field: "jobs.managerTeam", headerName: "Manager", flex: 1 },
+    // { field: "jobs.status1", headerName: "Status", flex: 1 },
+    {
+      field: "reportDate",
+      headerName: "StartDate",
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ padding: "8px" }}>
+          {moment(params.row.reportDate).format("DD/MM/YYYY")}
+        </div>
+      ),
+    },
+    {
+      field: "jobs.cDate",
+      headerName: "EndDate",
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ padding: "8px" }}>
+          {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
+        </div>
+      ),
+    },
+    {
+      field: "jobs.managerTeam",
+      headerName: "Manager",
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ padding: "8px" }}>
+          {params.row.jobs?.managerTeam}
+        </div>
+      ),
+    },
+    {
+      field: "jobs.status1",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (params) => (
+        <div
+          style={{
+            padding: "2px",
+            borderBottom: `5px solid`,
+            borderRadius: `5px `,
+            color: statusColors[params.row.jobs?.status1],
+          }}
+        >
+          {statusIcons[params.row.jobs?.status1]}
+          {params.row.jobs?.status1}
+        </div>
+      ),
+    },
     {
       field: "action",
       headerName: "Action",
@@ -729,64 +776,65 @@ export default function ColumnGroupingTable() {
             <DataGrid
               rows={formattedData}
               getRowId={(row) => row._id}
-              columns={columns.map((column) => {
-                if (column.field === "reportDate") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {moment(params.row.reportDate).format("DD/MM/YYYY")}
-                      </TableCell>
-                    ),
-                  };
-                }
+              columns={columns}
+              // columns={columns.map((column) => {
+              //   if (column.field === "reportDate") {
+              //     return {
+              //       ...column,
+              //       renderCell: (params) => (
+              //         <TableCell style={{ padding: 0 }}>
+              //           {moment(params.row.reportDate).format("DD/MM/YYYY")}
+              //         </TableCell>
+              //       ),
+              //     };
+              //   }
 
-                if (column.field === "jobs.managerTeam") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {params.row.jobs?.managerTeam}
-                      </TableCell>
-                    ),
-                  };
-                }
+              //   if (column.field === "jobs.managerTeam") {
+              //     return {
+              //       ...column,
+              //       renderCell: (params) => (
+              //         <TableCell style={{ padding: 0 }}>
+              //           {params.row.jobs?.managerTeam}
+              //         </TableCell>
+              //       ),
+              //     };
+              //   }
 
-                if (column.field === "jobs.status1") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      //   <TableCell style={{ backgroundColor: statusColors[params.row.jobs?.status1] }}>
-                      //   {statusIcons[params.row.jobs?.status1]}
-                      //   {params.row.jobs?.status1}
-                      // </TableCell>
-                      <TableCell
-                        style={{
-                          padding: "2px",
-                          borderBottom: `5px solid`,
-                          borderRadius: `5px `,
-                          color: statusColors[params.row.jobs?.status1],
-                        }}
-                      >
-                        {statusIcons[params.row.jobs?.status1]}
-                        {params.row.jobs?.status1}
-                      </TableCell>
-                    ),
-                  };
-                }
-                if (column.field === "jobs.cDate") {
-                  return {
-                    ...column,
-                    renderCell: (params) => (
-                      <TableCell style={{ padding: 0 }}>
-                        {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
-                      </TableCell>
-                    ),
-                  };
-                }
+              //   if (column.field === "jobs.status1") {
+              //     return {
+              //       ...column,
+              //       renderCell: (params) => (
+              //         //   <TableCell style={{ backgroundColor: statusColors[params.row.jobs?.status1] }}>
+              //         //   {statusIcons[params.row.jobs?.status1]}
+              //         //   {params.row.jobs?.status1}
+              //         // </TableCell>
+              //         <TableCell
+              //           style={{
+              //             padding: "2px",
+              //             borderBottom: `5px solid`,
+              //             borderRadius: `5px `,
+              //             color: statusColors[params.row.jobs?.status1],
+              //           }}
+              //         >
+              //           {statusIcons[params.row.jobs?.status1]}
+              //           {params.row.jobs?.status1}
+              //         </TableCell>
+              //       ),
+              //     };
+              //   }
+              //   if (column.field === "jobs.cDate") {
+              //     return {
+              //       ...column,
+              //       renderCell: (params) => (
+              //         <TableCell style={{ padding: 0 }}>
+              //           {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
+              //         </TableCell>
+              //       ),
+              //     };
+              //   }
 
-                return column;
-              })}
+              //   return column;
+              // })}
               rowsPerPageOptions={[5,10, 25, 50, 100]}
               checkboxSelection
               disableSelectionOnClick
