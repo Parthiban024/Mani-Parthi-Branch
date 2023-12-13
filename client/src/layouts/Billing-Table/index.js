@@ -222,6 +222,7 @@ export default function ColumnGroupingTable() {
   const list = ["CV", "NLP", "CM", "Sourcing"];
   const submit = (e) => {
     e.preventDefault();
+    
     const billData = {
       name: name,
       team: teamList,
@@ -230,26 +231,45 @@ export default function ColumnGroupingTable() {
       reportDate: bill.tDate,
       projectname: bill.projectname,
       jobs: {
-        // managerTeam: bill.jobs.managerTeam,
         managerTeam: managers,
         status1: bill.jobs.status1,
         cDate: bill.jobs.cDate,
       },
     };
+  
     axios
       .post("/billing/new", billData)
-      // .then((res) => toast.success(res.data))
-      // .then(() => (window.location = "/project-report"))
       .then((res) => {
         toast.success(res.data);
         axios.get(`/billing/`).then((response) => {
           setData(response.data);
         });
+        axios.get("/create/fetch/addteam-data").then((response) => {
+          setTeamList(response.data);
+        });
+      
+        axios.get("/create/fetch/manager-data").then((response) => {
+          setManagers(response.data);
+        });
       })
       .catch((err) => toast.error(err));
+  
     closeDrawer();
-    // console.log(bill.tDate)
+  
+    // Reset the state to initial values
+    setBill({
+      tDate: "",
+      team: "",
+      projectname: "",
+      batch: "",
+      jobs: {
+        managerTeam: "",
+        status1: "",
+        cDate: "",
+      },
+    });
   };
+  
 
   // drawer code end
 
@@ -305,8 +325,10 @@ export default function ColumnGroupingTable() {
   //     setInitialData(response.data);
   //   });
   // }, []);
+
   useEffect(() => {
     axios.get(`/billing/`).then((response) => {
+      // Update initial data
       setInitialData(response.data);
       setData(response.data);
     });
@@ -316,8 +338,9 @@ export default function ColumnGroupingTable() {
     axios.get("/create/fetch/manager-data").then((response) => {
       setManagers(response.data);
     });
-  }, []);
-  const handleSubmit = (e) => {
+  }, []); // Remove dependencies from the dependency array
+
+const handleSubmit = (e) => {
     e.preventDefault();
 
     const sDate = values.startDate;
@@ -532,7 +555,7 @@ export default function ColumnGroupingTable() {
               No.of.Resources
             </InputLabel>
           </MDBox>
-          <MDBox sx={{ p: 1, ml: 1 }}>
+          <MDBox sx={{ display: 'flex', alignItems: 'center', p: 1, ml: 1 }}>
             {/* <TextField
               sx={{ width: 305 }}
               select
@@ -562,7 +585,6 @@ export default function ColumnGroupingTable() {
               onChange={handleManagerChange}
               sx={{
                 width: 305,
-                mt: 1,
                 "& .MuiOutlinedInput-root": {
                   padding: 0.5,
                 },
