@@ -7,7 +7,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+// import Footer from "examples/Footer";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
@@ -18,7 +18,8 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import DatePicker from 'react-datepicker';
 import checkinImage from '../images/check-in.png'
 import checkoutImage from '../images/check-out.png';
-
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function Attendance() {
   const dispatch = useDispatch();
@@ -224,20 +225,21 @@ function Attendance() {
       </Grid>
       <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} lg={4}>
+          {/* <Card> */}
           <MDBox
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="space-between"
           >
-            <DatePicker
+            <Calendar
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               dateFormat="yyyy-MM-dd"
               isClearable
-              placeholderText="Select Date"
             />
           </MDBox>
+          {/* </Card> */}
         </Grid>
         <Grid item xs={12} lg={8}>
           <Card>
@@ -251,7 +253,7 @@ function Attendance() {
           </Card>
         </Grid>
       </Grid>
-      <Footer />
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }
