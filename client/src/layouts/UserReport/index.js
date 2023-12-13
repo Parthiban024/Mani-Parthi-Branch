@@ -114,13 +114,7 @@ function Report() {
 
 
 
-  // Fetch task data
-  useEffect(() => {
-    // Assuming you have an API endpoint to fetch task data
-    axios.get("/create-task/fetch/task-data").then((response) => {
-      setTaskList(response.data);
-    });
-  }, []);
+
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
 
   // Function to handle opening the filter popup
@@ -158,7 +152,9 @@ function Report() {
     axios.get("/billing/").then((response) => {
       const projects = response.data.map((item) => item.projectname);
       const managers = response.data.map((item) => item.jobs?.managerTeam).filter(Boolean);
-
+      axios.get("/create-task/fetch/task-data").then((response) => {
+        setTaskList(response.data);
+      });
       setProjectNames(projects);
       setManagers(managers);
 
@@ -278,41 +274,6 @@ function Report() {
     .catch((err) => toast.error(`Try Again Followed Error Acquired: ${err}☹️`));
   };
 
-  // useEffect(() => {
-  //   let activeTime = 0;
-  //   let totalTime = 0;
-  //   let entityTime = 0;
-  //   data.map((item) => {
-  //     if (item.URL.match(/sagemaker\.aws\/#\/work\//gm) !== null) {
-  //       activeTime += Number(item["Active(sec)"]);
-  //     }
-
-  //     if (item.URL.match(/inAll/gm) !== null) {
-  //       totalTime = Number(item["Active(sec)"]);
-  //     }
-  //     return null;
-  //   });
-  //   const active = convert(activeTime, "cal");
-  //   const total = convert(totalTime, "cal");
-  //   entityTime = totalTime - activeTime;
-  //   const entity = convert(entityTime, "cal");
-  //   // console.log(Object.keys(data).length);
-  //   // console.log(totalTime);
-  //   // console.log(activeTime);
-  //   // console.log(entityTime);
-  //   setSeconds({
-  //     TotalTime: total,
-  //     ActiveTime: active,
-  //     EntityTime: entity,
-  //   });
-  //   setTimeData({
-  //     TotalTime: totalTime,
-  //     ActiveTime: activeTime,
-  //     EntityTime: entityTime,
-  //   });
-
-  // }, [data]);
-  // Team List
 
 
   const listtask = [
@@ -687,7 +648,9 @@ function Report() {
             <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel>
           </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
-
+          {/* <input type="time" id="appt"    name="sessionOne"
+              value={value.sessionOne}
+              onChange={handleInputchange} min="00:00" max="12:00" /> */}
             <TextField
               sx={{ width: 305 }}
               select
