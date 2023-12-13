@@ -14,7 +14,7 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { updateUserName, updateUserEmpId } from './userActions';
 import { useDispatch } from 'react-redux';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import DatePicker from 'react-datepicker';
 import checkinImage from '../images/check-in.png'
 import checkoutImage from '../images/check-out.png';
@@ -51,16 +51,17 @@ function Attendance() {
   }, [empId, selectedDate]);
 
   const columns = [
-    { field: 'id', headerName: 'ID', editable: false },
-    { field: 'checkInTime', headerName: 'Check In', width: 150, flex: 1 },
-    { field: 'checkOutTime', headerName: 'Check Out', width: 150, flex: 1 },
-    { field: 'total', headerName: 'Total', width: 150, flex: 1 },
+    { field: 'id', headerName: 'S.No', editable: false },
     {
       field: 'currentDate',
       headerName: 'Date',
-      width: 150,
+      width: 200,
       valueGetter: (params) => moment(params.row.currentDate).format('YYYY-MM-DD'),
     },
+    { field: 'checkInTime', headerName: 'Check In', width: 120, flex: 1 },
+    { field: 'checkOutTime', headerName: 'Check Out', width: 120, flex: 1 },
+    { field: 'total', headerName: 'Total', width: 120, flex: 1 },
+
   ];
 
   const mappedData = attendanceData.map((item, index) => ({
@@ -241,7 +242,11 @@ function Attendance() {
         <Grid item xs={12} lg={8}>
           <Card>
             <div style={{ height: 370, width: '100%' }}>
-              <DataGrid rows={mappedData} columns={columns} pageSize={5} />
+              <DataGrid rows={mappedData} columns={columns} pageSize={5} components={{
+                Toolbar: () => (
+                  <GridToolbar />
+                ),
+              }} />
             </div>
           </Card>
         </Grid>
