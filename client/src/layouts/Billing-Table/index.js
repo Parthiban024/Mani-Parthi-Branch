@@ -47,9 +47,9 @@ import { useHistory } from "react-router-dom";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
-import CheckIcon from '@mui/icons-material/Check';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-import DirectionsRunIcon from '@mui/icons-material/DirectionsRun'; 
+import CheckIcon from "@mui/icons-material/Check";
+import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
+import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 
 export default function ColumnGroupingTable() {
   // drawer code
@@ -61,7 +61,7 @@ export default function ColumnGroupingTable() {
     { field: "jobs.cDate", headerName: "EndDate", flex: 1 },
     { field: "jobs.managerTeam", headerName: "Manager", flex: 1 },
     { field: "jobs.status1", headerName: "Status", flex: 1 },
- 
+
     {
       field: "action",
       headerName: "Action",
@@ -85,7 +85,7 @@ export default function ColumnGroupingTable() {
       ),
     },
   ];
- 
+
   const [count, setCount] = useState({ aTotal: "" });
   const [bill, setBill] = useState({
     tDate: "",
@@ -98,42 +98,42 @@ export default function ColumnGroupingTable() {
       cDate: "",
     },
   });
- 
+
   const [drawerOpen, setDrawerOpen] = useState(false);
- 
+
   const openDrawer = () => {
     setDrawerOpen(true);
   };
- 
+
   const closeDrawer = () => {
     setDrawerOpen(false);
   };
- 
+
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
- 
+
   const openFilterDialog = () => {
     setFilterDialogOpen(true);
   };
- 
+
   const closeFilterDialog = () => {
     setFilterDialogOpen(false);
   };
   const handleCancel = () => {
     setValues(initialValues);
     setTeamList(null);
- 
+
     // Close the filter popup
     closeFilterDialog();
   };
- 
+
   const empId = useSelector((state) => state.auth.user.empId);
   const name = useSelector((state) => state.auth.user.name);
- 
+
   const [teamList, setTeamList] = useState(null);
- 
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
- 
+
     setBill({
       ...bill,
       [name]: value,
@@ -142,9 +142,9 @@ export default function ColumnGroupingTable() {
       // status1: status,
     });
   };
- 
+
   const handleTeamChange = (event, value) => setTeamList(value);
- 
+
   const handleManagerTeamChange = (event, value) => {
     setBill({
       ...bill,
@@ -154,7 +154,7 @@ export default function ColumnGroupingTable() {
       },
     });
   };
- 
+
   const handleStatusChange = (event) => {
     setBill({
       ...bill,
@@ -164,7 +164,7 @@ export default function ColumnGroupingTable() {
       },
     });
   };
- 
+
   useEffect(() => {
     setCount({
       ...count,
@@ -200,22 +200,22 @@ export default function ColumnGroupingTable() {
     closeDrawer();
     // console.log(bill.tDate)
   };
- 
+
   // drawer code end
- 
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [data, setData] = useState([]);
- 
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
- 
+
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
- 
+
   const handleDelete = (id) => {
     axios
       .delete("/billing/" + id)
@@ -223,7 +223,7 @@ export default function ColumnGroupingTable() {
       .catch((err) => console.log(err));
     setData(data.filter((el) => el._id !== id));
   };
- 
+
   // card
   const initialValues = {
     startDate: "",
@@ -231,13 +231,13 @@ export default function ColumnGroupingTable() {
     team: "",
   };
   const [values, setValues] = useState(initialValues);
- 
+
   const [teamlist, setTeamlist] = useState(null);
   // const [report, setReport] = useState([]);
- 
+
   const handleInputchange = (e) => {
     const { name, value } = e.target;
- 
+
     setValues({
       ...values,
       [name]: value,
@@ -245,9 +245,9 @@ export default function ColumnGroupingTable() {
   };
   // const handleChange = (event, value) => setEmpName(value);
   const handleTeamchange = (event, value) => setTeamlist(value);
- 
+
   const [initialData, setInitialData] = useState([]);
- 
+
   // Fetch initial data without filter
   // useEffect(() => {
   //   axios.get(`/billing/`).then((response) => {
@@ -263,11 +263,11 @@ export default function ColumnGroupingTable() {
   }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
- 
+
     const sDate = values.startDate;
     const eDate = values.endDate;
     const team = teamlist;
- 
+
     if (team == null) {
       axios
         .get("billing/fetch/date/?sDate=" + sDate + "&eDate=" + eDate)
@@ -310,26 +310,27 @@ export default function ColumnGroupingTable() {
   // Team List
   const List = ["CV", "NLP", "CM", "Sourcing"];
   const [popperOpen, setPopperOpen] = useState(false);
- 
+
   const handlePopperToggle = () => {
     setPopperOpen((prev) => !prev);
   };
- 
+
   const handlePopperClose = () => {
     setPopperOpen(false);
   };
   const statusIcons = {
-    'POC': <SelfImprovementIcon/>,              
-    'In-Progress': <DirectionsRunIcon />,
-    'Completed-Won': <CheckIcon />,
-    'Completed-Lost': <CloseIcon />,
+    POC: <SelfImprovementIcon />,
+    "In-Progress": <DirectionsRunIcon />,
+    "Completed-Won": <CheckIcon />,
+    "Completed-Lost": <CloseIcon />,
   };
   const statusColors = {
-    'POC': '#2196F3',        // Blue
-    'In-Progress': '#FF9800', // orange
-    'Completed-Won': '#8BC34A', // Light Green
-    'Completed-Lost': '#FF5722', // Deep Orange
+    POC: "#2196F3", // Blue
+    "In-Progress": "#FF9800", // orange
+    "Completed-Won": "#8BC34A", // Light Green
+    "Completed-Lost": "#FF5722", // Deep Orange
   };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -357,7 +358,34 @@ export default function ColumnGroupingTable() {
           Create Project
         </MDButton>
       </div>
-      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius: "0", padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
+      <Drawer
+        anchor="right"
+        PaperProps={{
+          style: {
+            width: 712,
+            backgroundColor: "#fff",
+            color: "rgba(0, 0, 0, 0.87)",
+            boxShadow:
+              "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            flex: "1 0 auto",
+            zIndex: 1200,
+            WebkitOverflowScrolling: "touch",
+            position: "fixed",
+            top: 0,
+            outline: 0,
+            margin: "0",
+            border: "none",
+            borderRadius: "0",
+            padding: "23px",
+          },
+        }}
+        open={drawerOpen}
+        onClose={closeDrawer}
+      >
         <MDBox
           sx={{
             display: "flex",
@@ -374,7 +402,7 @@ export default function ColumnGroupingTable() {
             <CloseIcon />
           </IconButton>
         </MDBox>
- 
+
         <MDBox pb={5} component="form" role="form" onSubmit={submit}>
           <MDBox
             sx={{
@@ -455,7 +483,7 @@ export default function ColumnGroupingTable() {
               <option value="Naveen">Naveen</option>
               <option value="Sowmiya">Sowmiya</option>
             </TextField>
- 
+
             <TextField
               sx={{ width: 305, ml: 2 }}
               type="number"
@@ -496,7 +524,7 @@ export default function ColumnGroupingTable() {
               required
             />
             <TextField
-              sx={{ width: 305, ml:2 }}
+              sx={{ width: 305, ml: 2 }}
               type="date"
               variant="outlined"
               id="end-date"
@@ -572,7 +600,6 @@ export default function ColumnGroupingTable() {
                 position: "absolute",
                 top: "100px",
                 left: "0px",
-               
               }}
             >
               {({ TransitionProps, placement }) => (
@@ -585,7 +612,7 @@ export default function ColumnGroupingTable() {
                         role="form"
                         onSubmit={handleSubmit}
                         className="filter-popup"
-                        sx={{ display: "flex",  padding:"0px" }}
+                        sx={{ display: "flex", padding: "0px" }}
                       >
                         <MDBox
                           sx={{
@@ -597,7 +624,7 @@ export default function ColumnGroupingTable() {
                           <MDTypography
                             variant="h6"
                             fontWeight="medium"
-                            sx={{ fontSize: '15px' }}
+                            sx={{ fontSize: "15px" }}
                           >
                             Start Date
                           </MDTypography>
@@ -625,11 +652,11 @@ export default function ColumnGroupingTable() {
                             End Date
                           </MDTypography>
                           <MDInput
-                           id="movie-customized-option-demo"
+                            id="movie-customized-option-demo"
                             type="date"
                             name="endDate"
                             size="small"
-                            sx={{ width: "100%", border: 'none !important' }}
+                            sx={{ width: "100%", border: "none !important" }}
                             value={values.endDate}
                             onChange={handleInputchange}
                           />
@@ -651,7 +678,10 @@ export default function ColumnGroupingTable() {
                             disableCloseOnSelect
                             sx={{ width: "100%" }}
                             PopperComponent={(props) => (
-                              <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                              <Popper
+                                {...props}
+                                style={{ zIndex: 99999, position: "relative" }}
+                              >
                                 {props.children}
                               </Popper>
                             )}
@@ -684,73 +714,94 @@ export default function ColumnGroupingTable() {
           </Box>
         </Card>
       </Grid>
- 
+
       <Grid item xs={12} mt={1} mb={10}>
         <Card>
-          <Box sx={{ height: 480, width: "100%" }}>
+          <Box
+            sx={{
+              height: 480,
+              width: "100%",
+              "@media screen and (min-width: 768px)": {
+                height: 680,
+              },
+            }}
+          >
             <DataGrid
-             rows={formattedData}
-             getRowId={(row) => row._id}
-             columns={columns.map((column) => {
-               if (column.field === "reportDate") {
-                 return {
-                   ...column,
-                   renderCell: (params) => (
-                     <TableCell style={{ padding: 0 }}>
-                       {moment(params.row.reportDate).format("DD/MM/YYYY")}
-                     </TableCell>
-                   ),
-                 };
-               }
-           
-               if (column.field === "jobs.managerTeam") {
-                 return {
-                   ...column,
-                   renderCell: (params) => (
-                     <TableCell style={{ padding: 0 }}>
-                       {params.row.jobs?.managerTeam}
-                     </TableCell>
-                   ),
-                 };
-               }
-           
-               if (column.field === "jobs.status1") {
-                return {
-                  ...column,
-                  renderCell: (params) => (
-                 //   <TableCell style={{ backgroundColor: statusColors[params.row.jobs?.status1] }}>
-                 //   {statusIcons[params.row.jobs?.status1]} 
-                 //   {params.row.jobs?.status1} 
-                 // </TableCell>
-                    <TableCell style={{ padding: '2px', borderBottom: `2px solid`,   color: statusColors[params.row.jobs?.status1] }}>
-                   {statusIcons[params.row.jobs?.status1]} 
-                  {params.row.jobs?.status1} 
-                  </TableCell>
-                  ),
-                };
-              }
-               if (column.field === "jobs.cDate") {
-                 return {
-                   ...column,
-                   renderCell: (params) => (
-                     <TableCell style={{ padding: 0 }}>
-                       {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
-                     </TableCell>
-                   ),
-                 };
-               }
-           
-               return column;
-             })}
-             pageSize={10}
-             rowsPerPageOptions={[10, 25, 50, 100]}
-             checkboxSelection
-             disableSelectionOnClick
-            //  disableColumnMenu
+              rows={formattedData}
+              getRowId={(row) => row._id}
+              columns={columns.map((column) => {
+                if (column.field === "reportDate") {
+                  return {
+                    ...column,
+                    renderCell: (params) => (
+                      <TableCell style={{ padding: 0 }}>
+                        {moment(params.row.reportDate).format("DD/MM/YYYY")}
+                      </TableCell>
+                    ),
+                  };
+                }
+
+                if (column.field === "jobs.managerTeam") {
+                  return {
+                    ...column,
+                    renderCell: (params) => (
+                      <TableCell style={{ padding: 0 }}>
+                        {params.row.jobs?.managerTeam}
+                      </TableCell>
+                    ),
+                  };
+                }
+
+                if (column.field === "jobs.status1") {
+                  return {
+                    ...column,
+                    renderCell: (params) => (
+                      //   <TableCell style={{ backgroundColor: statusColors[params.row.jobs?.status1] }}>
+                      //   {statusIcons[params.row.jobs?.status1]}
+                      //   {params.row.jobs?.status1}
+                      // </TableCell>
+                      <TableCell
+                        style={{
+                          padding: "2px",
+                          borderBottom: `5px solid`,
+                          borderRadius: `5px `,
+                          color: statusColors[params.row.jobs?.status1],
+                        }}
+                      >
+                        {statusIcons[params.row.jobs?.status1]}
+                        {params.row.jobs?.status1}
+                      </TableCell>
+                    ),
+                  };
+                }
+                if (column.field === "jobs.cDate") {
+                  return {
+                    ...column,
+                    renderCell: (params) => (
+                      <TableCell style={{ padding: 0 }}>
+                        {moment(params.row.jobs?.cDate).format("DD/MM/YYYY")}
+                      </TableCell>
+                    ),
+                  };
+                }
+
+                return column;
+              })}
+              rowsPerPageOptions={[10, 25, 50, 100]}
+              checkboxSelection
+              disableSelectionOnClick
+              //  disableColumnMenu
               components={{
                 Toolbar: () => (
                   <div style={{ display: "flex" }}>
-                    <div style={{ display: "flex", alignItems: "center", marginTop: "5px", marginLeft: "10px", }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: "5px",
+                        marginLeft: "10px",
+                      }}
+                    >
                       <FilterListIcon
                         className="team-filter-icon"
                         style={{
@@ -768,13 +819,12 @@ export default function ColumnGroupingTable() {
                           color: "#1a73e8",
                           cursor: "pointer",
                           fontSize: "12.1px",
-                         
                         }}
                       >
                         DATE FILTER
                       </MDTypography>
                     </div>
-             
+
                     <GridToolbar />
                     {/* <div
                       style={{
@@ -801,10 +851,9 @@ export default function ColumnGroupingTable() {
           </Box>
         </Card>
       </Grid>
- 
+
       <Footer />
       <ToastContainer />
     </DashboardLayout>
   );
 }
- 
