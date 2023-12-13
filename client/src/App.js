@@ -66,7 +66,8 @@ function App() {
         store.dispatch(logoutUser());
 
         // Redirect to login
-        window.location.href = "/sign-in";
+        // window.location.href = "/sign-in";
+        window.location.href = "/authentication/sign-in"
       }
     }
   }, []);
