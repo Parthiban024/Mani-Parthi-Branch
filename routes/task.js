@@ -112,6 +112,42 @@ try {
 
 
 
+//delete funtions
+// Delete task
+router.route('/delete/task/:id').delete(async (req, res) => {
+  try {
+    const taskId = req.params.id;
+    await Task.findByIdAndDelete(taskId);
+    res.json('Task Deleted!!!');
+  } catch (error) {
+    res.status(400).json('Error:' + error);
+  }
+});
+
+// Delete manager
+router.route('/delete/manager/:id').delete(async (req, res) => {
+  try {
+    const managerId = req.params.id;
+    await Manager.findByIdAndDelete(managerId);
+    res.json('Manager Deleted!!!');
+  } catch (error) {
+    res.status(400).json('Error:' + error);
+  }
+});
+
+// Delete team
+router.route('/delete/team/:id').delete(async (req, res) => {
+  try {
+    const teamId = req.params.id;
+    await AddTeam.findByIdAndDelete(teamId);
+    res.json('Team Deleted!!!');
+  } catch (error) {
+    res.status(400).json('Error:' + error);
+  }
+});
+
+
+
 // ... (Other routes)
 
 export default router;
