@@ -7,6 +7,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+
 // import Footer from "examples/Footer";
 import "react-datepicker/dist/react-datepicker.css";
 import { useSelector } from "react-redux";
@@ -20,6 +21,8 @@ import checkinImage from '../images/check-in.png'
 import checkoutImage from '../images/check-out.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+
+
 
 function Attendance() {
   const dispatch = useDispatch();
