@@ -12,7 +12,7 @@ import Select from "@mui/material/Select";
 import "react-datepicker/dist/react-datepicker.css";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+// import Footer from "examples/Footer";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
@@ -76,12 +76,34 @@ const UserDataUpload = (props) => {
     styles.color = "#04756F";
   }
 
+  const [quote, setQuote] = useState(null); // Initialize quote as null
+
+  const quotes = () => {
+    axios.get('https://api.quotable.io/random')
+      .then((res) => {
+        setQuote(res.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching quotes:', error);
+        // Handle the error as needed, e.g., show a default quote.
+      });
+  };
+
+  useEffect(() => {
+    quotes();
+  }, []);
   return (
     <div>
       <DashboardLayout>
         <DashboardNavbar />
-
-        <Card lg={{ pb: "20px", height: "100%" }}>
+        <Card    sx={{
+              height: 480,
+              width: "100%",
+              "@media screen and (min-width: 768px)": {
+                height: 670,
+              },
+            }}>
+        {/* <Card lg={{ pb: "20px", height: "100%" }}> */}
           <MDBox pt={3} px={2} mb={8}>
             <MDBox
               display="flex"
@@ -103,6 +125,9 @@ const UserDataUpload = (props) => {
                 </MDTypography>
               </MDBox>
             </MDBox>
+
+      
+
             <MDBox
               pt={3}
               pb={2}
@@ -131,9 +156,20 @@ const UserDataUpload = (props) => {
                   <Grid item>
                     <MDBox component="img" src={cartoon} alt="cartoon" width="100%" mt={1} />
                   </Grid>
-                  <Grid item>
-                    {/* Additional content goes here */}
-                  </Grid>
+                  {/* <Grid item>
+                  
+                          <MDBox mt={1} display="flex" flexDirection="column" textAlign="center">
+          {quote ? ( 
+            <MDTypography sx={{ whiteSpace: "pre-wrap" }} mt={1} mb={2} variant="h6" color="text">
+              {quote.content}
+              <br />
+              - {quote.author}
+            </MDTypography>
+          ) : (
+            <div>Loading quote...</div>
+          )}
+        </MDBox>
+                  </Grid> */}
                 </Grid>
               </MDBox>
             </MDBox>

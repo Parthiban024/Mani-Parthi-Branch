@@ -3,17 +3,14 @@ import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import MDButton from "components/MDButton";
-import MDTypography from "components/MDTypography";
 import { ToastContainer, toast } from "react-toastify";
 import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import InputLabel from "@mui/material/InputLabel";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
 
 const TaskCreation = () => {
   const [task, setTask] = useState({
@@ -398,7 +395,7 @@ const TaskCreation = () => {
           </Card>
         </Grid>
       </Grid>
-      <Footer />
+      {/* <Footer /> */}
       <ToastContainer />
     </DashboardLayout>
   );

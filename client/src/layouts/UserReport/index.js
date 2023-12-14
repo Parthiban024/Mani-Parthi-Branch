@@ -13,7 +13,7 @@ import { useState, useMemo, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+// import Footer from "examples/Footer";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
@@ -931,7 +931,7 @@ function Report() {
         </MDBox>
         {/* ) : null} */}
       </Grid>
-      <Footer />
+      {/* <Footer /> */}
       <ToastContainer />
     </DashboardLayout>
 
