@@ -83,7 +83,7 @@ function Attendance() {
     let timeoutId;
 
     if (resetTimeoutId) {
-      timeoutId = setTimeout(resetFunction, 20000);
+      timeoutId = setTimeout(resetFunction, 120000);
     }
 
     return () => {
@@ -139,7 +139,7 @@ function Attendance() {
         console.log("Checkout time saved successfully");
 
         // Reset function logic
-        setResetTimeoutId(setTimeout(resetFunction, 20000));
+        setResetTimeoutId(setTimeout(resetFunction, 120000));
       } else {
         console.error("Failed to save checkout time");
       }
