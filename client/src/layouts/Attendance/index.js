@@ -14,9 +14,6 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import checkinImage from "../images/check-in.png";
 import checkoutImage from "../images/check-out.png";
 
-// ... (your existing imports)
-
-// ... (your existing imports)
 
 function Attendance() {
   const dispatch = useDispatch();

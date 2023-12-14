@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import InputLabel from "@mui/material/InputLabel";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
@@ -190,17 +191,21 @@ const TaskCreation = () => {
       <Grid
         container
         justifyContent="center"
-        alignItems="center"
+        alignItems="top"
         style={{ height: "80vh" }}
         spacing={4}
       >
-        <Grid item>
+        {/* Task Section */}
+        <Grid item xs={4}>
           <Card>
             <Box p={2}>
+            <InputLabel sx={{ ml:1, mb:1, fontWeight: 'bolder', fontSize: '17px' }} htmlFor="add-task" >
+              Add Task
+            </InputLabel>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
-                  label="Add Task"
                   name="createTask"
+                  id="add-task"
                   value={task.createTask}
                   onChange={handleInputChange}
                   variant="outlined"
@@ -215,17 +220,21 @@ const TaskCreation = () => {
                     updateData();
                   }}
                 >
-                  <AddIcon style={{ color: "white" }} />
+                        {/* <InputLabel sx={{  fontWeight: 'bolder', color: '#fff', mt:0.5 }} htmlFor="add-team">
+              ADD
+            </InputLabel><AddIcon style={{ color: "white" }} /> */}
+                  <InputLabel sx={{  fontWeight: 'bolder', color: '#fff', mt:0.5, padding:'5px' }} htmlFor="add-team">
+              ADD
+            </InputLabel>
                 </IconButton>
               </div>
-              {/* <MDTypography variant="h6">Task Data:</MDTypography> */}
-              <ul style={{ listStyleType: "none", paddingTop: 15 }}>
-                {taskData.map((task) => (
+              <ul style={{ listStyleType: "none", paddingTop: 10, paddingLeft: 15, paddingRight: 15, maxHeight: "35vh", overflowY: "auto" }}>
+                {taskData.slice(0, 10).map((task) => (
                   <li
                     key={task._id}
                     style={{
-                      background: "#f0f0f0",
-                      padding: "10px",
+                      borderBottom: "2px solid #f0f0f0",
+                      padding: "3px",
                       borderRadius: "5px",
                       marginBottom: "5px",
                       display: "flex",
@@ -241,7 +250,7 @@ const TaskCreation = () => {
                       style={{
                         cursor: "pointer",
                         marginLeft: "10px",
-                        color: "red", // Set color to red
+                        color: "red",
                       }}
                       onClick={() => handleDeleteTask(task._id)}
                     >
@@ -253,13 +262,18 @@ const TaskCreation = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item>
+
+        {/* Manager Section */}
+        <Grid item xs={4}>
           <Card>
             <Box p={2}>
+            <InputLabel sx={{ ml: 1, mb:1, fontWeight: 'bolder', fontSize: '17px' }} htmlFor="add-manager">
+              Add Manager
+            </InputLabel>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
-                  label="Add Manager"
                   name="createManager"
+                  id="add-manager"
                   value={addManager.createManager}
                   onChange={handleInputChangeTwo}
                   variant="outlined"
@@ -274,17 +288,18 @@ const TaskCreation = () => {
                     updateData();
                   }}
                 >
-                  <AddIcon style={{ color: "white" }} />
+            <InputLabel sx={{  fontWeight: 'bolder', color: '#fff', mt:0.5, padding: '5px' }} htmlFor="add-team">
+              ADD
+            </InputLabel>
                 </IconButton>
               </div>
-              {/* <MDTypography variant="h6">Manager Data:</MDTypography> */}
-              <ul style={{ listStyleType: "none", paddingTop: 15 }}>
-                {managerData.map((manager) => (
+              <ul style={{ listStyleType: "none", paddingTop: 10, paddingLeft: 15, paddingRight: 15, maxHeight: "35vh", overflowY: "auto" }}>
+                {managerData.slice(0, 10).map((manager) => (
                   <li
-                    key={manager.id}
+                    key={manager._id}
                     style={{
-                      background: "#f0f0f0",
-                      padding: "10px",
+                      borderBottom: "2px solid #f0f0f0",
+                      padding: "3px",
                       borderRadius: "5px",
                       marginBottom: "5px",
                       display: "flex",
@@ -300,7 +315,7 @@ const TaskCreation = () => {
                       style={{
                         cursor: "pointer",
                         marginLeft: "10px",
-                        color: "red", // Set color to red
+                        color: "red",
                       }}
                       onClick={() => handleDeleteManager(manager._id)}
                     >
@@ -312,13 +327,20 @@ const TaskCreation = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item>
+
+        {/* Team Section */}
+        <Grid item xs={4}>
           <Card>
+        
             <Box p={2}>
+            <InputLabel sx={{ ml: 1, mb:1, fontWeight: 'bolder', fontSize: '17px' }} htmlFor="add-team">
+              Add Team
+            </InputLabel>
               <div style={{ display: 'flex', alignItems: 'center' }}>
+         
                 <TextField
-                  label="Add Team"
                   name="createTeam"
+                  id="add-team"
                   value={addTeam.createTeam}
                   onChange={handleInputChangeThree}
                   variant="outlined"
@@ -333,17 +355,21 @@ const TaskCreation = () => {
                     updateData();
                   }}
                 >
-                  <AddIcon style={{ color: "white" }} />
+                  {/* <InputLabel sx={{  fontWeight: 'bolder', color: '#fff', mt:0.5 }} htmlFor="add-team">
+              ADD
+            </InputLabel><AddIcon style={{ color: "white" }} /> */}
+                  <InputLabel sx={{  fontWeight: 'bolder', color: '#fff', mt:0.5, padding: '5px' }} htmlFor="add-team">
+              ADD
+            </InputLabel>
                 </IconButton>
               </div>
-              {/* <MDTypography variant="h6">Team Data:</MDTypography> */}
-              <ul style={{ listStyleType: "none", paddingTop: 15 }}>
-                {teamData.map((team) => (
+              <ul style={{ listStyleType: "none", paddingTop: 10, paddingLeft: 15, paddingRight: 15, maxHeight: "35vh", overflowY: "auto" }}>
+                {teamData.slice(0, 10).map((team) => (
                   <li
-                    key={team.id}
+                    key={team._id}
                     style={{
-                      background: "#f0f0f0",
-                      padding: "10px",
+                      borderBottom: "2px solid #f0f0f0",
+                      padding: "3px",
                       borderRadius: "5px",
                       marginBottom: "5px",
                       display: "flex",
@@ -359,7 +385,7 @@ const TaskCreation = () => {
                       style={{
                         cursor: "pointer",
                         marginLeft: "10px",
-                        color: "red", // Set color to red
+                        color: "red",
                       }}
                       onClick={() => handleDeleteTeam(team._id)}
                     >
