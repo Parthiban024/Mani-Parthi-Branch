@@ -86,22 +86,21 @@ function Attendance() {
     sessionStorage.removeItem("checkoutTime");
     sessionStorage.removeItem("total");
     setResetTimeoutId(null);
-  }, []);
+  
+    // Clear existing timeout
+    clearTimeout(resetTimeoutId);
+  }, [resetTimeoutId]);
+  
 
   useEffect(() => {
-    let timeoutId;
-
     if (resetTimeoutId) {
-      timeoutId = setTimeout(resetFunction, 120000);
+      const timeoutId = setTimeout(resetFunction, 20000);
+  
+      return () => clearTimeout(timeoutId);
     }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
   }, [resetTimeoutId, resetFunction]);
-
+  
+  
 
   const handleCheckin = async () => {
     const timeNow = moment().format("hh:mm a");
@@ -150,7 +149,7 @@ function Attendance() {
         console.log("Checkout time saved successfully");
 
         // Reset function logic
-        setResetTimeoutId(setTimeout(resetFunction, 120000));
+        setResetTimeoutId(setTimeout(resetFunction, 20000));
         await fetchData(); // Refresh data after check-out
       } else {
         console.error("Failed to save checkout time");
