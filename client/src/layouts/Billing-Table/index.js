@@ -192,7 +192,7 @@ export default function ColumnGroupingTable() {
     });
   };
 
- 
+
 
   const handleManagerTeamChange = (event, value) => {
     setBill({
@@ -222,7 +222,7 @@ export default function ColumnGroupingTable() {
   const list = ["CV", "NLP", "CM", "Sourcing"];
   const submit = (e) => {
     e.preventDefault();
-    
+
     const billData = {
       name: name,
       team: teamList,
@@ -236,7 +236,7 @@ export default function ColumnGroupingTable() {
         cDate: bill.jobs.cDate,
       },
     };
-  
+
     axios
       .post("/billing/new", billData)
       .then((res) => {
@@ -247,15 +247,15 @@ export default function ColumnGroupingTable() {
         axios.get("/create/fetch/addteam-data").then((response) => {
           setTeamList(response.data);
         });
-      
+
         axios.get("/create/fetch/manager-data").then((response) => {
           setManagers(response.data);
         });
       })
       .catch((err) => toast.error(err));
-  
+
     closeDrawer();
-  
+
     // Reset the state to initial values
     setBill({
       tDate: "",
@@ -269,14 +269,14 @@ export default function ColumnGroupingTable() {
       },
     });
   };
-  
+
 
   // drawer code end
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [data, setData] = useState([]);
-  
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -340,7 +340,7 @@ export default function ColumnGroupingTable() {
     });
   }, []); // Remove dependencies from the dependency array
 
-const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const sDate = values.startDate;
@@ -358,11 +358,11 @@ const handleSubmit = (e) => {
       axios
         .get(
           "billing/fetch/report/?sDate=" +
-            sDate +
-            "&eDate=" +
-            eDate +
-            "&team=" +
-            team
+          sDate +
+          "&eDate=" +
+          eDate +
+          "&team=" +
+          team
         )
         .then((res) => {
           // console.log(res.data);
@@ -523,21 +523,26 @@ const handleSubmit = (e) => {
                 renderInput={(params) => <TextField {...params} />}
                 required
               /> */}
-                  <Autocomplete
-              disablePortal
-              id="department"
-              name="team"
-              options={(Array.isArray(teamList) ? teamList : []).map((addteam) => addteam.createTeam)}
-              onChange={handleTeamChange}
-              sx={{
-                width: 305,
-                mt: 1,
-                "& .MuiOutlinedInput-root": {
-                  padding: 0.5,
-                },
-              }}
-              renderInput={(params) => <TextField {...params} />}
-            />
+              <Autocomplete
+                disablePortal
+                id="department"
+                name="team"
+                options={(Array.isArray(teamList) ? teamList : []).map((addteam) => addteam.createTeam)}
+                onChange={handleTeamChange}
+                sx={{
+                  width: 305,
+                  mt: 1,
+                  "& .MuiOutlinedInput-root": {
+                    padding: 0.5,
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required  // Add this line for validation
+                  />
+                )}
+              />
             </MDBox>
           </MDBox>
           <MDBox
@@ -577,7 +582,7 @@ const handleSubmit = (e) => {
               <option value="Naveen">Naveen</option>
               <option value="Sowmiya">Sowmiya</option>
             </TextField> */}
-             <Autocomplete
+            <Autocomplete
               disablePortal
               id="manager"
               name="managerTeam"
@@ -589,7 +594,12 @@ const handleSubmit = (e) => {
                   padding: 0.5,
                 },
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  required  // Add this line for validation
+                />
+              )}
             />
             <TextField
               sx={{ width: 305, ml: 2 }}
@@ -895,7 +905,7 @@ const handleSubmit = (e) => {
 
               //   return column;
               // })}
-              rowsPerPageOptions={[5,10, 25, 50, 100]}
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
               checkboxSelection
               disableSelectionOnClick
               //  disableColumnMenu

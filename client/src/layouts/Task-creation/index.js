@@ -78,6 +78,12 @@ const TaskCreation = () => {
   };
 
   const handleSubmit = () => {
+
+    if (!task.createTask) {
+      toast.error("Task cannot be empty");
+      return;
+    }
+
     const taskData = {
       createTask: task.createTask,
     };
@@ -95,6 +101,12 @@ const TaskCreation = () => {
   };
 
   const handleSubmitTwo = () => {
+
+    if (!addManager.createManager) {
+      toast.error("Manager cannot be empty");
+      return;
+    }
+
     const managerData = {
       createManager: addManager.createManager,
     };
@@ -115,6 +127,12 @@ const TaskCreation = () => {
   };
 
   const handleSubmitThree = () => {
+
+    if (!addTeam.createTeam) {
+      toast.error("Team cannot be empty");
+      return;
+    }
+    
     const teamData = {
       createTeam: addTeam.createTeam,
     };
@@ -143,7 +161,7 @@ const TaskCreation = () => {
       })
       .catch((err) => console.log(err));
   };
-  
+
   const handleDeleteManager = (id) => {
     axios
       .delete("/create/delete/manager/" + id)
@@ -153,7 +171,7 @@ const TaskCreation = () => {
       })
       .catch((err) => console.log(err));
   };
-  
+
   const handleDeleteTeam = (id) => {
     axios
       .delete("/create/delete/team/" + id)
@@ -164,6 +182,7 @@ const TaskCreation = () => {
       .catch((err) => console.log(err));
   };
   
+
 
   return (
     <DashboardLayout>
@@ -178,7 +197,7 @@ const TaskCreation = () => {
         <Grid item>
           <Card>
             <Box p={2}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
                   label="Add Task"
                   name="createTask"
@@ -187,6 +206,7 @@ const TaskCreation = () => {
                   variant="outlined"
                   fullWidth
                   style={{ marginRight: '10px' }}
+                  required
                 />
                 <IconButton
                   style={{ background: "#4caf50", borderRadius: "5px" }}
@@ -202,7 +222,7 @@ const TaskCreation = () => {
               <ul style={{ listStyleType: "none", paddingTop: 15 }}>
                 {taskData.map((task) => (
                   <li
-                    key={task.id}
+                    key={task._id}
                     style={{
                       background: "#f0f0f0",
                       padding: "10px",
@@ -238,13 +258,14 @@ const TaskCreation = () => {
             <Box p={2}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
-                        label="Add Manager"
-                        name="createManager"
-                        value={addManager.createManager}
-                        onChange={handleInputChangeTwo}
-                        variant="outlined"
-                        fullWidth
+                  label="Add Manager"
+                  name="createManager"
+                  value={addManager.createManager}
+                  onChange={handleInputChangeTwo}
+                  variant="outlined"
+                  fullWidth
                   style={{ marginRight: '10px' }}
+                  required
                 />
                 <IconButton
                   style={{ background: "#4caf50", borderRadius: "5px" }}
@@ -296,13 +317,14 @@ const TaskCreation = () => {
             <Box p={2}>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
-                   label="Add Team"
-                   name="createTeam"
-                   value={addTeam.createTeam}
-                   onChange={handleInputChangeThree}
-                   variant="outlined"
-                   fullWidth
-                   style={{ marginRight: '10px' }}
+                  label="Add Team"
+                  name="createTeam"
+                  value={addTeam.createTeam}
+                  onChange={handleInputChangeThree}
+                  variant="outlined"
+                  fullWidth
+                  style={{ marginRight: '10px' }}
+                  required
                 />
                 <IconButton
                   style={{ background: "#4caf50", borderRadius: "5px" }}

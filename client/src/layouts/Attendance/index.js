@@ -31,22 +31,34 @@ function Attendance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [resetTimeoutId, setResetTimeoutId] = useState(null);
 
+  
   useEffect(() => {
-    // Fetch data on component mount
-    fetch(`/emp-attendance/fetch/att-data?empId=${empId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const mappedData = data.map((item) => ({ ...item, id: item._id }));
-
-        // Filter data based on selected date if it's set
-        const filteredData = selectedDate
-          ? mappedData.filter((item) => moment(item.currentDate).isSame(selectedDate, "day"))
-          : mappedData;
-
-        setAttendanceData(filteredData);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+    fetchData(); // Initial data fetch
   }, [empId, selectedDate]);
+
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`/emp-attendance/fetch/att-data?empId=${empId}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const mappedData = data.map((item) => ({ ...item, id: item._id }));
+
+      // Filter data based on the selected date if it's set
+      const filteredData = selectedDate
+        ? mappedData.filter((item) => moment(item.currentDate).isSame(selectedDate, "day"))
+        : mappedData;
+
+      setAttendanceData(filteredData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   const columns = [
     { field: "id", headerName: "S.No", editable: false },
@@ -102,6 +114,8 @@ function Attendance() {
     sessionStorage.setItem("checkinTime", timeNow);
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("empId", empId);
+
+    await fetchData(); // Refresh data after check-in
   };
 
   const handleCheckout = async () => {
@@ -140,6 +154,7 @@ function Attendance() {
 
         // Reset function logic
         setResetTimeoutId(setTimeout(resetFunction, 120000));
+        await fetchData(); // Refresh data after check-out
       } else {
         console.error("Failed to save checkout time");
       }

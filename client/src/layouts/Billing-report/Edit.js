@@ -153,20 +153,20 @@ function Edit() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-<Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius:'0', padding: "23px" } }} open={drawerOpen1} onClose={closeDrawer1}>
+      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius: '0', padding: "23px" } }} open={drawerOpen1} onClose={closeDrawer1}>
         <div>
           <MDBox
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              mb: 2, 
-              
+              mb: 2,
+
             }}
           >
             <Typography variant="h6">Update Project</Typography>
             <IconButton
-              sx={{ position: "absolute", top: 10, right: 0 }} 
+              sx={{ position: "absolute", top: 10, right: 0 }}
               onClick={closeDrawer1}
             >
               <CloseIcon />
@@ -197,15 +197,17 @@ function Edit() {
                   required
                 />
               </MDBox>
-              <MDBox sx={{ width: 730, ml: 2, mt:1 }}>
+              <MDBox sx={{ width: 730, ml: 2, mt: 1 }}>
                 <InputLabel sx={{ mr: 20 }} htmlFor="department">
                   Department *
                 </InputLabel>
                 <Autocomplete
                   disablePortal
-                  sx={{ width: 305, mt: 1,  "& .MuiOutlinedInput-root": {
-                    padding: 0.5,
-                  },}}
+                  sx={{
+                    width: 305, mt: 1, "& .MuiOutlinedInput-root": {
+                      padding: 0.5,
+                    },
+                  }}
                   id="combo-box-demo"
                   options={list}
                   isOptionEqualToValue={(list, value) =>
@@ -213,7 +215,12 @@ function Edit() {
                   }
                   value={bill.team}
                   onChange={handleTeamChange}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      required  // Add this line for validation
+                    />
+                  )}
                 />
               </MDBox>
             </MDBox>
@@ -263,28 +270,35 @@ function Edit() {
                 <option value="Sowmiya">Sowmiya</option>
               </TextField> */}
               <Autocomplete
-                  disablePortal
-                  sx={{ width: 305,  "& .MuiOutlinedInput-root": {
+                disablePortal
+                sx={{
+                  width: 305, "& .MuiOutlinedInput-root": {
                     padding: 0.5,
-                  },}}
-                  id="combo-box-demo"
-                  options={list}
-                  isOptionEqualToValue={(list, value) =>
-                    list.value === value.value
-                  }
-                  name="managerTeam"
-                  value={bill.jobs.managerTeam}
-                  onChange={(e) =>
-                    setBill({
-                      ...bill,
-                      jobs: {
-                        ...bill.jobs,
-                        managerTeam: e.target.value,
-                      },
-                    })
-                  }
-                  renderInput={(params) => <TextField {...params} />}
-                />
+                  },
+                }}
+                id="combo-box-demo"
+                options={list}
+                isOptionEqualToValue={(list, value) =>
+                  list.value === value.value
+                }
+                name="managerTeam"
+                value={bill.jobs.managerTeam}
+                onChange={(e) =>
+                  setBill({
+                    ...bill,
+                    jobs: {
+                      ...bill.jobs,
+                      managerTeam: e.target.value,
+                    },
+                  })
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required  // Add this line for validation
+                  />
+                )}
+              />
               <TextField
                 sx={{ width: 305, ml: 2 }}
                 type="number"
@@ -293,6 +307,7 @@ function Edit() {
                 fullWidth
                 name="batch"
                 value={bill.batch}
+                required
                 onChange={handleInputChange}
               />
             </MDBox>
@@ -329,6 +344,7 @@ function Edit() {
                 id="end-date"
                 type="date"
                 name="cDate"
+                required
                 value={bill.jobs.cDate}
                 onChange={(e) =>
                   setBill({
@@ -374,28 +390,28 @@ function Edit() {
               </TextField>
             </MDBox>
             <MDBox
-  pt={1}
-  px={1}
-  sx={{
-    display: "flex",
-    flexDirection: "row", // Set flexDirection to "row" to place buttons in the same row
-    justifyContent: "center",
-    alignItems: "center",
-  }}
->
-  <MDButton variant="gradient" color="success" type="submit">
-    &nbsp;Update
-  </MDButton>
-  <MDButton
-    variant="gradient"
-    // size="small"
-    color="warning"
-    onClick={handleCancel}
-    style={{ marginLeft: "10px" }}
-  >
-    Cancel
-  </MDButton>
-</MDBox>
+              pt={1}
+              px={1}
+              sx={{
+                display: "flex",
+                flexDirection: "row", // Set flexDirection to "row" to place buttons in the same row
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <MDButton variant="gradient" color="success" type="submit">
+                &nbsp;Update
+              </MDButton>
+              <MDButton
+                variant="gradient"
+                // size="small"
+                color="warning"
+                onClick={handleCancel}
+                style={{ marginLeft: "10px" }}
+              >
+                Cancel
+              </MDButton>
+            </MDBox>
 
           </MDBox>
         </div>
