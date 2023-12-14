@@ -100,8 +100,8 @@ function Edit() {
       ...count,
     });
   }, [bill]);
-  const list = ["CV", "NLP", "CM"];
-
+  const list = [];
+  const List = [];
   const { id } = useParams();
   useEffect(() => {
     axios
@@ -225,15 +225,15 @@ function Edit() {
                 mt: 1,
               }}
             >
-              <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="manager">
+              <InputLabel sx={{ mt: 2, ml: 2 }} htmlFor="manager">
                 Manager *
               </InputLabel>
-              <InputLabel sx={{ mt: 2, mr: 24 }} htmlFor="members">
+              <InputLabel sx={{ mt: 2, mr: 26.5 }} htmlFor="members">
                 No.of.Resources *
               </InputLabel>
             </MDBox>
-            <MDBox sx={{ p: 1, ml: 1 }}>
-              <TextField
+            <MDBox sx={{ display: 'flex', alignItems: 'center', p: 1, ml: 1 }}>
+              {/* <TextField
                 sx={{ width: 305 }}
                 select
                 fullWidth
@@ -261,8 +261,30 @@ function Edit() {
                 <option value="Rajesh">Rajesh</option>
                 <option value="Naveen">Naveen</option>
                 <option value="Sowmiya">Sowmiya</option>
-              </TextField>
-
+              </TextField> */}
+              <Autocomplete
+                  disablePortal
+                  sx={{ width: 305,  "& .MuiOutlinedInput-root": {
+                    padding: 0.5,
+                  },}}
+                  id="combo-box-demo"
+                  options={list}
+                  isOptionEqualToValue={(list, value) =>
+                    list.value === value.value
+                  }
+                  name="managerTeam"
+                  value={bill.jobs.managerTeam}
+                  onChange={(e) =>
+                    setBill({
+                      ...bill,
+                      jobs: {
+                        ...bill.jobs,
+                        managerTeam: e.target.value,
+                      },
+                    })
+                  }
+                  renderInput={(params) => <TextField {...params} />}
+                />
               <TextField
                 sx={{ width: 305, ml: 2 }}
                 type="number"
