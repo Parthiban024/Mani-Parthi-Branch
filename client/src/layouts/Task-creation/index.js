@@ -229,7 +229,7 @@ const TaskCreation = () => {
                 </IconButton>
               </div>
               <ul style={{ listStyleType: "none", paddingTop: 10, paddingLeft: 15, paddingRight: 15, maxHeight: "35vh", overflowY: "auto" }}>
-                {taskData.slice(0, 10).map((task) => (
+                {taskData.slice(0).map((task) => (
                   <li
                     key={task._id}
                     style={{
@@ -294,7 +294,7 @@ const TaskCreation = () => {
                 </IconButton>
               </div>
               <ul style={{ listStyleType: "none", paddingTop: 10, paddingLeft: 15, paddingRight: 15, maxHeight: "35vh", overflowY: "auto" }}>
-                {managerData.slice(0, 10).map((manager) => (
+                {managerData.slice(0).map((manager) => (
                   <li
                     key={manager._id}
                     style={{
@@ -364,7 +364,7 @@ const TaskCreation = () => {
                 </IconButton>
               </div>
               <ul style={{ listStyleType: "none", paddingTop: 10, paddingLeft: 15, paddingRight: 15, maxHeight: "35vh", overflowY: "auto" }}>
-                {teamData.slice(0, 10).map((team) => (
+                {teamData.slice(0).map((team) => (
                   <li
                     key={team._id}
                     style={{
