@@ -34,21 +34,31 @@ function Attendance() {
   const [attendanceData, setAttendanceData] = useState([]);
 
 
+  
   useEffect(() => {
-    // Fetch data on component mount
-    fetch(`/emp-attendance/fetch/att-data?empId=${empId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        const mappedData = data.map((item) => ({ ...item, id: item._id }));
+    fetchData(); // Initial data fetch
+  }, [empId, selectedDate]);
+
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`/emp-attendance/fetch/att-data?empId=${empId}`);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const mappedData = data.map((item) => ({ ...item, id: item._id }));
 
         // Filter data based on selected date if it's set
         const filteredData = selectedDate
-          ? mappedData.filter((item) => moment(item.currentDate).isSame(selectedDate, 'day'))
+          ? mappedData.filter((item) => moment(item.currentDate).isSame(selectedDate, "day"))
           : mappedData;
 
         setAttendanceData(filteredData);
       })
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) => console.error("Error fetching data:", error));
   }, [empId, selectedDate]);
 
   const columns = [
@@ -79,9 +89,9 @@ function Attendance() {
     setCheckinTime(timeNow);
     setCheckinTimeForCheckout(timeNow); // Set checkinTimeForCheckout here
 
-    localStorage.setItem("checkinTime", timeNow);
-    localStorage.setItem("name", name);
-    localStorage.setItem("empId", empId);
+    sessionStorage.setItem("checkinTime", timeNow);
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("empId", empId);
   };
 
   const handleCheckout = async () => {
@@ -119,16 +129,7 @@ function Attendance() {
         console.log('Checkout time saved successfully');
 
         // Reset function logic
-        const resetIntervalId = setInterval(() => {
-          setCheckinTime('');
-          setCheckoutTime('');
-          setTotal('');
-          setRemainingTime('');
-          localStorage.removeItem('checkinTime');
-          localStorage.removeItem('checkoutTime');
-          localStorage.removeItem('total');
-          clearInterval(resetIntervalId);
-        }, 20000);
+        setResetTimeoutId(setTimeout(resetFunction, 120000));
       } else {
         console.error('Failed to save checkout time');
       }
