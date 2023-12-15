@@ -1,30 +1,22 @@
+// Sidenav.js
+
 import { useState, useEffect } from "react";
-
-// react-router-dom components
-import { useLocation, NavLink } from "react-router-dom";
-
-// prop-types is a library for typechecking of props.
+import { useLocation, NavLink } from "react-router-dom"; // Import useLocation
 import PropTypes from "prop-types";
-
-// @mui material components
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
 import Icon from "@mui/material/Icon";
-import axios from 'axios';
-// Material Dashboard 2 React components
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-// import MDButton from "components/MDButton";
-
-// Material Dashboard 2 React example components
 import SidenavCollapse from "examples/Sidenav/SidenavCollapse";
-
-// Custom styles for the Sidenav
 import SidenavRoot from "examples/Sidenav/SidenavRoot";
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import StartIcon from '@mui/icons-material/Start';
 import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
-
-// Material Dashboard 2 React context
 import {
   useMaterialUIController,
   setMiniSidenav,
@@ -32,12 +24,12 @@ import {
   setWhiteSidenav,
 } from "context";
 
-function Sidenav({ color, brand, brandName, routes,roles, ...rest }) {
+function Sidenav({ color, brand, brandName, routes, roles, ...rest }) {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode } = controller;
-  const location = useLocation();
-  const collapseName = location.pathname.replace("/", "");
-  const [quote,setQuote] = useState({});
+  const location = useLocation(); // Use useLocation
+  const collapseName = location.pathname.replace("/", ""); // Define collapseName
+  const [quote, setQuote] = useState({});
   let textColor = "white";
 
   if (transparentSidenav || (whiteSidenav && !darkMode)) {
@@ -46,40 +38,37 @@ function Sidenav({ color, brand, brandName, routes,roles, ...rest }) {
     textColor = "inherit";
   }
 
+  const openSidenav = () => setMiniSidenav(dispatch, false);
+  const isSidebarOpen = !miniSidenav;
   const closeSidenav = () => setMiniSidenav(dispatch, true);
-  const quotes = () =>{
-    // axios.get('https://api.quotable.io/random')
+
+  const quotes = () => {
     axios.get('')
-    .then((res)=>{
-      setQuote(res.data)
-      
-    })
-  }
-  useEffect(()=>{
-    quotes();
-  },[])
+      .then((res) => {
+        setQuote(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching quote:", error);
+      });
+  };
 
   useEffect(() => {
-    // A function that sets the mini state of the sidenav.
+    quotes();
+  }, []);
+
+  useEffect(() => {
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
       setTransparentSidenav(dispatch, window.innerWidth < 1200 ? false : transparentSidenav);
       setWhiteSidenav(dispatch, window.innerWidth < 1200 ? false : whiteSidenav);
     }
 
-    /** 
-     The event listener that's calling the handleMiniSidenav function when resizing the window.
-    */
     window.addEventListener("resize", handleMiniSidenav);
-
-    // Call the handleMiniSidenav function to set the state with the initial value.
     handleMiniSidenav();
 
-    // Remove event listener on cleanup
     return () => window.removeEventListener("resize", handleMiniSidenav);
   }, [dispatch, location]);
 
-  // Render all the routes from the routes.js (All the visible items on the Sidenav)
   const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, href, route, role }) => {
     let returnValue;
 
@@ -99,11 +88,11 @@ function Sidenav({ color, brand, brandName, routes,roles, ...rest }) {
             noCollapse={noCollapse}
           />
         </Link>
-      ) : role===roles || role === 'open' ?(
+      ) : role === roles || role === 'open' ? (
         <NavLink key={key} to={route}>
           <SidenavCollapse name={name} icon={icon} active={key === collapseName} />
         </NavLink>
-      ):'';
+      ) : '';
     } else if (type === "title") {
       returnValue = (
         <MDTypography
@@ -141,21 +130,9 @@ function Sidenav({ color, brand, brandName, routes,roles, ...rest }) {
       {...rest}
       variant="permanent"
       ownerState={{ transparentSidenav, whiteSidenav, miniSidenav, darkMode }}
+      
     >
       <MDBox pt={3} pb={1} px={4} textAlign="center">
-        <MDBox
-          display={{ xs: "block", xl: "none" }}
-          position="absolute"
-          top={0}
-          right={0}
-          p={1.625}
-          onClick={closeSidenav}
-          sx={{ cursor: "pointer" }}
-        >
-          <MDTypography variant="h6" color="secondary">
-            <Icon sx={{ fontWeight: "bold" }}>close</Icon>
-          </MDTypography>
-        </MDBox>
         <MDBox component={NavLink} to="/" display="flex" alignItems="center">
           {brand && <MDBox component="img" src={brand} alt="Brand" width="12rem" />}
           <MDBox
@@ -181,50 +158,33 @@ function Sidenav({ color, brand, brandName, routes,roles, ...rest }) {
           (darkMode && !transparentSidenav && whiteSidenav)
         }
       />
-       <MDBox mt={2} textAlign="center">
-          <MDBox mb={0.5}>
-            {/* <MDTypography color="success" variant="h4">
-              Quotes 
-            </MDTypography> */}
-          </MDBox></MDBox>
-          <MDBox mt={1} display="flex" flexDirection="column" textAlign="center">
-         <MDTypography sx={{whiteSpace: "pre-wrap"}} mt={1} mb={2} variant="h6"  color="text">
-            {quote.content}
-         <br/>
-           {/* - {quote.author} */}
-          </MDTypography>
-          {/* <MDTypography color="dark" variant="h5">
-          - {quote.author}
-            </MDTypography> */}
-        </MDBox>
-      {/* <MDBox p={2} mt="auto">
-        <MDButton
-          component="a"
-          href=""
-          target="_blank"
-          rel="noreferrer"
-          variant="gradient"
-          // color={}
-          fullWidth
-        >
-          upgrade to pro
-        </MDButton>
-      </MDBox> */}
+      <MDBox mt={2} textAlign="center">
+        <MDBox mb={0.5}></MDBox>
+      </MDBox>
+      <MDBox mt={1} display="flex" flexDirection="column" textAlign="center">
+        <MDTypography sx={{ whiteSpace: "pre-wrap" }} mt={1} mb={2} variant="h6" color="text">
+          {quote.content}
+          <br />
+        </MDTypography>
+      </MDBox>
+
+      <MDBox position="absolute" bottom={0} end={0} p={2}>
+        <IconButton onClick={isSidebarOpen ? closeSidenav : openSidenav}>
+          {isSidebarOpen ? <MenuOpenIcon /> : <StartIcon />}
+        </IconButton>
+      </MDBox>
     </SidenavRoot>
   );
 }
 
-// Setting default values for the props of Sidenav
 Sidenav.defaultProps = {
   color: "info",
   brand: "",
 };
 
-// Typechecking props for the Sidenav
 Sidenav.propTypes = {
   color: PropTypes.oneOf(["primary", "secondary", "info", "success", "warning", "error", "dark"]),
   brand: PropTypes.string,
-  // eslint-disable-next-line react/require-default-props
   brandName: PropTypes.string,
   routes: PropTypes.arrayOf(PropTypes.object).isRequired,
   roles: PropTypes.string

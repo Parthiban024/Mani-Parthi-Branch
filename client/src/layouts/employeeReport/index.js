@@ -12,7 +12,7 @@ import Select from "@mui/material/Select";
 import "react-datepicker/dist/react-datepicker.css";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+// import Footer from "examples/Footer";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
