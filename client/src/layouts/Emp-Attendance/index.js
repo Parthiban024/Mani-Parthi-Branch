@@ -5,7 +5,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
-import Footer from 'examples/Footer';
+// import Footer from 'examples/Footer';
 import MDBox from 'components/MDBox';
 import MDTypography from 'components/MDTypography';
 
@@ -72,7 +72,7 @@ function Attendance() {
         </Card>
       </Grid>
 
-      <Footer />
+     {/* <Footer /> */}
     </DashboardLayout>
   );
 }
