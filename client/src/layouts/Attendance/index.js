@@ -13,7 +13,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import checkinImage from "../images/check-in.png";
 import checkoutImage from "../images/check-out.png";
-
+import './calendar.css'
 
 function Attendance() {
   const dispatch = useDispatch();
@@ -28,22 +28,61 @@ function Attendance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [resetTimeoutId, setResetTimeoutId] = useState(null);
 
-  
+  const [selectedAttendanceData, setSelectedAttendanceData] = useState([]);
+
+  const dayCellRenderer = ({ date }) => {
+    // Check if the date is the present date
+    const isPresentDate = moment(date).isSame(moment(), "day");
+
+    // Determine the symbol based on whether it is the present date or has attendance
+    const symbol = selectedAttendanceData.find((item) => moment(item.currentDate).isSame(date, "day")) ? "P" : "A";
+
+    // Apply different styles for days with and without attendance
+    const cellStyle = {
+      padding: "0px",
+      textAlign: "center",
+      fontWeight: "bold",
+      color: isPresentDate ? "green" : symbol === "P" ? "green" : "red",
+      cursor: "pointer", // Add cursor pointer for interaction
+    };
+
+
+    const handleDateClick = () => {
+      // Toggle attendance on date click
+      const updatedData = selectedAttendanceData.map((item) => {
+        if (moment(item.currentDate).isSame(date, "day")) {
+          return {
+            ...item,
+            hasAttendance: !item.hasAttendance,
+          };
+        }
+        return item;
+      });
+
+      setSelectedAttendanceData(updatedData);
+    };
+
+    return (
+      <div style={cellStyle} onClick={handleDateClick}>
+        {symbol}
+      </div>
+    );
+  };
+
   useEffect(() => {
     fetchData(); // Initial data fetch
   }, [empId, selectedDate]);
 
-
   const fetchData = async () => {
     try {
       const response = await fetch(`/emp-attendance/fetch/att-data?empId=${empId}`);
-      
+
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`);
       }
 
       const data = await response.json();
-      const mappedData = data.map((item) => ({ ...item, id: item._id }));
+      const mappedData = data.map((item) => ({ ...item, id: item._id, hasAttendance: true })); // Set hasAttendance to true for all dates
 
       // Filter data based on the selected date if it's set
       const filteredData = selectedDate
@@ -51,23 +90,24 @@ function Attendance() {
         : mappedData;
 
       setAttendanceData(filteredData);
+      setSelectedAttendanceData(mappedData); // Set the selected data for the DataGrid
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
-
   const columns = [
     { field: "id", headerName: "S.No", editable: false },
     {
       field: "currentDate",
       headerName: "Date",
-      width: 200,
+      width: 120,
       valueGetter: (params) => moment(params.row.currentDate).format("YYYY-MM-DD"),
     },
     { field: "checkInTime", headerName: "Check In", width: 120, flex: 1 },
     { field: "checkOutTime", headerName: "Check Out", width: 120, flex: 1 },
     { field: "total", headerName: "Total", width: 120, flex: 1 },
+    // { field: 'status', headerName: 'Status', width: 120, flex: 1 },
+
   ];
 
   const mappedData = attendanceData.map((item, index) => ({
@@ -75,6 +115,7 @@ function Attendance() {
     id: index + 1,
     name: item.name,
     empId: item.empId,
+    status: item.checkOutTime ? 'Present' : 'Absent',
   }));
 
   const resetFunction = useCallback(() => {
@@ -86,21 +127,21 @@ function Attendance() {
     sessionStorage.removeItem("checkoutTime");
     sessionStorage.removeItem("total");
     setResetTimeoutId(null);
-  
+
     // Clear existing timeout
     clearTimeout(resetTimeoutId);
   }, [resetTimeoutId]);
-  
+
 
   useEffect(() => {
     if (resetTimeoutId) {
       const timeoutId = setTimeout(resetFunction, 20000);
-  
+
       return () => clearTimeout(timeoutId);
     }
   }, [resetTimeoutId, resetFunction]);
-  
-  
+
+
 
   const handleCheckin = async () => {
     const timeNow = moment().format("hh:mm a");
@@ -222,29 +263,40 @@ function Attendance() {
                   </Grid>
                 </MDBox>
               </MDBox>
-              <MDBox mt={4} px={10} display="flex" flexDirection="column">
+              {/* <MDBox mt={4} px={10} display="flex" flexDirection="column">
                 <MDTypography mb={1} variant="h6" color="info" fontWeight="regular" style={{ marginLeft: "70px" }}>
                   <h3>Working Hours: {total}</h3>
                 </MDTypography>
-              </MDBox>
+              </MDBox> */}
             </Grid>
           </Grid>
         </MDBox>
       </Grid>
+
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} lg={7} xl={5}>
           <MDBox
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="space-between"
+            style={{ height: '500px', overflowY: 'auto' }}
           >
-            <Calendar selected={selectedDate} onChange={(date) => setSelectedDate(date)} dateFormat="yyyy-MM-dd" isClearable />
+            <Calendar
+              selected={selectedDate}
+              onChange={(date) => {
+                setSelectedDate(date);
+                fetchData(); // Fetch data for the selected date
+              }}
+              dateFormat="yyyy-MM-dd"
+              isClearable
+              tileContent={({ date }) => dayCellRenderer({ date })}
+            />
           </MDBox>
         </Grid>
-        <Grid item xs={12} lg={8}>
+        <Grid item xs={12} lg={5} xl={6}>
           <Card>
-            <div style={{ height: 370, width: "100%" }}>
+            <div style={{ height: 470, width: "100%" }}>
               <DataGrid rows={mappedData} columns={columns} pageSize={5} components={{ Toolbar: () => <GridToolbar /> }} />
             </div>
           </Card>
@@ -255,4 +307,3 @@ function Attendance() {
 }
 
 export default Attendance;
-

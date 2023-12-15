@@ -1,0 +1,80 @@
+.react-calendar {
+    width: 677px;
+    max-width: 100%;
+    background: white;
+    border: 1px solid #a0a096;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 2.125em;
+    /* border: 1px solid black !important; */
+}
+.react-calendar__month-view__weekdays {
+    text-align: center;
+    text-transform: uppercase;
+    font: inherit;
+    font-size: 0.75em;
+    font-weight: bold;
+    border-bottom: 0.5px solid #cbd5e1;
+    border-top: 0.5px solid #cbd5e1;
+}
+.react-calendar {
+    width: 677px;
+    max-width: 100%;
+    background: white;
+    /* border: 1px solid #a0a096; */
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 2.125em;
+    /* border: 1px solid black !important; */
+    border: none;
+}
+.react-calendar__tile {
+    max-width: 100%;
+    padding: 2px 10.6667px !important;
+    background: none;
+    text-align: start;
+    line-height: 16px;
+    font: inherit;
+    font-size: 0.833em;
+    border: 0.5px solid #cbd5e1;
+    color: #93a9c5;
+}
+.react-calendar__tile--now {
+    background: #edfaed;
+    color: black;
+}
+.react-calendar__tile--now:hover {
+    background: #edfaed !important;
+    color: black;
+}
+.react-calendar__tile--active {
+    background: #f7f7f7 !important;
+    color: black;
+}
+.react-calendar__month-view__weekdays__weekday {
+    padding: 0;
+}
+abbr[title] {
+    text-decoration: none;
+}
+/* Add these styles to your calendar.css file */
+.react-calendar__tile--present::before {
+    content: 'P';
+    display: block;
+    color: #4caf50;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .react-calendar__tile--absent::before {
+    content: 'A';
+    display: block;
+    color: #ff5722;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  .react-calendar button {
+    margin: 0;
+    border: 0;
+    outline: none;
+    border: 0.5px solid #cbd5e1;
+}
+
