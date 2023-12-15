@@ -70,6 +70,8 @@ export default styled(Drawer)(({ theme, ownerState }) => {
     "& .MuiDrawer-paper": {
       boxShadow: xxl,
       border: "none",
+      height:"100%",
+      margin:0,
 
       ...(miniSidenav ? drawerCloseStyles() : drawerOpenStyles()),
     },
