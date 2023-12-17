@@ -13,6 +13,7 @@ import BillingTable from "layouts/Billing-Table";
 // import Edit from 'layouts/Billing-report/Edit'
 import Attendance from "layouts/Attendance";
 import TaskCreation from "layouts/employeeReport"
+import AllEmployee from "layouts/All-Employees"
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -42,6 +43,15 @@ const routes = [
     icon: <Icon fontSize="small">create_new_folder</Icon>,
     route: "/employee-attendance",
     component: <EmployeeAtt/>,
+    role: "admin",
+  },
+  {
+    type: "collapse",
+    name: "Employees",
+    key: "employees",
+    icon: <Icon fontSize="small">create_new_folder</Icon>,
+    route: "/employees",
+    component: <AllEmployee/>,
     role: "admin",
   },
   {

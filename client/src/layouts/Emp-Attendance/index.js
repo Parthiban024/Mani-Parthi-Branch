@@ -5,9 +5,17 @@ import { DataGrid, GridToolbar, GridToolbarContainer  } from "@mui/x-data-grid";
 import moment from 'moment';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
+import Popper from "@mui/material/Popper";
+import FilterListIcon from "@material-ui/icons/FilterList";
 // import Footer from 'examples/Footer';
 import MDBox from 'components/MDBox';
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import MDTypography from 'components/MDTypography';
+import DialogContent from "@mui/material/DialogContent";
+import MDButton from "components/MDButton";
+import MDInput from "components/MDInput";
 
 function Attendance() {
   const name = useSelector((state) => state.auth.user.name);
@@ -35,6 +43,16 @@ function Attendance() {
     setEndDate(date);
   };
 
+  const [popperOpen, setPopperOpen] = useState(false);
+
+  const handlePopperToggle = () => {
+    setPopperOpen((prev) => !prev);
+  };
+
+  const handlePopperClose = () => {
+    setPopperOpen(false);
+  };
+  
   const filteredData = attendanceData.filter((item) => {
     if (startDate && endDate) {
       const startDateTime = moment(startDate).startOf('day');
@@ -60,33 +78,7 @@ function Attendance() {
       valueGetter: (params) => moment(params.row.currentDate).format('YYYY-MM-DD'),
     },
   ];
-  const CustomToolbar = () => (
-    <GridToolbarContainer>
-      {/* Your custom date pickers */}
-      {/* <TextField
-        label="Start Date"
-        type="date"
-        onChange={(e) => handleStartDateChange(e.target.value)}
-        value={startDate}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
 
-      <TextField
-        label="End Date"
-        type="date"
-        onChange={(e) => handleEndDateChange(e.target.value)}
-        value={endDate}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      /> */}
-
-      {/* Default grid toolbar */}
-      <GridToolbar />
-    </GridToolbarContainer>
-  );
 
   return (
     <DashboardLayout>
@@ -108,7 +100,99 @@ function Attendance() {
           </Card>
         </Grid>
       </Grid> */}
-
+   <Grid item xs={12} mt={2} mb={1}>
+        <Card>
+          <Box>
+            <Popper
+              open={popperOpen}
+              // anchorEl={/* Provide the reference to the element that triggers the popper */}
+              role={undefined}
+              transition
+              disablePortal
+              style={{
+                zIndex: 9999,
+                position: "absolute",
+                top: "90px",
+                left: "0px",
+              }}
+            >
+              {({ TransitionProps, placement }) => (
+                <ClickAwayListener onClickAway={handlePopperClose}>
+                  <Paper>
+                    {/* <DialogTitle sx={{ textAlign: 'center' }}>Your Popper Title</DialogTitle> */}
+                    <DialogContent>
+                      <MDBox
+                        component="form"
+                        role="form"
+                        // onSubmit={handleSubmit}
+                        className="filter-popup"
+                        sx={{ display: "flex", padding: "0px" }}
+                      >
+                        <MDBox
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            marginRight: 2,
+                          }}
+                        >
+                          <MDTypography
+                            variant="h6"
+                            fontWeight="medium"
+                            sx={{ fontSize: "15px" }}
+                          >
+                            Start Date
+                          </MDTypography>
+                          <MDInput
+                            type="date"
+                            onChange={(e) => handleStartDateChange(e.target.value)}
+                            value={startDate}
+                          />
+                        </MDBox>
+                        <MDBox
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            marginRight: 2,
+                          }}
+                        >
+                          <MDTypography
+                            variant="h6"
+                            // fontWeight="medium"
+                            size="small"
+                          >
+                            End Date
+                          </MDTypography>
+                          <MDInput
+                            id="movie-customized-option-demo"
+                            type="date"
+                            onChange={(e) => handleEndDateChange(e.target.value)}
+                            value={endDate}
+                          />
+                        </MDBox>
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          pt={3}
+                        >
+                          <MDButton
+                            variant="gradient"
+                            size="small"
+                            color="info"
+                            type="submit"
+                          >
+                            Search
+                          </MDButton>
+                        </Box>
+                      </MDBox>
+                    </DialogContent>
+                  </Paper>
+                </ClickAwayListener>
+              )}
+            </Popper>
+          </Box>
+        </Card>
+      </Grid>
       <Grid mt={4} mb={10}>
         <Card>
           <div style={{ height: 370, width: '100%' }}>
@@ -116,7 +200,62 @@ function Attendance() {
               rows={filteredData}
               columns={columns}
               pageSize={5}
-              components={{ Toolbar: CustomToolbar }}
+              components={{
+                Toolbar: () => (
+                  <div style={{ display: "flex" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginTop: "5px",
+                        marginLeft: "10px",
+                      }}
+                    >
+                      <FilterListIcon
+                        className="team-filter-icon"
+                        style={{
+                          cursor: "pointer",
+                          color: "#1a73e8",
+                          fontSize: "20px",
+                        }}
+                        onClick={handlePopperToggle}
+                        aria-label="Team Filter"
+                      />
+                      <MDTypography
+                        variant="h6"
+                        onClick={handlePopperToggle}
+                        style={{
+                          color: "#1a73e8",
+                          cursor: "pointer",
+                          fontSize: "12.1px",
+                        }}
+                      >
+                        DATE FILTER
+                      </MDTypography>
+                    </div>
+
+                    <GridToolbar />
+                    {/* <div
+                      style={{
+                        display: "flex",
+                        marginLeft: "auto",
+                        alignItems: "center"
+                      }}
+                    >
+                    <MDButton
+                      className="team-report-btn"
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      style={{ marginRight: "13px" }}
+                      onClick={allReport}
+                    >
+                      &nbsp;All Report
+                    </MDButton>
+                    </div> */}
+                  </div>
+                ),
+              }}
               
             />
           </div>
