@@ -35,6 +35,7 @@ import Attendance from "layouts/Attendance";
 import EmployeeAtt from "layouts/Emp-Attendance"
 import TaskCreation from "layouts/Task-creation"
 import AllEmployee from "layouts/All-Employees"
+import 'layouts/Attendance/calendar.css'
 
 function App() {
   const [controller] = useMaterialUIController();
