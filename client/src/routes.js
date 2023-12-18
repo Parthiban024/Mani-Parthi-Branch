@@ -51,7 +51,7 @@ const routes = [
     type: "collapse",
     name: "Employees",
     key: "employees",
-    icon: <PeopleIcon fontSize="small" />, // Use the Material-UI People icon
+    icon: <Icon fontSize="small">peopleIcon</Icon>,
     route: "/employees",
     component: <AllEmployee />,
     role: "admin",
@@ -122,7 +122,7 @@ const routes = [
     type: "collapse",
     name: "Settings",
     key: "Settings",
-    icon: <SettingsIcon fontSize="small" />, // Use the Material-UI Settings icon
+    icon: <Icon fontSize="small">settingsIcon</Icon>,
     route: "/Settings",
     component: <TaskCreation />,
     role: "admin",
