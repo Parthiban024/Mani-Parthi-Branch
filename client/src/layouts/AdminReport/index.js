@@ -10,7 +10,7 @@ import MDInput from "components/MDInput";
 import * as React from "react";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
-import IconButton from "@material-ui/core/IconButton";
+// import IconButton from "@material-ui/core/IconButton";
 // import FormControl from "@mui/material/FormControl";
 // import Select from "@mui/material/Select";
 import { useState, useEffect, useMemo } from "react";
@@ -19,14 +19,14 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 import moment from "moment";
-import Drawer from "@mui/material/Drawer";
+// import Drawer from "@mui/material/Drawer";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Dialog from "@mui/material/Dialog";
-import CloseIcon from "@mui/icons-material/Close";
-import DialogTitle from "@mui/material/DialogTitle";
+// import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+// import Dialog from "@mui/material/Dialog";
+// import CloseIcon from "@mui/icons-material/Close";
+// import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+// import DialogActions from "@mui/material/DialogActions";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Paper from "@mui/material/Paper";
@@ -173,6 +173,14 @@ function AdminReport() {
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
     {
+      field: "date",
+      headerName: "Date",
+      // type: 'date',
+      width: 100,
+      editable: false,
+      flex: 1,
+    },
+    {
       field: "name",
       headerName: "Name",
       width: 200,
@@ -182,18 +190,11 @@ function AdminReport() {
     {
       field: "team",
       headerName: "Team",
-      width: 150,
+      width: 70,
       editable: false,
       flex: 1,
     },
-    {
-      field: "date",
-      headerName: "Date",
-      // type: 'date',
-      width: 130,
-      editable: false,
-      flex: 1,
-    },
+    
     {
       field: "projectName",
       headerName: "Project Name",
@@ -206,9 +207,9 @@ function AdminReport() {
       field: "task",
       headerName: "Task",
       // type: 'number',
-      width: 150,
+      width: 200,
       editable: false,
-      flex: 1,
+      flex: 1.5,
     },
     {
       field: "managerTask",
@@ -305,7 +306,7 @@ function AdminReport() {
     <DashboardLayout>
       <DashboardNavbar />
 
-      <Grid item xs={12} mt={4} mb={1}>
+      <Grid item xs={12}  mb={1}>
         <Card>
           <Box>
             <Popper
@@ -463,7 +464,7 @@ function AdminReport() {
           </Box>
         </Card>
       </Grid>
-      <Grid item xs={12} mt={3} mb={10}>
+      <Grid item xs={12}  mb={10}>
         {/* <IconButton  onClick={openDrawer} color="primary" aria-label="Filter">
       <FilterListIcon />
     </IconButton> */}
@@ -495,7 +496,16 @@ function AdminReport() {
                   noEndBorder
                 /> */}
 
-                <Box sx={{ height: 480, width: "100%" }}>
+                {/* <Box sx={{ height: 480, width: "100%" }}> */}
+                <Box
+            sx={{
+              height: 480,
+              width: "100%",
+              "@media screen and (min-width: 768px)": {
+                height: 670,
+              },
+            }}
+          >
                   <DataGrid
                     rows={row}
                     columns={columns}

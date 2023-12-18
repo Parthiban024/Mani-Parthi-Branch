@@ -1,14 +1,12 @@
 // Sidenav.js
 
 import { useState, useEffect } from "react";
-import { useLocation, NavLink } from "react-router-dom"; // Import useLocation
+import { useLocation, NavLink } from "react-router-dom"; 
 import PropTypes from "prop-types";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Link from "@mui/material/Link";
-import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -132,16 +130,17 @@ function Sidenav({ color, brand, brandName, routes, roles, ...rest }) {
       ownerState={{ transparentSidenav, whiteSidenav, miniSidenav, darkMode }}
       
     >
-      <MDBox pt={3} pb={1} px={4} textAlign="center">
+      <MDBox   px={3} textAlign="center">
         <MDBox component={NavLink} to="/" display="flex" alignItems="center">
-          {brand && <MDBox component="img" src={brand} alt="Brand" width="12rem" />}
+          {brand && <MDBox component="img" src={brand} alt="Brand" width="2.5rem" marginRight="13px" />}
+          {brandName && <MDBox component="img" src={brandName} alt="Brandname" width="8rem" />}
           <MDBox
             width={!brandName && "100%"}
             sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}
           >
-            <MDTypography component="h6" variant="button" fontWeight="medium" color={textColor}>
+            {/* <MDTypography component="h6" variant="button" fontWeight="medium" color={textColor}>
               {brandName}
-            </MDTypography>
+            </MDTypography> */}
           </MDBox>
         </MDBox>
       </MDBox>
