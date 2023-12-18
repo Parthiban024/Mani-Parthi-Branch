@@ -66,17 +66,18 @@ function Attendance() {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 30 },
-    { field: 'name', headerName: 'Name', width: 150, flex: 1 },
-    { field: 'empId', headerName: 'Employee ID', width: 150, flex: 1 },
-    { field: 'checkInTime', headerName: 'Check In', width: 150, flex: 1 },
-    { field: 'checkOutTime', headerName: 'Check Out', width: 150 },
-    { field: 'total', headerName: 'Total', width: 150 },
     {
       field: 'currentDate',
       headerName: 'Date',
       width: 150,
       valueGetter: (params) => moment(params.row.currentDate).format('YYYY-MM-DD'),
     },
+    { field: 'name', headerName: 'Name', width: 150, flex: 1 },
+    { field: 'empId', headerName: 'Employee ID', width: 150, flex: 1 },
+    { field: 'checkInTime', headerName: 'Check In', width: 150, flex: 1 },
+    { field: 'checkOutTime', headerName: 'Check Out', width: 150 },
+    { field: 'total', headerName: 'Total', width: 150 },
+   
   ];
 
 
@@ -195,11 +196,19 @@ function Attendance() {
       </Grid>
       <Grid mt={4} mb={10}>
         <Card>
-          <div style={{ height: 370, width: '100%' }}>
+        <Box
+            sx={{
+              height: 480,
+              width: "100%",
+              "@media screen and (min-width: 768px)": {
+                height: 670,
+              },
+            }}
+          >
             <DataGrid
               rows={filteredData}
               columns={columns}
-              pageSize={5}
+               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               components={{
                 Toolbar: () => (
                   <div style={{ display: "flex" }}>
@@ -258,7 +267,7 @@ function Attendance() {
               }}
               
             />
-          </div>
+          </Box>
         </Card>
       </Grid>
 

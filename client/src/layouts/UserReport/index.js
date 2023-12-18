@@ -368,20 +368,6 @@ function Report() {
 
   const initialDataColumns = [
     {
-      field: "name",
-      headerName: "Name",
-      width: 50,
-      editable: false,
-      flex: 1,
-    },
-    {
-      field: "team",
-      headerName: "Team",
-      width: 50,
-      editable: false,
-      flex: 1,
-    },
-    {
       field: "dateTask",
       headerName: "Date",
       width: 130,
@@ -392,9 +378,23 @@ function Report() {
       },
     },
     {
+      field: "name",
+      headerName: "Name",
+      width: 50,
+      editable: false,
+      flex: 1,
+    },
+    {
       field: "projectName",
       headerName: "Project Name",
       width: 150,
+      editable: false,
+      flex: 1,
+    },
+    {
+      field: "team",
+      headerName: "Team",
+      width: 50,
       editable: false,
       flex: 1,
     },
