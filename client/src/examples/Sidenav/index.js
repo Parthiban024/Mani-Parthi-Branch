@@ -138,6 +138,7 @@ function Sidenav({ color, brand, brandName, routes, roles, ...rest }) {
             width={!brandName && "100%"}
             sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}
           >
+            
             {/* <MDTypography component="h6" variant="button" fontWeight="medium" color={textColor}>
               {brandName}
             </MDTypography> */}
@@ -172,6 +173,7 @@ function Sidenav({ color, brand, brandName, routes, roles, ...rest }) {
           {isSidebarOpen ? <MenuOpenIcon /> : <StartIcon />}
         </IconButton>
       </MDBox>
+      
     </SidenavRoot>
   );
 }
