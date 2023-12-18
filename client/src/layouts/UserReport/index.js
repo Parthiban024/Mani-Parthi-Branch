@@ -28,23 +28,21 @@ import IconButton from "@mui/material/IconButton";
 import { useSelect } from "@mui/base";
 import { ToastContainer, toast } from "react-toastify";
 import InputLabel from "@mui/material/InputLabel";
-import Pagination from '@mui/material/Pagination';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import dayjs, { Dayjs } from 'dayjs';
-import Stack from '@mui/material/Stack';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import Pagination from "@mui/material/Pagination";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import dayjs, { Dayjs } from "dayjs";
+import Stack from "@mui/material/Stack";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 function Report() {
-
-
   // task page code start
   const [data, setData] = useState([]);
   const [disable, setDisable] = useState(true);
@@ -68,7 +66,6 @@ function Report() {
     // sessionTwo: 0,
     // others: 0,
     // comments: "",
-
   };
   const [value, setValue] = useState(initialvalues);
   const handleTeamchange = (event, value) => setTeamlist(value);
@@ -105,15 +102,12 @@ function Report() {
     // Reset project name and managerTask when the drawer is closed
     setValue((prevValues) => ({
       ...prevValues,
-      projectName: '',
-      managerTask: '',
-      sessionOne: '',
+      projectName: "",
+      managerTask: "",
+      sessionOne: "",
       // sessionMinute: ''
     }));
   };
-
-
-
 
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
 
@@ -151,7 +145,9 @@ function Report() {
   useEffect(() => {
     axios.get("/billing/").then((response) => {
       const projects = response.data.map((item) => item.projectname);
-      const managers = response.data.map((item) => item.jobs?.managerTeam).filter(Boolean);
+      const managers = response.data
+        .map((item) => item.jobs?.managerTeam)
+        .filter(Boolean);
       axios.get("/create/fetch/task-data").then((response) => {
         setTaskList(response.data);
       });
@@ -161,7 +157,9 @@ function Report() {
       const currentDate = getCurrentDate();
 
       // Find the selected project in the response data
-      const selectedProject = response.data.find((item) => item.projectname === value.projectName);
+      const selectedProject = response.data.find(
+        (item) => item.projectname === value.projectName
+      );
 
       if (selectedProject) {
         const projectManager = selectedProject.jobs?.managerTeam;
@@ -170,16 +168,16 @@ function Report() {
         setValue((prevValues) => ({
           ...prevValues,
           dateTask: currentDate,
-          managerTask: projectManager || '',
-          team: projectTeam || '', // Set the team based on the selected project
+          managerTask: projectManager || "",
+          team: projectTeam || "", // Set the team based on the selected project
         }));
       } else {
         // Reset date, manager, and team when another project name is selected
         setValue((prevValues) => ({
           ...prevValues,
-          dateTask: '',
-          managerTask: '',
-          team: '', // Reset team value
+          dateTask: "",
+          managerTask: "",
+          team: "", // Reset team value
         }));
       }
     });
@@ -260,27 +258,25 @@ function Report() {
     };
 
     axios
-    .post("/analyst/add", userData)
-    .then(() => {
-      toast.success("Successfully Data Submitted 👌");
-      closeDrawer();
-      // Fetch data again after submitting a new task
-      fetchData();
-      axios.get(`/analyst/fetch/userdata/?empId=${empId}`).then((response) => {
-        setInitialData(response.data);
-      });
-      // setReport((prevReport) => [userData, ...prevReport]);
-    })
-    .catch((err) => toast.error(`Try Again Followed Error Acquired: ${err}☹️`));
+      .post("/analyst/add", userData)
+      .then(() => {
+        toast.success("Successfully Data Submitted 👌");
+        closeDrawer();
+        // Fetch data again after submitting a new task
+        fetchData();
+        axios
+          .get(`/analyst/fetch/userdata/?empId=${empId}`)
+          .then((response) => {
+            setInitialData(response.data);
+          });
+        // setReport((prevReport) => [userData, ...prevReport]);
+      })
+      .catch((err) =>
+        toast.error(`Try Again Followed Error Acquired: ${err}☹️`)
+      );
   };
 
-
-
-  const listtask = [
-    "CV",
-    "NLP",
-    "CM",
-  ];
+  const listtask = ["CV", "NLP", "CM"];
 
   const tasklist = [
     "Initial Annotation-Billable",
@@ -290,7 +286,7 @@ function Report() {
     "Other-Interval Tracking -Billable",
 
     "Guidelines",
-    "POC"
+    "POC",
   ];
 
   // task page code end
@@ -345,7 +341,6 @@ function Report() {
       startDate: values.startDate,
       endDate: values.endDate,
       team: teamList,
-
     };
     // console.log(userData);
 
@@ -434,29 +429,27 @@ function Report() {
   useEffect(() => {
     const reversedRowsData =
       report.length === 0
-        ? initialData.slice().reverse().map((item, index) => ({
-            ...item,
-            id: index + 1,
-            name: item.name,
-            team: item.team,
-            date: moment(item.createdAt).format("DD-MM-YYYY"),
-            projectName: item.projectName,
-            task: item.task,
-            managerTask: item.managerTask,
-            sessionOne: item.sessionOne,
-            // sessionMinute: item.sessionMinute,
-          }))
-          : report.slice().reverse() || [];
+        ? initialData
+            .slice()
+            .reverse()
+            .map((item, index) => ({
+              ...item,
+              id: index + 1,
+              name: item.name,
+              team: item.team,
+              date: moment(item.createdAt).format("DD-MM-YYYY"),
+              projectName: item.projectName,
+              task: item.task,
+              managerTask: item.managerTask,
+              sessionOne: item.sessionOne,
+              // sessionMinute: item.sessionMinute,
+            }))
+        : report.slice().reverse() || [];
 
     setReversedRows(reversedRowsData);
   }, [report, initialData]);
   // Team List
-  const list = [
-    "CV",
-    "NLP",
-    "CM",
-  ];
-
+  const list = ["CV", "NLP", "CM"];
 
   const [popperOpen, setPopperOpen] = useState(false);
 
@@ -496,7 +489,34 @@ function Report() {
           Create Task
         </MDButton>
       </div>
-      <Drawer anchor="right" PaperProps={{ style: { width: 712, backgroundColor: "#fff", color: "rgba(0, 0, 0, 0.87)", boxShadow: "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)", overflowY: "auto", display: "flex", flexDirection: "column", height: "100%", flex: "1 0 auto", zIndex: 1200, WebkitOverflowScrolling: "touch", position: "fixed", top: 0, outline: 0, margin: "0", border: "none", borderRadius: '0', padding: "23px" } }} open={drawerOpen} onClose={closeDrawer}>
+      <Drawer
+        anchor="right"
+        PaperProps={{
+          style: {
+            width: 712,
+            backgroundColor: "#fff",
+            color: "rgba(0, 0, 0, 0.87)",
+            boxShadow:
+              "0px 8px 10px -5px rgba(0,0,0,0.2), 0px 16px 24px 2px rgba(0,0,0,0.14), 0px 6px 30px 5px rgba(0,0,0,0.12)",
+            overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            flex: "1 0 auto",
+            zIndex: 1200,
+            WebkitOverflowScrolling: "touch",
+            position: "fixed",
+            top: 0,
+            outline: 0,
+            margin: "0",
+            border: "none",
+            borderRadius: "0",
+            padding: "23px",
+          },
+        }}
+        open={drawerOpen}
+        onClose={closeDrawer}
+      >
         <MDBox
           sx={{
             display: "flex",
@@ -515,8 +535,6 @@ function Report() {
         </MDBox>
 
         <MDBox pb={5} component="form" role="form" onSubmit={submit}>
-
-
           <MDBox sx={{ width: 250, p: 2 }}>
             <InputLabel htmlFor="project-name">Select Project Name</InputLabel>
             <Autocomplete
@@ -530,10 +548,7 @@ function Report() {
                   projectName: newValue,
                 });
               }}
-
-              renderInput={(params) => (
-                <TextField {...params} />
-              )}
+              renderInput={(params) => <TextField {...params} />}
             />
           </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
@@ -547,8 +562,8 @@ function Report() {
                 value.projectName === "Not assigned-CV"
                   ? "CV"
                   : value.projectName === "Not assigned-NLP"
-                    ? "NLP"
-                    : value.team
+                  ? "NLP"
+                  : value.team
               }
               onChange={(event, newValue) => {
                 setValue({
@@ -556,25 +571,22 @@ function Report() {
                   team: newValue,
                 });
               }}
-
               renderInput={(params) => <TextField {...params} />}
             />
           </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
-
             <InputLabel htmlFor="task">Task</InputLabel>
             <Autocomplete
               disablePortal
               id="task"
               name="createTask"
-              options={(Array.isArray(taskList) ? taskList : []).map((task) => task.createTask)}
+              options={(Array.isArray(taskList) ? taskList : []).map(
+                (task) => task.createTask
+              )}
               onChange={handleTaskChange}
               sx={{ width: 626, mt: 1 }}
               renderInput={(params) => <TextField {...params} />}
             />
-
-
-
           </MDBox>
           <MDBox
             sx={{
@@ -584,11 +596,15 @@ function Report() {
               mt: 1,
             }}
           >
-
-            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="manager">Manager</InputLabel>
-            <InputLabel sx={{ mt: 1, mr: 37 }} htmlFor="date">Date</InputLabel>
+            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="manager">
+              Manager
+            </InputLabel>
+            <InputLabel sx={{ mt: 1, mr: 37 }} htmlFor="date">
+              Date
+            </InputLabel>
           </MDBox>
-          <MDBox sx={{ p: 1, ml: 1 }}
+          <MDBox
+            sx={{ p: 1, ml: 1 }}
             style={{
               display: "flex",
             }}
@@ -605,10 +621,8 @@ function Report() {
                 });
               }}
               sx={{ width: 305 }}
-
               renderInput={(params) => <TextField {...params} />}
             />
-
 
             <TextField
               sx={{ width: 305, ml: 2 }}
@@ -623,8 +637,6 @@ function Report() {
               value={value.dateTask}
               onChange={handleInputchange}
             />
-
-
           </MDBox>
           <MDBox
             sx={{
@@ -634,25 +646,26 @@ function Report() {
               mt: 1,
             }}
           >
-
-            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">Daily Log</InputLabel>
+            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">
+              Daily Log
+            </InputLabel>
             {/* <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel> */}
           </MDBox>
           <MDBox sx={{ width: 250, p: 2 }}>
-          <TextField
-  type="time"
-  id="appt"
-  name="sessionOne"
-  sx={{ width: 305 }}
-  value={value.sessionOne}
-  onChange={handleInputchange}
-  InputProps={{
-    inputProps: {
-      min: "00:00",
-      max: "12:00",
-    },
-  }}
-/>
+            <TextField
+              type="time"
+              id="appt"
+              name="sessionOne"
+              sx={{ width: 305 }}
+              value={value.sessionOne}
+              onChange={handleInputchange}
+              InputProps={{
+                inputProps: {
+                  min: "00:00",
+                  max: "12:00",
+                },
+              }}
+            />
 
             {/* <TextField
               sx={{ width: 305 }}
@@ -711,12 +724,11 @@ function Report() {
             </MDButton>
           </MDBox>
         </MDBox>
-
-
       </Drawer>
-      <Grid item xs={12} mt={1} mb={5}>
+
+      <Grid item xs={12} mb={5}>
         {/* <Card> */}
-        <Grid item xs={12} mt={4} mb={1}>
+        <Grid item xs={12} mb={1}>
           <Card>
             <Box>
               <Popper
@@ -730,7 +742,6 @@ function Report() {
                   position: "absolute",
                   top: "131px",
                   left: "0px",
-
                 }}
               >
                 {({ TransitionProps, placement }) => (
@@ -755,7 +766,7 @@ function Report() {
                             <MDTypography
                               variant="h6"
                               fontWeight="medium"
-                              sx={{ fontSize: '15px' }}
+                              sx={{ fontSize: "15px" }}
                             >
                               Start Date
                             </MDTypography>
@@ -787,7 +798,7 @@ function Report() {
                               type="date"
                               name="endDate"
                               size="small"
-                              sx={{ width: "100%", border: 'none !important' }}
+                              sx={{ width: "100%", border: "none !important" }}
                               value={values.endDate}
                               onChange={handleInputChange}
                             />
@@ -809,7 +820,13 @@ function Report() {
                               disableCloseOnSelect
                               sx={{ width: "100%" }}
                               PopperComponent={(props) => (
-                                <Popper {...props} style={{ zIndex: 99999, position: 'relative' }}>
+                                <Popper
+                                  {...props}
+                                  style={{
+                                    zIndex: 99999,
+                                    position: "relative",
+                                  }}
+                                >
                                   {props.children}
                                 </Popper>
                               )}
@@ -862,7 +879,16 @@ function Report() {
                   </MDTypography>
                 </MDBox> */}
               <MDBox pt={0}>
-                <Box sx={{ height: 500, width: "100%", display: "flex", borderRadius: 20 }}>
+                {/* <Box sx={{ height: 500, width: "100%", display: "flex", borderRadius: 20 }}> */}
+                <Box
+                  sx={{
+                    height: 480,
+                    width: "100%",
+                    "@media screen and (min-width: 768px)": {
+                      height: 670,
+                    },
+                  }}
+                >
                   <DataGrid
                     rows={reversedRows}
                     columns={report.length === 0 ? initialDataColumns : columns} // Use initialDataColumns when report is empty
@@ -874,7 +900,14 @@ function Report() {
                     components={{
                       Toolbar: () => (
                         <div style={{ display: "flex" }}>
-                          <div style={{ display: "flex", alignItems: "center", marginLeft: "10px", }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              marginTop: "5px",
+                              marginLeft: "10px",
+                            }}
+                          >
                             <FilterListIcon
                               className="team-filter-icon"
                               style={{
@@ -892,7 +925,6 @@ function Report() {
                                 color: "#1a73e8",
                                 cursor: "pointer",
                                 fontSize: "12.1px",
-
                               }}
                             >
                               DATE FILTER
@@ -921,8 +953,6 @@ function Report() {
                         </div>
                       ),
                     }}
-
-
                   />
                 </Box>
               </MDBox>
@@ -934,7 +964,6 @@ function Report() {
       {/* <Footer /> */}
       <ToastContainer />
     </DashboardLayout>
-
   );
 }
 

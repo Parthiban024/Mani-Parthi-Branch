@@ -4,7 +4,9 @@ import Icon from "@mui/material/Icon";
 import MDBox from "./components/MDBox";
 import Sidenav from "./examples/Sidenav";
 import Configurator from "./examples/Configurator";
-import logo from "./assets/images/logo (1).jpg";
+// import logo from "./assets/images/logo (1).jpg";
+import logo from "./assets/images/logo-ball.png";
+import logo1 from "./assets/images/logo-text.png";
 import routes from "./routes";
 import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "./context";
 import { useSelector } from "react-redux";
@@ -79,8 +81,8 @@ export default function Auth() {
       <>
         <Sidenav
           color={sidenavColor}
-          brand={(transparentSidenav && !darkMode) || whiteSidenav ? logo : logo}
-          brandName=""
+          brand={(transparentSidenav && !darkMode) || whiteSidenav ? logo : logo }
+          brandName={(transparentSidenav && !darkMode) || whiteSidenav ? logo1 : logo1 }
           routes={routes}
           roles={roles}
           onMouseEnter={handleOnMouseEnter}
