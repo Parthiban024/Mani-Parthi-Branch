@@ -19,12 +19,14 @@ import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton } from '@mui/material';
+import MDButton from "components/MDButton";
 
 const excelRowSchema = {
-  employee_id: '',
+  emp_id: '',
   employee_name: '',
   department: '',
   role: '',
+  date: '',
 };
 
 function Employees() {
@@ -34,10 +36,11 @@ function Employees() {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [newEmployeeData, setNewEmployeeData] = useState({
-    employee_id: '',
+    emp_id: '',
     employee_name: '',
     department: '',
     role: '',
+    date: '',
   });
 
   const [columns, setColumns] = useState([]);
@@ -54,7 +57,7 @@ function Employees() {
         // Filter out "__v" field from columns
         const filteredColumns = fetchData.columns
           .filter((col) => col !== '__v')
-          .map((col) => ({ field: col, headerName: col, width: 150 }));
+          .map((col) => ({ field: col, headerName: col, width: 230 }));
 
         // Filter out "__v" field from rows
         const filteredRows = fetchData.rows.map((row) => {
@@ -174,10 +177,11 @@ function Employees() {
     setIsFormOpen(false);
     // Reset the new employee data when closing the form
     setNewEmployeeData({
-      employee_id: '',
+      emp_id: '',
       employee_name: '',
       department: '',
       role: '',
+      date: '',
     });
   };
 
@@ -301,71 +305,96 @@ function Employees() {
 
   return (
     <DashboardLayout>
-      <DashboardNavbar />
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Card>
-            <input
-              type="file"
-              accept=".xlsx, .xls"
-              onChange={handleFileChange}
-              style={{ display: 'none' }}
-              id="file-upload"
-            />
-            <label htmlFor="file-upload">
-              <Button component="span" variant="contained" color="primary">
-                Upload Excel
-              </Button>
-            </label>
-            <Button variant="contained" color="primary" onClick={handleOpenForm}>
-              Add Employee
-            </Button>
-            {isLoading && <CircularProgress />}
-            {!isLoading && (
-              <div style={{ height: 370, width: '100%' }}>
-                <DataGrid
-                  rows={data}
-                  columns={[
-                    ...columns,
-                    {
-                      field: 'actions',
-                      headerName: 'Actions',
-                      width: 150,
-                      renderCell: (params) => (
-                        <>
-                          <IconButton color="secondary" onClick={() => handleDeleteEmployee(params.id)}>
-                            <DeleteIcon />
-                          </IconButton> 
-                          <IconButton color="primary" onClick={() => handleEditEmployee(params.id)}>
-                            <EditIcon />
-                          </IconButton>
-                        </>
-                      ),
-                    },
-                  ]}
-                  pageSize={5}
-                  checkboxSelection
-                  components={{
-                    Toolbar: () => (
-  
-    
-                        <GridToolbar />
-                    ),
-                  }}
-                />
-              </div>
-            )}
-          </Card>
-        </Grid>
+    <DashboardNavbar />
+    <Grid container spacing={3}>
+      <Grid item xs={12}>
+      <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', padding: '16px' }}>
+            <div>
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                id="file-upload"
+              />
+              <label htmlFor="file-upload">
+                <MDButton component="span" variant="contained" color="success"       style={{
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "0.7rem",
+            borderRadius: "10px",
+            textAlign: "center",
+            minHeight: "10px",
+            minWidth: "120px",
+            
+          }}>
+                  Import
+                </MDButton>
+              </label>
+            </div>&nbsp;&nbsp;
+            <MDButton
+          variant="outlined"
+          color="info"
+          onClick={handleOpenForm}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "0.7rem",
+            borderRadius: "10px",
+            textAlign: "center",
+            minHeight: "10px",
+            minWidth: "120px",
+          }}
+        >
+       Add Employee
+        </MDButton>
+          </div>
+        <Card>
 
-        <Dialog open={isFormOpen} onClose={handleCloseForm}>
+          {isLoading && <CircularProgress />}
+          {!isLoading && (
+            <div style={{ height: 370, width: '100%' }}>
+              <DataGrid
+                rows={data}
+                columns={[
+                  ...columns,
+                  {
+                    field: 'actions',
+                    headerName: 'Actions',
+                    width: 150,
+                    renderCell: (params) => (
+                      <>
+                        <IconButton color="secondary" onClick={() => handleDeleteEmployee(params.id)}>
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton color="primary" onClick={() => handleEditEmployee(params.id)}>
+                          <EditIcon />
+                        </IconButton>
+                      </>
+                    ),
+                  },
+                ]}
+                pageSize={5}
+                checkboxSelection
+                components={{
+                  Toolbar: () => (
+                    <GridToolbar />
+                  ),
+                }}
+              />
+            </div>
+          )}
+        </Card>
+      </Grid>
+
+      <Dialog open={isFormOpen} onClose={handleCloseForm}>
           <DialogTitle>{selectedEmployeeId ? 'Update Employee' : 'Add Employee'}</DialogTitle>
           <DialogContent>
             <TextField
               label="Employee ID"
-              value={newEmployeeData.employee_id}
+              value={newEmployeeData.emp_id}
               onChange={(e) =>
-                setNewEmployeeData({ ...newEmployeeData, employee_id: e.target.value })
+                setNewEmployeeData({ ...newEmployeeData, emp_id: e.target.value })
               }
               fullWidth
               margin="normal"
@@ -395,6 +424,13 @@ function Employees() {
               fullWidth
               margin="normal"
             />
+            <TextField
+              label="Date"
+              value={newEmployeeData.date}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, date: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseForm} color="primary">
@@ -409,17 +445,16 @@ function Employees() {
           </DialogActions>
         </Dialog>
 
-        <Snackbar
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={handleCloseSnackbar}
-          message={snackbarMessage}
-        />
-      </Grid>
-    </DashboardLayout>
-  );
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+      />
+    </Grid>
+  </DashboardLayout>
+);
 }
-
 
 export default Employees;

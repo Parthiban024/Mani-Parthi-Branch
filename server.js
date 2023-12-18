@@ -118,10 +118,11 @@ app.use('/create', Task);
 
 // MongoDB Schema
 const employeeSchema = new mongoose.Schema({
-  employee_id: String,
+  emp_id: String,
   employee_name: String,
   department: String,
   role: String,
+  date: String,
 });
 
 const Employee = mongoose.model('Employee', employeeSchema);
