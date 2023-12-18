@@ -173,6 +173,7 @@ function Sidenav({ color, brand, brandName, routes, roles, ...rest }) {
           {isSidebarOpen ? <MenuOpenIcon /> : <StartIcon />}
         </IconButton>
       </MDBox>
+      
     </SidenavRoot>
   );
 }
