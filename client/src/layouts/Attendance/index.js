@@ -144,51 +144,60 @@ function Attendance() {
 
 
   const handleCheckin = async () => {
-    const timeNow = moment().format("hh:mm a");
-    setCheckinTime(timeNow);
-    setCheckinTimeForCheckout(timeNow); // Set checkinTimeForCheckout here
-
-    sessionStorage.setItem("checkinTime", timeNow);
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("empId", empId);
-
-    await fetchData(); // Refresh data after check-in
-  };
-
-  const handleCheckout = async () => {
-    const checkTime = moment().format("hh:mm a");
-    setCheckoutTime(checkTime);
-
-    // Ensure checkinTimeForCheckout is set correctly, use the current time if not set
-    const checkinMoment = moment(checkinTimeForCheckout || moment(), "hh:mm a");
-    const checkoutMoment = moment(checkTime, "hh:mm a");
-    const overAll = moment.duration(checkoutMoment.diff(checkinMoment));
-
-    setTotal(`${overAll.hours()}hrs : ${overAll.minutes()}mins`);
-
-    sessionStorage.setItem("checkoutTime", checkTime);
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("empId", empId);
-    sessionStorage.setItem("total", `${overAll.hours()}hrs : ${overAll.minutes()}mins`);
-
     try {
+      const timeNow = moment().format("hh:mm a");
+  
+      setCheckinTime(timeNow);
+      setCheckinTimeForCheckout(timeNow);
+  
+      sessionStorage.setItem("checkinTime", timeNow);
+      sessionStorage.setItem("checkinTimeForCheckout", timeNow);
+      sessionStorage.setItem("name", name);
+      sessionStorage.setItem("empId", empId);
+  
+      // Refresh data after check-in
+      await fetchData();
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  
+  
+  const handleCheckout = async () => {
+    try {
+      const checkTime = moment().format("hh:mm a");
+      setCheckoutTime(checkTime);
+  
+      // Ensure checkinTimeForCheckout is set correctly, use the current time if not set
+      const checkinMoment = moment(sessionStorage.getItem("checkinTimeForCheckout") || moment(), "hh:mm a");
+      const checkoutMoment = moment(checkTime, "hh:mm a");
+      const overAll = moment.duration(checkoutMoment.diff(checkinMoment));
+  
+      setTotal(`${overAll.hours()}hrs : ${overAll.minutes()}mins`);
+  
+      sessionStorage.setItem("checkoutTime", checkTime);
+      sessionStorage.setItem("name", name);
+      sessionStorage.setItem("empId", empId);
+      sessionStorage.setItem("total", `${overAll.hours()}hrs : ${overAll.minutes()}mins`);
+  
+      // Send check-out time to the server
       const response = await fetch("/emp-attendance/att", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          checkInTime: checkinTimeForCheckout || checkTime, // Use stored check-in time or current time
+          checkInTime: sessionStorage.getItem("checkinTimeForCheckout") || checkTime,
           checkOutTime: checkTime,
           name: name,
           empId: empId,
           total: `${overAll.hours()}hrs : ${overAll.minutes()}mins`,
         }),
       });
-
+  
       if (response.ok) {
         console.log("Checkout time saved successfully");
-
+  
         // Reset function logic
         setResetTimeoutId(setTimeout(resetFunction, 20000));
         await fetchData(); // Refresh data after check-out
@@ -199,6 +208,7 @@ function Attendance() {
       console.error("Error:", error);
     }
   };
+  
 
   return (
     <DashboardLayout>

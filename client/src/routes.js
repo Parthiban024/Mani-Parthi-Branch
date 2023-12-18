@@ -14,6 +14,8 @@ import BillingTable from "layouts/Billing-Table";
 import Attendance from "layouts/Attendance";
 import TaskCreation from "layouts/employeeReport"
 import AllEmployee from "layouts/All-Employees"
+import SettingsIcon from "@mui/icons-material/Settings";
+import PeopleIcon from "@mui/icons-material/People";
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -49,9 +51,9 @@ const routes = [
     type: "collapse",
     name: "Employees",
     key: "employees",
-    icon: <Icon fontSize="small">create_new_folder</Icon>,
+    icon: <PeopleIcon fontSize="small" />, // Use the Material-UI People icon
     route: "/employees",
-    component: <AllEmployee/>,
+    component: <AllEmployee />,
     role: "admin",
   },
   {
@@ -120,7 +122,7 @@ const routes = [
     type: "collapse",
     name: "Settings",
     key: "Settings",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <SettingsIcon fontSize="small" />, // Use the Material-UI Settings icon
     route: "/Settings",
     component: <TaskCreation />,
     role: "admin",

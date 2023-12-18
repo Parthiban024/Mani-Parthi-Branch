@@ -23,10 +23,32 @@ import MDButton from "components/MDButton";
 
 const excelRowSchema = {
   emp_id: '',
-  employee_name: '',
+  emp_name: '',
+  doj: '',
+  gender: '',
+  dob: Date,
+  email_id: '',
+  status: '',
+  confirmation_date: '',
+  age_range: '',
+  manager_id: '',
+  manager_name: '',
+  phone_no: '',
+  blood_group: '',
+  employment_status: '',
+  pan_no: '',
+  uan_no: '',
+  marital_status: '',
+  bank_ac_no: '',
+  nationality: '',
+  age: '',
+  current_access_card_no: '',
+  residential_status: '',
+  location: '',
+  designation: '',
   department: '',
-  role: '',
-  date: '',
+  grade: '',
+  shift: '',
 };
 
 function Employees() {
@@ -37,43 +59,77 @@ function Employees() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [newEmployeeData, setNewEmployeeData] = useState({
     emp_id: '',
-    employee_name: '',
+    emp_name: '',
+    doj: '',
+    gender: '',
+    dob: Date,
+    email_id: '',
+    status: '',
+    confirmation_date: '',
+    age_range: '',
+    manager_id: '',
+    manager_name: '',
+    phone_no: '',
+    blood_group: '',
+    employment_status: '',
+    pan_no: '',
+    uan_no: '',
+    marital_status: '',
+    bank_ac_no: '',
+    nationality: '',
+    age: '',
+    current_access_card_no: '',
+    residential_status: '',
+    location: '',
+    designation: '',
     department: '',
-    role: '',
-    date: '',
+    grade: '',
+    shift: '',
   });
 
   const [columns, setColumns] = useState([]);
 
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
-  useEffect(() => {
-    // Fetch initial data from MongoDB
-    const fetchDataFromMongoDB = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/fetchData');
-        const fetchData = await response.json();
+// ...
+const capitalizeHeader = (header) => header.toUpperCase();
 
-        // Filter out "__v" field from columns
-        const filteredColumns = fetchData.columns
-          .filter((col) => col !== '__v')
-          .map((col) => ({ field: col, headerName: col, width: 230 }));
+// ...
 
-        // Filter out "__v" field from rows
-        const filteredRows = fetchData.rows.map((row) => {
-          const { __v, ...rowDataWithoutV } = row;
-          return rowDataWithoutV;
-        });
+useEffect(() => {
+  // Fetch initial data from MongoDB
+  const fetchDataFromMongoDB = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/fetchData');
+      const fetchData = await response.json();
 
-        setColumns(filteredColumns);
-        setData(filteredRows);
-      } catch (error) {
-        console.error('Error fetching data from MongoDB', error);
-      }
-    };
+      // Filter out "__v" field from columns
+      const filteredColumns = fetchData.columns
+        .filter((col) => col !== '__v')
+        .map((col) => ({ field: col, headerName: capitalizeHeader(col), width: 150 })); // Use the helper function here
 
-    fetchDataFromMongoDB();
-  }, []);
+      // Filter out "__v" field from rows
+      const filteredRows = fetchData.rows.map((row) => {
+        const { __v, ...rowDataWithoutV } = row;
+        return rowDataWithoutV;
+      });
+
+      setColumns(filteredColumns);
+      setData(filteredRows);
+    } catch (error) {
+      console.error('Error fetching data from MongoDB', error);
+    }
+  };
+
+  fetchDataFromMongoDB();
+}, []);
+
+// ...
+
+// Use capitalizeHeader in other places where you define or update columns
+
+// ...
+
 
 
   const handleFileChange = async (e) => {
@@ -178,120 +234,94 @@ function Employees() {
     // Reset the new employee data when closing the form
     setNewEmployeeData({
       emp_id: '',
-      employee_name: '',
+      emp_name: '',
+      doj: '',
+      gender: '',
+      dob: Date,
+      email_id: '',
+      status: '',
+      confirmation_date: '',
+      age_range: '',
+      manager_id: '',
+      manager_name: '',
+      phone_no: '',
+      blood_group: '',
+      employment_status: '',
+      pan_no: '',
+      uan_no: '',
+      marital_status: '',
+      bank_ac_no: '',
+      nationality: '',
+      age: '',
+      current_access_card_no: '',
+      residential_status: '',
+      location: '',
+      designation: '',
       department: '',
-      role: '',
-      date: '',
+      grade: '',
+      shift: '',
     });
   };
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+  
+  const handleApiRequest = async (url, method, body = null) => {
+    try {
+      setIsLoading(true);
+  
+      const requestOptions = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: body ? JSON.stringify(body) : null,
+      };
+  
+      const response = await fetch(url, requestOptions);
+  
+      if (response.ok) {
+        setSnackbarMessage(`Operation completed successfully`);
+      } else {
+        setSnackbarMessage(`Failed to ${capitalizeFirstLetter(method.toLowerCase())} employee`);
+      }
+  
+      // Fetch the updated data from MongoDB
+      const fetchDataResponse = await fetch('http://localhost:5000/api/fetchData');
+      const fetchData = await fetchDataResponse.json();
+  
+      setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
+      setData(fetchData.rows);
+  
+      setSnackbarOpen(true);
+  
+      if (method === 'POST' || method === 'PUT') {
+        setIsFormOpen(false); // Close the form after adding or updating an employee
+      }
+    } catch (error) {
+      console.error(`Error ${capitalizeFirstLetter(method.toLowerCase())} employee or communicating with the server`, error);
+      setSnackbarMessage(`Error ${capitalizeFirstLetter(method.toLowerCase())} employee or communicating with the server`);
+      setSnackbarOpen(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // ...
+  
   const handleAddEmployee = async () => {
-    try {
-      setIsLoading(true);
-
-      // Save the new employee data to MongoDB
-      const response = await fetch('http://localhost:5000/api/addEmployee', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newEmployeeData),
-      });
-
-      if (response.ok) {
-        setSnackbarMessage('Employee added successfully');
-
-        // Fetch the updated data from MongoDB
-        const fetchDataResponse = await fetch('http://localhost:5000/api/fetchData');
-        const fetchData = await fetchDataResponse.json();
-
-        setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
-        setData(fetchData.rows);
-
-        setSnackbarOpen(true);
-        setIsFormOpen(false); // Close the form after adding an employee
-      } else {
-        setSnackbarMessage('Failed to add employee');
-        setSnackbarOpen(true);
-      }
-    } catch (error) {
-      console.error('Error adding employee or communicating with the server', error);
-      setSnackbarMessage('Error adding employee or communicating with the server');
-      setSnackbarOpen(true);
-    } finally {
-      setIsLoading(false);
-    }
+    await handleApiRequest('http://localhost:5000/api/addEmployee', 'POST', newEmployeeData);
   };
-
+  
   const handleDeleteEmployee = async (id) => {
-    try {
-      setIsLoading(true);
-
-      // Delete the employee data from MongoDB
-      const response = await fetch(`http://localhost:5000/api/deleteEmployee/${id}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        setSnackbarMessage('Employee deleted successfully');
-
-        // Fetch the updated data from MongoDB
-        const fetchDataResponse = await fetch('http://localhost:5000/api/fetchData');
-        const fetchData = await fetchDataResponse.json();
-
-        setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
-        setData(fetchData.rows);
-
-        setSnackbarOpen(true);
-      } else {
-        setSnackbarMessage('Failed to delete employee');
-        setSnackbarOpen(true);
-      }
-    } catch (error) {
-      console.error('Error deleting employee or communicating with the server', error);
-      setSnackbarMessage('Error deleting employee or communicating with the server');
-      setSnackbarOpen(true);
-    } finally {
-      setIsLoading(false);
-    }
+    await handleApiRequest(`http://localhost:5000/api/deleteEmployee/${id}`, 'DELETE');
   };
+  
   const handleUpdateEmployee = async () => {
-    try {
-      setIsLoading(true);
-
-      // Update the employee data in MongoDB
-      const response = await fetch(`http://localhost:5000/api/updateEmployee/${selectedEmployeeId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newEmployeeData),
-      });
-
-      if (response.ok) {
-        setSnackbarMessage('Employee updated successfully');
-
-        // Fetch the updated data from MongoDB
-        const fetchDataResponse = await fetch('http://localhost:5000/api/fetchData');
-        const fetchData = await fetchDataResponse.json();
-
-        setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
-        setData(fetchData.rows);
-
-        setSnackbarOpen(true);
-        setIsFormOpen(false); // Close the form after updating an employee
-      } else {
-        setSnackbarMessage('Failed to update employee');
-        setSnackbarOpen(true);
-      }
-    } catch (error) {
-      console.error('Error updating employee or communicating with the server', error);
-      setSnackbarMessage('Error updating employee or communicating with the server');
-      setSnackbarOpen(true);
-    } finally {
-      setIsLoading(false);
-    }
+    await handleApiRequest(`http://localhost:5000/api/updateEmployee/${selectedEmployeeId}`, 'PUT', newEmployeeData);
   };
+  
 
   const handleEditEmployee = (id) => {
     // Find the selected employee from the data
@@ -305,10 +335,10 @@ function Employees() {
 
   return (
     <DashboardLayout>
-    <DashboardNavbar />
-    <Grid container spacing={3}>
-      <Grid item xs={12}>
-      <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', padding: '16px' }}>
+      <DashboardNavbar />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'center', padding: '16px' }}>
             <div>
               <input
                 type="file"
@@ -318,81 +348,82 @@ function Employees() {
                 id="file-upload"
               />
               <label htmlFor="file-upload">
-                <MDButton component="span" variant="contained" color="success"       style={{
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "0.7rem",
-            borderRadius: "10px",
-            textAlign: "center",
-            minHeight: "10px",
-            minWidth: "120px",
-            
-          }}>
+                <MDButton component="span" variant="contained" color="success" style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  fontSize: "0.7rem",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  minHeight: "10px",
+                  minWidth: "120px",
+
+                }}>
                   Import
                 </MDButton>
               </label>
             </div>&nbsp;&nbsp;
             <MDButton
-          variant="outlined"
-          color="info"
-          onClick={handleOpenForm}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "0.7rem",
-            borderRadius: "10px",
-            textAlign: "center",
-            minHeight: "10px",
-            minWidth: "120px",
-          }}
-        >
-       Add Employee
-        </MDButton>
+              variant="outlined"
+              color="info"
+              onClick={handleOpenForm}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+              }}
+            >
+              Add Employee
+            </MDButton>
           </div>
-        <Card>
+          <Card>
 
-          {isLoading && <CircularProgress />}
-          {!isLoading && (
-            <div style={{ height: 370, width: '100%' }}>
-              <DataGrid
-                rows={data}
-                columns={[
-                  ...columns,
-                  {
-                    field: 'actions',
-                    headerName: 'Actions',
-                    width: 150,
-                    renderCell: (params) => (
-                      <>
-                        <IconButton color="secondary" onClick={() => handleDeleteEmployee(params.id)}>
-                          <DeleteIcon />
-                        </IconButton>
-                        <IconButton color="primary" onClick={() => handleEditEmployee(params.id)}>
-                          <EditIcon />
-                        </IconButton>
-                      </>
+            {isLoading && <CircularProgress />}
+            {!isLoading && (
+              <div style={{ height: 370, width: '100%' }}>
+                <DataGrid
+                  rows={data}
+                  columns={[
+                    ...columns,
+                    {
+                      field: 'actions',
+                      headerName: 'Actions',
+                      width: 150,
+                      renderCell: (params) => (
+                        <>
+                          <IconButton color="secondary" onClick={() => handleDeleteEmployee(params.id)}>
+                            <DeleteIcon />
+                          </IconButton>
+                          <IconButton color="primary" onClick={() => handleEditEmployee(params.id)}>
+                            <EditIcon />
+                          </IconButton>
+                        </>
+                      ),
+                    },
+                  ]}
+                  pageSize={5}
+                  checkboxSelection
+                  components={{
+                    Toolbar: () => (
+                      <GridToolbar />
                     ),
-                  },
-                ]}
-                pageSize={5}
-                checkboxSelection
-                components={{
-                  Toolbar: () => (
-                    <GridToolbar />
-                  ),
-                }}
-              />
-            </div>
-          )}
-        </Card>
-      </Grid>
+                  }}
+                />
+              </div>
+            )}
+          </Card>
+        </Grid>
 
-      <Dialog open={isFormOpen} onClose={handleCloseForm}>
+        <Dialog open={isFormOpen} onClose={handleCloseForm}>
           <DialogTitle>{selectedEmployeeId ? 'Update Employee' : 'Add Employee'}</DialogTitle>
           <DialogContent>
             <TextField
               label="Employee ID"
               value={newEmployeeData.emp_id}
+              type='number'
               onChange={(e) =>
                 setNewEmployeeData({ ...newEmployeeData, emp_id: e.target.value })
               }
@@ -401,33 +432,200 @@ function Employees() {
             />
             <TextField
               label="Employee Name"
-              value={newEmployeeData.employee_name}
+              value={newEmployeeData.emp_name}
               onChange={(e) =>
-                setNewEmployeeData({ ...newEmployeeData, employee_name: e.target.value })
+                setNewEmployeeData({ ...newEmployeeData, emp_name: e.target.value })
               }
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="DOJ"
+              value={newEmployeeData.doj}
+              type='date'
+              onChange={(e) =>
+                setNewEmployeeData({ ...newEmployeeData, doj: e.target.value })
+              }
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Gender"
+              value={newEmployeeData.gender}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, gender: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Dob"
+              type='date'
+              value={newEmployeeData.dob}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, dob: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Email Id"
+              type='email'
+              value={newEmployeeData.email_id}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, email_id: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Status"
+              value={newEmployeeData.status}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, status: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Confirmation Date"
+              type='date'
+              value={newEmployeeData.confirmation_date}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, confirmation_date: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Age Range"
+              type='number'
+              value={newEmployeeData.age_range}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, age_range: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Manager Id"
+              type='number'
+              value={newEmployeeData.manager_id}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, manager_id: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Manager Name"
+              value={newEmployeeData.manager_name}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, manager_name: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Phone No"
+              type='phone'
+              value={newEmployeeData.phone_no}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, phone_no: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Blood Group"
+              value={newEmployeeData.blood_group}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, blood_group: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Employment Status"
+              value={newEmployeeData.employment_status}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, employment_status: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Pan No"
+              type='number'
+              value={newEmployeeData.pan_no}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, pan_no: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Uan No"
+              type='number'
+              value={newEmployeeData.uan_no}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, uan_no: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+
+            <TextField
+              label="Marital Status"
+              value={newEmployeeData.marital_status}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, marital_status: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Bank Ac No"
+              type='number'
+              value={newEmployeeData.bank_ac_no}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, bank_ac_no: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Nationality"
+              value={newEmployeeData.nationality}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, nationality: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Age"
+              type='number'
+              value={newEmployeeData.age}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, age: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Current Access Card No"
+              type='number'
+              value={newEmployeeData.current_access_card_no}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, current_access_card_no: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Residential Status"
+              value={newEmployeeData.residential_status}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, residential_status: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Location"
+              value={newEmployeeData.location}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, location: e.target.value })}
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              label="Designation"
+              value={newEmployeeData.designation}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, designation: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
               label="Department"
               value={newEmployeeData.department}
-              onChange={(e) =>
-                setNewEmployeeData({ ...newEmployeeData, department: e.target.value })
-              }
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, department: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
-              label="Role"
-              value={newEmployeeData.role}
-              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, role: e.target.value })}
+              label="Grade"
+              value={newEmployeeData.grade}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, grade: e.target.value })}
               fullWidth
               margin="normal"
             />
             <TextField
-              label="Date"
-              value={newEmployeeData.date}
-              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, date: e.target.value })}
+              label="Shift"
+              value={newEmployeeData.shift}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, shift: e.target.value })}
               fullWidth
               margin="normal"
             />
@@ -445,16 +643,16 @@ function Employees() {
           </DialogActions>
         </Dialog>
 
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message={snackbarMessage}
-      />
-    </Grid>
-  </DashboardLayout>
-);
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={snackbarMessage}
+        />
+      </Grid>
+    </DashboardLayout>
+  );
 }
 
 export default Employees;
