@@ -13,6 +13,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import checkinImage from "../images/check-in.png";
 import checkoutImage from "../images/check-out.png";
+import Box from "@mui/material/Box";
 import './calendar.css'
 
 function Attendance() {
@@ -284,13 +285,15 @@ function Attendance() {
       </Grid>
 
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={12} lg={7} xl={5}>
+        <Grid item xs={12} lg={7} xl={6}>
           <MDBox
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="space-between"
-            style={{ height: '500px', overflowY: 'auto' }}
+            style={{ height: '500', overflowY: 'auto'  , "@media screen and (min-width: 768px)": {
+              height: '570',
+            }, }}
           >
             <Calendar
               selected={selectedDate}
@@ -306,9 +309,17 @@ function Attendance() {
         </Grid>
         <Grid item xs={12} lg={5} xl={6}>
           <Card>
-            <div style={{ height: 470, width: "100%" }}>
-              <DataGrid rows={mappedData} columns={columns} pageSize={5} components={{ Toolbar: () => <GridToolbar /> }} />
-            </div>
+          <Box
+            sx={{
+              height: 480,
+              width: "100%",
+              "@media screen and (min-width: 768px)": {
+                height: 545,
+              },
+            }}
+          >
+              <DataGrid rows={mappedData} columns={columns} rowsPerPageOptions={[5, 10, 25, 50, 100]} components={{ Toolbar: () => <GridToolbar /> }} />
+            </Box>
           </Card>
         </Grid>
       </Grid>
