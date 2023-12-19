@@ -118,3 +118,6 @@ abbr[title] {
     background: #3b95ee;
     color: #fff;
 }
+.react-calendar__navigation {
+    margin-bottom: 0em!important;
+}
