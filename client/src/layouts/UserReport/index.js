@@ -295,7 +295,7 @@ function Report() {
   const initialValues = {
     startDate: "",
     endDate: "",
-    // empname: "",
+    empname: "",
     team: "",
   };
   const [values, setValues] = useState(initialValues);
@@ -323,9 +323,14 @@ function Report() {
       setInitialData(response.data);
     });
   }, [empId]);
+  
 
   // Fetch data when a new task is submitted
   const fetchData = () => {
+    console.log("Start Date:", values.startDate);
+    console.log("End Date:", values.endDate);
+    console.log("Team List:", teamList);
+  
     axios
       .get(
         `analyst/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
@@ -335,6 +340,7 @@ function Report() {
       })
       .catch((err) => console.log(`Error:${err}`));
   };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -342,8 +348,8 @@ function Report() {
       endDate: values.endDate,
       team: teamList,
     };
-    console.log(userData);
-
+    // console.log(userData);
+    fetchData();
     axios
       .get(
         `analyst/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
@@ -449,7 +455,7 @@ function Report() {
     setReversedRows(reversedRowsData);
   }, [report, initialData]);
   // Team List
-  const list = ["CV", "NLP", "CM"];
+  const list = ["CV", "NLP", "CM", "SOURCING"];
 
   const [popperOpen, setPopperOpen] = useState(false);
 
@@ -666,51 +672,6 @@ function Report() {
                 },
               }}
             />
-
-            {/* <TextField
-              sx={{ width: 305 }}
-              select
-              fullWidth
-              id="hour"
-              name="sessionOne"
-              value={value.sessionOne}
-              onChange={handleInputchange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="">Select Time</option>
-              <option value="1hour">1 Hour</option>
-              <option value="2hours">2 Hours</option>
-              <option value="3hours">3 Hours</option>
-              <option value="4hours">4 Hours</option>
-              <option value="5hours">5 Hours</option>
-              <option value="6hours">6 Hours</option>
-              <option value="7hours">7 Hours</option>
-              <option value="8hours">8 Hours</option>
-            </TextField> */}
-            {/* <TextField
-              sx={{ width: 305, ml: 2 }}
-              select
-              fullWidth
-              id="minutes"
-              name="sessionMinute"
-              value={value.sessionMinute}
-              onChange={handleInputchange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="">Select Time</option>
-              <option value="15minutes">15 minutes</option>
-              <option value="30minutes">30 minutes</option>
-              <option value="45minutes">45 minutes</option>
-              <option value="60minutes">60 minutes</option>
-            </TextField> */}
           </MDBox>
           <MDBox
             pt={3}
@@ -864,20 +825,6 @@ function Report() {
         <MDBox pt={4}>
           <Grid item xs={12}>
             <Card>
-              {/* <MDBox
-                  mx={2}
-                  mt={-3}
-                  py={3}
-                  px={2}
-                  variant="gradient"
-                  bgColor="info"
-                  borderRadius="lg"
-                  coloredShadow="info"
-                >
-                  <MDTypography variant="h6" color="white">
-                    Reports Table
-                  </MDTypography>
-                </MDBox> */}
               <MDBox pt={0}>
                 {/* <Box sx={{ height: 500, width: "100%", display: "flex", borderRadius: 20 }}> */}
                 <Box
