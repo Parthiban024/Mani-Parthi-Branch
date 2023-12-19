@@ -85,12 +85,12 @@ export default function Auth() {
           brandName={(transparentSidenav && !darkMode) || whiteSidenav ? logo1 : logo1 }
           routes={routes}
           roles={roles}
-          onMouseEnter={handleOnMouseEnter}
-          onMouseLeave={handleOnMouseLeave}
+          // onMouseEnter={handleOnMouseEnter}
+          // onMouseLeave={handleOnMouseLeave}
         />
 
-        <Configurator />
-        {configsButton}
+        {/* <Configurator />
+        {configsButton} */}
       </>
     )}
       
