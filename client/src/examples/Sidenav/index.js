@@ -168,7 +168,7 @@ function Sidenav({ color, brand, brandName, routes, roles, ...rest }) {
         </MDTypography>
       </MDBox>
 
-      <MDBox position="absolute" bottom={0} end={0} p={2}>
+      <MDBox position="absolute" bottom={0} right={0} p={2}>
         <IconButton onClick={isSidebarOpen ? closeSidenav : openSidenav}>
           {isSidebarOpen ? <MenuOpenIcon /> : <StartIcon />}
         </IconButton>
