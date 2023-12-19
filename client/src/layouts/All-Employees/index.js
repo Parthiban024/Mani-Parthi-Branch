@@ -9,10 +9,17 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  TextField,
   DialogActions,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  TextField,
+  Divider,
 } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { read, utils } from 'xlsx';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
@@ -24,12 +31,12 @@ import MDButton from "components/MDButton";
 const excelRowSchema = {
   emp_id: '',
   emp_name: '',
-  doj: '',
+  doj: Date,
   gender: '',
   dob: Date,
   email_id: '',
   status: '',
-  confirmation_date: '',
+  confirmation_date: Date,
   age_range: '',
   manager_id: '',
   manager_name: '',
@@ -57,15 +64,18 @@ function Employees() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedColumns, setSelectedColumns] = useState([]);
+
   const [newEmployeeData, setNewEmployeeData] = useState({
     emp_id: '',
     emp_name: '',
-    doj: '',
+    doj: Date,
     gender: '',
     dob: Date,
     email_id: '',
     status: '',
-    confirmation_date: '',
+    confirmation_date: Date,
     age_range: '',
     manager_id: '',
     manager_name: '',
@@ -86,12 +96,37 @@ function Employees() {
     grade: '',
     shift: '',
   });
-
+  const handleSelectColumns = (selectedColumns) => {
+    setSelectedColumns(selectedColumns);
+  };
+  
   const [columns, setColumns] = useState([]);
 
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
 
-// ...
+// ... const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedViewEmployee, setSelectedViewEmployee] = useState(null);
+
+  const handleViewEmployee = (id) => {
+    // Find the selected employee from the data
+    const selectedEmployee = data.find((emp) => emp.id === id);
+
+    // Set the selected employee data
+    setSelectedViewEmployee(selectedEmployee);
+
+    // Open the View dialog
+    setIsViewDialogOpen(true);
+  };
+
+  // ... (existing code)
+
+  // JSX for the "View" icon in the DataGrid
+  const ViewButton = ({ onClick, id }) => (
+    <IconButton color="info" onClick={() => handleViewEmployee(id)}>
+      <VisibilityIcon />
+    </IconButton>
+  );
+
 const capitalizeHeader = (header) => header.toUpperCase();
 
 // ...
@@ -102,24 +137,23 @@ useEffect(() => {
     try {
       const response = await fetch('http://localhost:5000/api/fetchData');
       const fetchData = await response.json();
-
+  
       // Filter out "__v" field from columns
       const filteredColumns = fetchData.columns
         .filter((col) => col !== '__v')
-        .map((col) => ({ field: col, headerName: capitalizeHeader(col), width: 150 })); // Use the helper function here
-
-      // Filter out "__v" field from rows
-      const filteredRows = fetchData.rows.map((row) => {
-        const { __v, ...rowDataWithoutV } = row;
-        return rowDataWithoutV;
-      });
-
+        .map((col) => ({ field: col, headerName: capitalizeHeader(col), width: 230 }));
+  
+      // Set initial selected columns (you can customize this based on your requirement)
+      const initialSelectedColumns = filteredColumns.slice(0, 5).map((col) => col.field);
+  
       setColumns(filteredColumns);
-      setData(filteredRows);
+      setData(fetchData.rows);
+      setSelectedColumns(initialSelectedColumns);
     } catch (error) {
       console.error('Error fetching data from MongoDB', error);
     }
   };
+  
 
   fetchDataFromMongoDB();
 }, []);
@@ -129,8 +163,6 @@ useEffect(() => {
 // Use capitalizeHeader in other places where you define or update columns
 
 // ...
-
-
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -235,12 +267,12 @@ useEffect(() => {
     setNewEmployeeData({
       emp_id: '',
       emp_name: '',
-      doj: '',
+      doj: Date,
       gender: '',
       dob: Date,
       email_id: '',
       status: '',
-      confirmation_date: '',
+      confirmation_date: Date,
       age_range: '',
       manager_id: '',
       manager_name: '',
@@ -384,42 +416,62 @@ useEffect(() => {
             {isLoading && <CircularProgress />}
             {!isLoading && (
               <div style={{ height: 370, width: '100%' }}>
-                <DataGrid
-                  rows={data}
-                  columns={[
-                    ...columns,
-                    {
-                      field: 'actions',
-                      headerName: 'Actions',
-                      width: 150,
-                      renderCell: (params) => (
-                        <>
-                          <IconButton color="secondary" onClick={() => handleDeleteEmployee(params.id)}>
-                            <DeleteIcon />
-                          </IconButton>
-                          <IconButton color="primary" onClick={() => handleEditEmployee(params.id)}>
-                            <EditIcon />
-                          </IconButton>
-                        </>
-                      ),
-                    },
-                  ]}
-                  pageSize={5}
-                  checkboxSelection
-                  components={{
-                    Toolbar: () => (
-                      <GridToolbar />
-                    ),
-                  }}
-                />
+      <DataGrid
+  rows={data}
+  rowsPerPageOptions={[5, 10, 25, 50, 100]}
+  columns={[
+    ...columns.filter((col) => selectedColumns.includes(col.field)), // Filter columns based on selection
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 150,
+      renderCell: (params) => (
+        <>
+               <IconButton color="info">
+          <ViewButton  id={params.id} />
+          </IconButton> |
+     
+          <IconButton color="secondary" onClick={() => handleEditEmployee(params.id)}>
+            <EditIcon /> 
+          </IconButton> |
+          <IconButton color="error" onClick={() => handleDeleteEmployee(params.id)}>
+            <DeleteIcon />
+          </IconButton>
+   
+        </>
+      ),
+    },
+  ]}
+  checkboxSelection
+  components={{
+    Toolbar: () => (
+      <GridToolbar
+        selectedColumns={selectedColumns}
+        onColumnsChange={handleSelectColumns}
+        columns={columns}
+      />
+    ),
+  }}
+/>
+
               </div>
             )}
           </Card>
         </Grid>
 
         <Dialog open={isFormOpen} onClose={handleCloseForm}>
-          <DialogTitle>{selectedEmployeeId ? 'Update Employee' : 'Add Employee'}</DialogTitle>
-          <DialogContent>
+          <DialogTitle style={{ background: '#2196f3', color: 'white' }}>{selectedEmployeeId ? 'Update Employee' : 'Add Employee'}</DialogTitle>
+          <DialogContent >
+            <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Employee ID"
               value={newEmployeeData.emp_id}
@@ -439,8 +491,20 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+            </div>
+            <div       
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
-              label="DOJ"
+              label="Doj" 
               value={newEmployeeData.doj}
               type='date'
               onChange={(e) =>
@@ -456,6 +520,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Dob"
               type='date'
@@ -472,6 +547,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Status"
               value={newEmployeeData.status}
@@ -487,6 +573,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Age Range"
               type='number'
@@ -503,6 +600,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Manager Name"
               value={newEmployeeData.manager_name}
@@ -518,6 +626,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Blood Group"
               value={newEmployeeData.blood_group}
@@ -532,6 +651,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Pan No"
               type='number'
@@ -548,7 +678,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
-
+ </div>
+ <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Marital Status"
               value={newEmployeeData.marital_status}
@@ -564,6 +704,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Nationality"
               value={newEmployeeData.nationality}
@@ -579,6 +730,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Current Access Card No"
               type='number'
@@ -594,6 +756,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Location"
               value={newEmployeeData.location}
@@ -608,6 +781,17 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+             <div        style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                gap: "10px"
+              }}>
             <TextField
               label="Department"
               value={newEmployeeData.department}
@@ -622,6 +806,8 @@ useEffect(() => {
               fullWidth
               margin="normal"
             />
+             </div>
+       
             <TextField
               label="Shift"
               value={newEmployeeData.shift}
@@ -642,7 +828,33 @@ useEffect(() => {
             </Button>
           </DialogActions>
         </Dialog>
-
+        <Dialog open={isViewDialogOpen} onClose={() => setIsViewDialogOpen(false)}>
+        <DialogTitle style={{ background: '#2196f3', color: 'white' }}>View Employee</DialogTitle>
+        <DialogContent>
+          {selectedViewEmployee && (
+            <Grid container spacing={2} mt={1}>
+              {Object.entries(selectedViewEmployee).map(([key, value]) => (
+                <React.Fragment key={key}>
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+                      {key}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography variant="body2">{value}</Typography>
+                  </Grid>
+                  <Divider variant="middle" />
+                </React.Fragment>
+              ))}
+            </Grid>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsViewDialogOpen(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
         <Snackbar
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           open={snackbarOpen}

@@ -290,7 +290,7 @@ function AdminReport() {
   );
 
   // Team List
-  const list = ["CV", "NLP", "CM"];
+  const list = ["CV", "NLP", "CM", "SOURCING"];
 
   const [popperOpen, setPopperOpen] = useState(false);
 
@@ -318,7 +318,7 @@ function AdminReport() {
               style={{
                 zIndex: 9999,
                 position: "absolute",
-                top: "140px",
+                top: "120px",
                 left: "0px",
               }}
             >
@@ -509,8 +509,8 @@ function AdminReport() {
                   <DataGrid
                     rows={row}
                     columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
+                    // pageSize={10}
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
                     checkboxSelection
                     disableSelectionOnClick
                     components={{
