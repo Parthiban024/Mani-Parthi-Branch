@@ -350,7 +350,7 @@ export default function ColumnGroupingTable() {
       .then((res) => toast.success(res.data))
       // .then(() => (window.location = "/project-report"))
       .catch((err) => toast.error(err));
-      closeDrawer()
+    closeDrawer()
     // console.log(bill.tDate)
   };
 
@@ -486,11 +486,11 @@ export default function ColumnGroupingTable() {
       axios
         .get(
           "billing/fetch/report/?sDate=" +
-            sDate +
-            "&eDate=" +
-            eDate +
-            "&team=" +
-            team
+          sDate +
+          "&eDate=" +
+          eDate +
+          "&team=" +
+          team
         )
         .then((res) => {
           // console.log(res.data);
@@ -589,7 +589,7 @@ export default function ColumnGroupingTable() {
                 Project Name
               </InputLabel>
               <TextField
-                sx={{ width: 305, mt: 1, ml: 2  }}
+                sx={{ width: 305, mt: 1, ml: 2 }}
                 id="project-name"
                 variant="outlined"
                 fullWidth
@@ -599,16 +599,18 @@ export default function ColumnGroupingTable() {
                 required
               />
             </MDBox>
-            <MDBox sx={{width: 730, ml: 2,mt: 1 }}>
+            <MDBox sx={{ width: 730, ml: 2, mt: 1 }}>
               <InputLabel htmlFor="department">Department</InputLabel>
               <Autocomplete
                 disablePortal
                 id="department"
                 options={list}
                 onChange={handleTeamChange}
-                sx={{ width: 280, mt: 1,  "& .MuiOutlinedInput-root": {
-                  padding: 0.5,
-                },}}
+                sx={{
+                  width: 280, mt: 1, "& .MuiOutlinedInput-root": {
+                    padding: 0.5,
+                  },
+                }}
                 renderInput={(params) => <TextField {...params} />}
               />
             </MDBox>
@@ -747,7 +749,7 @@ pl={2}
                     renderInput={(params) => <TextField {...params} />}
                   /> */}
             <TextField
-              sx={{  width: 305 }}
+              sx={{ width: 305 }}
               select
               fullWidth
               id="manager"
@@ -769,7 +771,7 @@ pl={2}
             </TextField>
 
             <TextField
-              sx={{  width: 280, ml: 2 }}
+              sx={{ width: 280, ml: 2 }}
               type="number"
               id="members"
               variant="outlined"
@@ -822,7 +824,7 @@ pl={2}
           <MDBox sx={{ width: 200, p: 1, mt: 3, ml: 1 }}>
             <InputLabel htmlFor="status">Status</InputLabel>
             <TextField
-              sx={{width: 610, mt: 1, mr: 1 }}
+              sx={{ width: 610, mt: 1, mr: 1 }}
               select
               fullWidth
               id="status"
@@ -1284,7 +1286,7 @@ pl={2}
                       size="small"
                       // style={{ marginRight: '13px' }}
                       onClick={allReport}
-                      // onClick={() => setShow(!show)}
+                    // onClick={() => setShow(!show)}
                     >
                       &nbsp;All Report
                     </MDButton>
@@ -1423,12 +1425,12 @@ pl={2}
                               <EditIcon />
                             </IconButton>{" "}
                           </Link>
-                            {/* <Link to={"/project-entry/edit/" + item._id}>
+                          {/* <Link to={"/project-entry/edit/" + item._id}>
                             <IconButton aria-label="edit">
                               <EditIcon />
                             </IconButton>{" "}
                           </Link> */}
-                          
+
                           |
                           <IconButton
                             onClick={(e) => handleDelete(item._id)}

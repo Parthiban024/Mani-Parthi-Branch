@@ -16,7 +16,7 @@ import TextField from "@mui/material/TextField";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Autocomplete from "@mui/material/Autocomplete";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import {ToastContainer,toast} from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 function Report() {
@@ -53,8 +53,8 @@ function Report() {
     },
   });
 
-  const empId = useSelector((state)=>state.auth.user.empId);
-  const name = useSelector((state)=>state.auth.user.name)
+  const empId = useSelector((state) => state.auth.user.empId);
+  const name = useSelector((state) => state.auth.user.name)
 
   const [teamList, setTeamList] = useState(null);
   // const [managerTeamList, setManagerTeamList] = useState(null);
@@ -132,17 +132,17 @@ function Report() {
   const submit = (e) => {
     e.preventDefault();
     const billData = {
-      name:name,
-      team:bill.team,
-      empId:empId,
-      batch:bill.batch,
-      reportDate:bill.tDate,
-      projectname:bill.projectname,
-      associated:{
-        annotation:bill.associated.annotation,
-        qc:bill.associated.qc,
-        pm:bill.associated.pmsme,
-        total:count.aTotal,
+      name: name,
+      team: bill.team,
+      empId: empId,
+      batch: bill.batch,
+      reportDate: bill.tDate,
+      projectname: bill.projectname,
+      associated: {
+        annotation: bill.associated.annotation,
+        qc: bill.associated.qc,
+        pm: bill.associated.pmsme,
+        total: count.aTotal,
       },
       // hours:{
       //   annotation:bill.hours.annotation,
@@ -156,20 +156,20 @@ function Report() {
       //   total:count.hTotal,
       //   comments:bill.hours.comments
       // },
-      jobs:{
+      jobs: {
         // annotation:bill.jobs.annotation,
-        managerTeam:bill.jobs.managerTeam,
+        managerTeam: bill.jobs.managerTeam,
         // qc:bill.jobs.qc,
-        status1:bill.jobs.status1,
-        cDate:bill.jobs.cDate,
+        status1: bill.jobs.status1,
+        cDate: bill.jobs.cDate,
         // total:count.jTotal
       }
     }
-    axios.post('/billing/new',billData)
-    .then((res)=>toast.success(res.data))
-    .then(()=>window.location = '/project-report')
-    .catch(err=>toast.error(err))
-  // console.log(bill.tDate)
+    axios.post('/billing/new', billData)
+      .then((res) => toast.success(res.data))
+      .then(() => window.location = '/project-report')
+      .catch(err => toast.error(err))
+    // console.log(bill.tDate)
   };
   return (
     <DashboardLayout>
@@ -222,7 +222,7 @@ function Report() {
                     id="combo-box-demo"
                     options={list}
                     onChange={handleTeamChange}
-                    
+
                     sx={{ width: 200 }}
                     renderInput={(params) => <TextField {...params} />}
                   />
@@ -586,7 +586,7 @@ function Report() {
               <Grid container spacing={2}>
                 <Grid item xs={2} md={3}>
                   <MDTypography variant="h6" fontWeight="medium">
-                 Project Manager *
+                    Project Manager *
                   </MDTypography>
                   {/* <MDInput
                     type="number"
@@ -602,7 +602,7 @@ function Report() {
                       })
                     }
                   /> */}
-                    
+
                   {/* <Autocomplete
                     disablePortal
                     id="combo-box-demo"
@@ -611,28 +611,28 @@ function Report() {
                     sx={{ width: 200 }}
                     renderInput={(params) => <TextField {...params} />}
                   /> */}
-                    <TextField
-              sx={{ width: 220 }}
-              select
-              fullWidth
-              name="managerTeam"
-              value={bill.jobs.managerTeam}
-              required
-              onChange={handleManagerTeamChange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="">Select Manager</option>
-              <option value="Balamurugan">Balamurugan</option>
-              <option value="Rajesh">Rajesh</option>
-              <option value="Naveen">Naveen</option>
-              <option value="Sowmiya">Sowmiya</option>
-            </TextField>
-             
-                
+                  <TextField
+                    sx={{ width: 220 }}
+                    select
+                    fullWidth
+                    name="managerTeam"
+                    value={bill.jobs.managerTeam}
+                    required
+                    onChange={handleManagerTeamChange}
+                    variant="outlined"
+                    InputLabelProps={{ shrink: true }}
+                    SelectProps={{
+                      native: true,
+                    }}
+                  >
+                    <option value="">Select Manager</option>
+                    <option value="Balamurugan">Balamurugan</option>
+                    <option value="Rajesh">Rajesh</option>
+                    <option value="Naveen">Naveen</option>
+                    <option value="Sowmiya">Sowmiya</option>
+                  </TextField>
+
+
                 </Grid>
                 <Grid item xs={2} md={3}>
                   <MDTypography variant="h6" fontWeight="medium">
@@ -649,7 +649,7 @@ function Report() {
                       })
                     }
                   /> */}
-                   {/* <Autocomplete
+                  {/* <Autocomplete
                     disablePortal
                     id="combo-box-demo"
                     options={ status1}
@@ -657,24 +657,24 @@ function Report() {
                     sx={{ width: 200 }}
                     renderInput={(params) => <TextField {...params} />}
                   /> */}
- <TextField
-              sx={{ width: 220, mr: 2 }}
-              select
-              fullWidth
-              name="status1"
-              value={bill.jobs.status1}
-              required
-              onChange={handleStatusChange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
-            >
-              <option value="">Select Status</option>
-              <option value="Active">Active</option>
-              <option value="Completed">Completed</option>
-            </TextField>
+                  <TextField
+                    sx={{ width: 220, mr: 2 }}
+                    select
+                    fullWidth
+                    name="status1"
+                    value={bill.jobs.status1}
+                    required
+                    onChange={handleStatusChange}
+                    variant="outlined"
+                    InputLabelProps={{ shrink: true }}
+                    SelectProps={{
+                      native: true,
+                    }}
+                  >
+                    <option value="">Select Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Completed">Completed</option>
+                  </TextField>
                 </Grid>
                 <Grid item xs={2} md={3}>
                   <MDTypography variant="h6" fontWeight="medium">
@@ -692,8 +692,8 @@ function Report() {
                       })
                     }
                   /> */}
-                    <MDInput
-                     disabled 
+                  <MDInput
+                    disabled
 
                     type="date"
                     name="cDate"
@@ -721,7 +721,7 @@ function Report() {
         </Card>
       </Grid>
       {/* <Footer /> */}
-      <ToastContainer/>
+      <ToastContainer />
     </DashboardLayout>
   );
 }

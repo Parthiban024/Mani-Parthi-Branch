@@ -39,7 +39,7 @@ import Icon from "@mui/material/Icon";
 import cartoon from "assets/images/cartoon.png";
 
 const UserDataUpload = (props) => {
-  const name = useSelector((state)=>state.auth.user.name);
+  const name = useSelector((state) => state.auth.user.name);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -96,14 +96,14 @@ const UserDataUpload = (props) => {
     <div>
       <DashboardLayout>
         <DashboardNavbar />
-        <Card    sx={{
-              height: 480,
-              width: "100%",
-              "@media screen and (min-width: 768px)": {
-                height: 670,
-              },
-            }}>
-        {/* <Card lg={{ pb: "20px", height: "100%" }}> */}
+        <Card sx={{
+          height: 480,
+          width: "100%",
+          "@media screen and (min-width: 768px)": {
+            height: 670,
+          },
+        }}>
+          {/* <Card lg={{ pb: "20px", height: "100%" }}> */}
           <MDBox pt={3} px={2} mb={8}>
             <MDBox
               display="flex"
@@ -126,7 +126,7 @@ const UserDataUpload = (props) => {
               </MDBox>
             </MDBox>
 
-      
+
 
             <MDBox
               pt={3}

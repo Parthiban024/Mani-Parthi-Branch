@@ -9,9 +9,9 @@ function Team() {
   const [editValue, setEditValue] = useState("");
   const [alert, setAlert] = useState({ show: false, msg: "", type: "" });
   const [lists, setLists] = useState([
-    { id: 1, title: "team1",complete: false  },
-    { id: 2, title: "team2",complete: false },
-    
+    { id: 1, title: "team1", complete: false },
+    { id: 2, title: "team2", complete: false },
+
   ]);
 
   const handleSubmit = (e) => {

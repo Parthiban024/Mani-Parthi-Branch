@@ -35,10 +35,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 
 const columns = [
-  { field: 'id', headerName: 'Employee ID', width: 150, flex:1},
-  { field: 'Employee Name', headerName: 'Employee Name', width: 200, flex:1 },
-  { field: 'Department', headerName: 'Department', width: 150, flex:1 },
-  { field: 'Role', headerName: 'Role', width: 150, flex:1 },
+  { field: 'id', headerName: 'Employee ID', width: 150, flex: 1 },
+  { field: 'Employee Name', headerName: 'Employee Name', width: 200, flex: 1 },
+  { field: 'Department', headerName: 'Department', width: 150, flex: 1 },
+  { field: 'Role', headerName: 'Role', width: 150, flex: 1 },
 ];
 
 const UserDataUpload = () => {
@@ -72,53 +72,53 @@ const UserDataUpload = () => {
       <DashboardLayout>
         <DashboardNavbar />
         <div
-        style={{
-          display: "flex",
-          justifyContent: "end",
-        }}
-      >
-        <MDButton
-          variant="gradient"
-          color="success"
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={openDrawer}
           style={{
             display: "flex",
-            justifyContent: "center",
-            // padding: "6px 12px", // Adjusted padding
-            fontSize: "0.7rem", // Adjusted font size
-            borderRadius: "10px",
-            textAlign: "center",
-            minHeight: "10px", // Adjust the height as needed
-            minWidth: "120px",
-           // Adjust the width as needed
+            justifyContent: "end",
           }}
         >
-          Add Employee
-        </MDButton>
-      </div>
-        <Drawer anchor="right" PaperProps={{ style: { width: 712 } }} open={drawerOpen} onClose={closeDrawer}>
-        <MDBox
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2, // Adjusted margin-bottom
-          }}
-        >
-          <Typography variant="h6">New Task</Typography>
-          <IconButton
-            sx={{ position: "absolute", top: 10, right: 0 }} // Positioned to the top right corner
-            onClick={closeDrawer}
+          <MDButton
+            variant="gradient"
+            color="success"
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={openDrawer}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              // padding: "6px 12px", // Adjusted padding
+              fontSize: "0.7rem", // Adjusted font size
+              borderRadius: "10px",
+              textAlign: "center",
+              minHeight: "10px", // Adjust the height as needed
+              minWidth: "120px",
+              // Adjust the width as needed
+            }}
           >
-            <CloseIcon />
-          </IconButton>
-        </MDBox>
+            Add Employee
+          </MDButton>
+        </div>
+        <Drawer anchor="right" PaperProps={{ style: { width: 712 } }} open={drawerOpen} onClose={closeDrawer}>
+          <MDBox
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2, // Adjusted margin-bottom
+            }}
+          >
+            <Typography variant="h6">New Task</Typography>
+            <IconButton
+              sx={{ position: "absolute", top: 10, right: 0 }} // Positioned to the top right corner
+              onClick={closeDrawer}
+            >
+              <CloseIcon />
+            </IconButton>
+          </MDBox>
 
-        <MDBox pb={5} component="form" role="form" >
+          <MDBox pb={5} component="form" role="form" >
 
 
-          {/* <MDBox sx={{ width: 250, p: 2 }}>
+            {/* <MDBox sx={{ width: 250, p: 2 }}>
             <InputLabel htmlFor="project-name">Select Project Name</InputLabel>
             <Autocomplete
               sx={{ width: 626, mt: 1 }}
@@ -137,7 +137,7 @@ const UserDataUpload = () => {
               // )}
             />
           </MDBox> */}
-          {/* <MDBox sx={{ width: 250, p: 2 }}>
+            {/* <MDBox sx={{ width: 250, p: 2 }}>
             <InputLabel htmlFor="department">Department</InputLabel>
             <Autocomplete
               sx={{ width: 626, mt: 1 }}
@@ -175,7 +175,7 @@ const UserDataUpload = () => {
 
 
           </MDBox> */}
-          {/* <MDBox
+            {/* <MDBox
             sx={{
               display: "flex",
               flexDirection: "row",
@@ -226,51 +226,51 @@ const UserDataUpload = () => {
 
           </MDBox> */}
 
-          <MDBox sx={{ width: 250, p: 2 }}>
-            <InputLabel htmlFor="hour">Daily Log</InputLabel>
+            <MDBox sx={{ width: 250, p: 2 }}>
+              <InputLabel htmlFor="hour">Daily Log</InputLabel>
 
-            <TextField
-              sx={{ width: 305, mt: 1 }}
-              select
-              fullWidth
-              id="hour"
-              name="sessionOne"
-              // value={value.sessionOne}
-              // onChange={handleInputchange}
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              SelectProps={{
-                native: true,
-              }}
+              <TextField
+                sx={{ width: 305, mt: 1 }}
+                select
+                fullWidth
+                id="hour"
+                name="sessionOne"
+                // value={value.sessionOne}
+                // onChange={handleInputchange}
+                variant="outlined"
+                InputLabelProps={{ shrink: true }}
+                SelectProps={{
+                  native: true,
+                }}
+              >
+                <option value="">Select Hours</option>
+                <option value="1hour">1 Hour</option>
+                <option value="2hour">2 Hour</option>
+                <option value="3hour">3 Hour</option>
+                <option value="4hour">4 Hour</option>
+              </TextField>
+
+
+            </MDBox>
+            <MDBox
+              pt={3}
+              px={2}
+              display="flex"
+              justifyContent="end"
+              alignItems="center"
             >
-              <option value="">Select Hours</option>
-              <option value="1hour">1 Hour</option>
-              <option value="2hour">2 Hour</option>
-              <option value="3hour">3 Hour</option>
-              <option value="4hour">4 Hour</option>
-            </TextField>
-
-
+              <MDButton type="submit" color="success">
+                Save
+              </MDButton>
+            </MDBox>
           </MDBox>
-          <MDBox
-            pt={3}
-            px={2}
-            display="flex"
-            justifyContent="end"
-            alignItems="center"
-          >
-            <MDButton type="submit" color="success">
-              Save
-            </MDButton>
-          </MDBox>
-        </MDBox>
 
 
-      </Drawer>
+        </Drawer>
         <Card>
-        <div style={{ height: 400, width: '100%' }}>
-          <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5, 10, 20]} checkboxSelection />
-        </div>
+          <div style={{ height: 400, width: '100%' }}>
+            <DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5, 10, 20]} checkboxSelection />
+          </div>
         </Card>
       </DashboardLayout>
     </div>

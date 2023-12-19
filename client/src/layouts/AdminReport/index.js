@@ -194,7 +194,7 @@ function AdminReport() {
       editable: false,
       flex: 1,
     },
-    
+
     {
       field: "projectName",
       headerName: "Project Name",
@@ -306,7 +306,7 @@ function AdminReport() {
     <DashboardLayout>
       <DashboardNavbar />
 
-      <Grid item xs={12}  mb={1}>
+      <Grid item xs={12} mb={1}>
         <Card>
           <Box>
             <Popper
@@ -464,7 +464,7 @@ function AdminReport() {
           </Box>
         </Card>
       </Grid>
-      <Grid item xs={12}  mb={10}>
+      <Grid item xs={12} mb={10}>
         {/* <IconButton  onClick={openDrawer} color="primary" aria-label="Filter">
       <FilterListIcon />
     </IconButton> */}
@@ -498,14 +498,14 @@ function AdminReport() {
 
                 {/* <Box sx={{ height: 480, width: "100%" }}> */}
                 <Box
-            sx={{
-              height: 480,
-              width: "100%",
-              "@media screen and (min-width: 768px)": {
-                height: 670,
-              },
-            }}
-          >
+                  sx={{
+                    height: 480,
+                    width: "100%",
+                    "@media screen and (min-width: 768px)": {
+                      height: 670,
+                    },
+                  }}
+                >
                   <DataGrid
                     rows={row}
                     columns={columns}
@@ -569,40 +569,40 @@ function AdminReport() {
                         </div>
                       ),
                     }}
-                    // components={{
-                    //   Toolbar: () => (
-                    //     <div style={{ display: 'flex' }}>
-                    //       <GridToolbar />
-                    //       {/* Custom filter icon with aria-label */}
+                  // components={{
+                  //   Toolbar: () => (
+                  //     <div style={{ display: 'flex' }}>
+                  //       <GridToolbar />
+                  //       {/* Custom filter icon with aria-label */}
 
-                    //       <div style={{ display: 'flex', marginLeft: 'auto', alignItems: 'center' }} >
+                  //       <div style={{ display: 'flex', marginLeft: 'auto', alignItems: 'center' }} >
 
-                    //         <FilterListIcon
-                    //           className="team-filter-icon"
-                    //           // style={{ cursor: 'pointer', color: '#3a87ea', fontSize: '20px' }}
-                    //           // onClick={openDrawer}
-                    //           style={{ cursor: 'pointer', color: '#3a87ea', fontSize: '20px' }}
-                    //           onClick={openFilterDialog}
-                    //           aria-label="Team Filter"
-                    //         />
-                    //         <MDTypography variant="h6"  onClick={openFilterDialog} style={{ color: '#3a87ea', cursor: 'pointer', fontSize: '12.1px', marginRight: '10px', }}>
-                    //           TEAM FILTER
-                    //         </MDTypography>
-                    //         <MDButton
-                    //           className="team-report-btn"
-                    //           variant="outlined"
-                    //           color="error"
-                    //           size="small"
-                    //           style={{ marginRight: '13px' }}
-                    //           onClick={allReport}
-                    //         // onClick={() => setShow(!show)}
-                    //         >
-                    //           &nbsp;All Report
-                    //         </MDButton>
-                    //       </div>
-                    //     </div>
-                    //   ),
-                    // }}
+                  //         <FilterListIcon
+                  //           className="team-filter-icon"
+                  //           // style={{ cursor: 'pointer', color: '#3a87ea', fontSize: '20px' }}
+                  //           // onClick={openDrawer}
+                  //           style={{ cursor: 'pointer', color: '#3a87ea', fontSize: '20px' }}
+                  //           onClick={openFilterDialog}
+                  //           aria-label="Team Filter"
+                  //         />
+                  //         <MDTypography variant="h6"  onClick={openFilterDialog} style={{ color: '#3a87ea', cursor: 'pointer', fontSize: '12.1px', marginRight: '10px', }}>
+                  //           TEAM FILTER
+                  //         </MDTypography>
+                  //         <MDButton
+                  //           className="team-report-btn"
+                  //           variant="outlined"
+                  //           color="error"
+                  //           size="small"
+                  //           style={{ marginRight: '13px' }}
+                  //           onClick={allReport}
+                  //         // onClick={() => setShow(!show)}
+                  //         >
+                  //           &nbsp;All Report
+                  //         </MDButton>
+                  //       </div>
+                  //     </div>
+                  //   ),
+                  // }}
                   />
                 </Box>
               </MDBox>

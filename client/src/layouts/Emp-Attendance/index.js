@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, Card, TextField } from '@mui/material';
-import { DataGrid, GridToolbar, GridToolbarContainer  } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar, GridToolbarContainer } from "@mui/x-data-grid";
 import moment from 'moment';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
@@ -52,7 +52,7 @@ function Attendance() {
   const handlePopperClose = () => {
     setPopperOpen(false);
   };
-  
+
   const filteredData = attendanceData.filter((item) => {
     if (startDate && endDate) {
       const startDateTime = moment(startDate).startOf('day');
@@ -77,7 +77,7 @@ function Attendance() {
     { field: 'checkInTime', headerName: 'Check In', width: 150, flex: 1 },
     { field: 'checkOutTime', headerName: 'Check Out', width: 150 },
     { field: 'total', headerName: 'Total', width: 150 },
-   
+
   ];
 
 
@@ -101,7 +101,7 @@ function Attendance() {
           </Card>
         </Grid>
       </Grid> */}
-   <Grid item xs={12} mt={2} mb={1}>
+      <Grid item xs={12} mt={2} mb={1}>
         <Card>
           <Box>
             <Popper
@@ -196,7 +196,7 @@ function Attendance() {
       </Grid>
       <Grid mt={4} mb={10}>
         <Card>
-        <Box
+          <Box
             sx={{
               height: 480,
               width: "100%",
@@ -208,7 +208,7 @@ function Attendance() {
             <DataGrid
               rows={filteredData}
               columns={columns}
-               rowsPerPageOptions={[5, 10, 25, 50, 100]}
+              rowsPerPageOptions={[5, 10, 25, 50, 100]}
               components={{
                 Toolbar: () => (
                   <div style={{ display: "flex" }}>
@@ -265,13 +265,13 @@ function Attendance() {
                   </div>
                 ),
               }}
-              
+
             />
           </Box>
         </Card>
       </Grid>
 
-     {/* <Footer /> */}
+      {/* <Footer /> */}
     </DashboardLayout>
   );
 }

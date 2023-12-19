@@ -136,7 +136,7 @@ function Attendance() {
 
   useEffect(() => {
     if (resetTimeoutId) {
-      const timeoutId = setTimeout(resetFunction, 20000);
+      const timeoutId = setTimeout(resetFunction, 3600000);
 
       return () => clearTimeout(timeoutId);
     }
@@ -147,40 +147,40 @@ function Attendance() {
   const handleCheckin = async () => {
     try {
       const timeNow = moment().format("hh:mm a");
-  
+
       setCheckinTime(timeNow);
       setCheckinTimeForCheckout(timeNow);
-  
+
       sessionStorage.setItem("checkinTime", timeNow);
       sessionStorage.setItem("checkinTimeForCheckout", timeNow);
       sessionStorage.setItem("name", name);
       sessionStorage.setItem("empId", empId);
-  
+
       // Refresh data after check-in
       await fetchData();
     } catch (error) {
       console.error("Error:", error);
     }
   };
-  
-  
+
+
   const handleCheckout = async () => {
     try {
       const checkTime = moment().format("hh:mm a");
       setCheckoutTime(checkTime);
-  
+
       // Ensure checkinTimeForCheckout is set correctly, use the current time if not set
       const checkinMoment = moment(sessionStorage.getItem("checkinTimeForCheckout") || moment(), "hh:mm a");
       const checkoutMoment = moment(checkTime, "hh:mm a");
       const overAll = moment.duration(checkoutMoment.diff(checkinMoment));
-  
+
       setTotal(`${overAll.hours()}hrs : ${overAll.minutes()}mins`);
-  
+
       sessionStorage.setItem("checkoutTime", checkTime);
       sessionStorage.setItem("name", name);
       sessionStorage.setItem("empId", empId);
       sessionStorage.setItem("total", `${overAll.hours()}hrs : ${overAll.minutes()}mins`);
-  
+
       // Send check-out time to the server
       const response = await fetch("/emp-attendance/att", {
         method: "POST",
@@ -195,12 +195,12 @@ function Attendance() {
           total: `${overAll.hours()}hrs : ${overAll.minutes()}mins`,
         }),
       });
-  
+
       if (response.ok) {
         console.log("Checkout time saved successfully");
-  
+
         // Reset function logic
-        setResetTimeoutId(setTimeout(resetFunction, 20000));
+        setResetTimeoutId(setTimeout(resetFunction, 3600000));
         await fetchData(); // Refresh data after check-out
       } else {
         console.error("Failed to save checkout time");
@@ -209,7 +209,7 @@ function Attendance() {
       console.error("Error:", error);
     }
   };
-  
+
 
   return (
     <DashboardLayout>
@@ -291,9 +291,11 @@ function Attendance() {
             flexDirection="column"
             alignItems="center"
             justifyContent="space-between"
-            style={{ height: '500', overflowY: 'auto'  , "@media screen and (min-width: 768px)": {
-              height: '570',
-            }, }}
+            style={{
+              height: '500', overflowY: 'auto', "@media screen and (min-width: 768px)": {
+                height: '570',
+              },
+            }}
           >
             <Calendar
               selected={selectedDate}
@@ -309,15 +311,15 @@ function Attendance() {
         </Grid>
         <Grid item xs={12} lg={5} xl={6}>
           <Card>
-          <Box
-            sx={{
-              height: 480,
-              width: "100%",
-              "@media screen and (min-width: 768px)": {
-                height: 545,
-              },
-            }}
-          >
+            <Box
+              sx={{
+                height: 480,
+                width: "100%",
+                "@media screen and (min-width: 768px)": {
+                  height: 545,
+                },
+              }}
+            >
               <DataGrid rows={mappedData} columns={columns} rowsPerPageOptions={[5, 10, 25, 50, 100]} components={{ Toolbar: () => <GridToolbar /> }} />
             </Box>
           </Card>
