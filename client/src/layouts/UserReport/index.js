@@ -295,7 +295,7 @@ function Report() {
   const initialValues = {
     startDate: "",
     endDate: "",
-    empname: "",
+    // empname: "",
     team: "",
   };
   const [values, setValues] = useState(initialValues);
@@ -342,7 +342,7 @@ function Report() {
       endDate: values.endDate,
       team: teamList,
     };
-    // console.log(userData);
+    console.log(userData);
 
     axios
       .get(
