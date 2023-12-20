@@ -140,7 +140,7 @@ function Cover(props) {
                 <Grid container spacing={2}>
                   <Grid item xs={1} md={7}>
                     <MDInput
-                      type="number"
+                      type="text"
                       value={values.empid}
                       onChange={handleInputChange}
                       helperText={err.empId}
