@@ -383,6 +383,8 @@ function Edit() {
                 }}
               >
                 <option value="">Select Status</option>
+                <option value="NOT-Started">NOT Started</option>
+                <option value="Training">Training</option>
                 <option value="POC">POC</option>
                 <option value="In-Progress">In Progress</option>
                 <option value="Completed-Won">Completed Won</option>

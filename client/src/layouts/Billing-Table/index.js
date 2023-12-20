@@ -383,13 +383,17 @@ export default function ColumnGroupingTable() {
     setPopperOpen(false);
   };
   const statusIcons = {
-    POC: <SelfImprovementIcon />,
+    "POC": <SelfImprovementIcon />,
+    "NOT-Started": <SelfImprovementIcon />,
+    "Training": <SelfImprovementIcon />,
     "In-Progress": <DirectionsRunIcon />,
     "Completed-Won": <CheckIcon />,
     "Completed-Lost": <CloseIcon />,
   };
   const statusColors = {
-    POC: "#2196F3", // Blue
+    "POC": "#2196F3", // Blue
+    "NOT-Started":"#FF9800", 
+    "Training": "#FF9800",
     "In-Progress": "#FF9800", // orange
     "Completed-Won": "#8BC34A", // Light Green
     "Completed-Lost": "#FF5722", // Deep Orange
@@ -656,6 +660,8 @@ export default function ColumnGroupingTable() {
               }}
             >
               <option value="">Select Status</option>
+              <option value="NOT-Started">NOT Started</option>
+              <option value="Training">Training</option>
               <option value="POC">POC</option>
               <option value="In-Progress">In Progress</option>
               <option value="Completed-Won">Completed Won</option>
