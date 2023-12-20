@@ -58,7 +58,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "attendance",
+    name: "Attendance",
     key: "attendance",
     icon: <Icon fontSize="small">table_view</Icon>,
     route: "attendance",
