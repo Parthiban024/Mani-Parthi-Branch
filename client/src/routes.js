@@ -13,6 +13,7 @@ import BillingTable from "layouts/Billing-Table";
 // import Edit from 'layouts/Billing-report/Edit'
 import Attendance from "layouts/Attendance";
 import TaskCreation from "layouts/employeeReport"
+import LastLogin from "layouts/Last-Login";
 import AllEmployee from "layouts/All-Employees"
 import SettingsIcon from "@mui/icons-material/Settings";
 import PeopleIcon from "@mui/icons-material/People";
@@ -125,6 +126,15 @@ const routes = [
     icon: <Icon fontSize="small">settingsIcon</Icon>,
     route: "/Settings",
     component: <TaskCreation />,
+    role: "admin",
+  },
+  {
+    type: "collapse",
+    name: "LastLogin",
+    key: "LastLogin",
+    icon: <Icon fontSize="small">settingsIcon</Icon>,
+    route: "/LastLogin",
+    component: <LastLogin />,
     role: "admin",
   },
   // {

@@ -32,10 +32,12 @@ import Profile from "./layouts/profile";
 import UserReport from "./layouts/UserReport";
 import Employee from "./layouts/employeeReport";
 import Attendance from "layouts/Attendance";
-import EmployeeAtt from "layouts/Emp-Attendance"
-import TaskCreation from "layouts/Task-creation"
-import AllEmployee from "layouts/All-Employees"
-import 'layouts/Attendance/calendar.css'
+import EmployeeAtt from "layouts/Emp-Attendance";
+import TaskCreation from "layouts/Task-creation";
+import LastLogin from "layouts/Last-Login";
+import AllEmployee from "layouts/All-Employees";
+import 'layouts/Attendance/calendar.css';
+import { from } from "stylis";
 
 function App() {
   const [controller] = useMaterialUIController();
@@ -126,6 +128,9 @@ function App() {
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/Settings" element={<TaskCreation/>} />
+        </Route>
+        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+          <Route exact path="/LastLogin" element={<LastLogin/>} />
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/user-task" element={<UserReport/>} />

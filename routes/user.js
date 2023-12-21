@@ -10,8 +10,9 @@ import crypto from 'crypto';
 
 import loginValidate from '../validation/login.js';
 import registerValidate from '../validation/register.js';
-
+import LastLogin from '../models/LastLogin.js';
 import User from '../models/user.model.js'
+import Employee from '../models/excelUpload.js'; 
 
 dotenv.config();
 const HOST = process.env.SMTP_HOST
@@ -20,90 +21,150 @@ const USER = process.env.SMTP_USER
 const PASS = process.env.SMTP_PASS
 
 
+const determineRoleFromDesignation = (designation) => {
+    // Your logic to determine the role based on the designation
+    // For example, if designation is "DEV", return "admin", else return "analyst"
+    const adminDesignations = ["DEV"];
+    // Assuming the designations that should be assigned "admin" role are "DEV", "IT_ADMIN", and "PROJECT_MANAGER"
+  
+    return adminDesignations.includes(designation.toUpperCase()) ? "admin" : "analyst";
+  };
+  
 
-router.route('/register').post((req, res) => {
-
-    const { errors, isValid } = registerValidate(req.body);
-
-    if (!isValid) {
+router.post('/register', async (req, res) => {
+    try {
+      const { errors, isValid } = registerValidate(req.body);
+  
+      if (!isValid) {
         return res.status(400).json(errors);
+      }
+  
+      // Check if the email already exists in the user database
+      const existingUser = await User.findOne({ email: req.body.email });
+  
+      if (existingUser) {
+        return res.status(400).json({ emailAlready: 'Email already exists' });
+      }
+  
+      // Check if the email exists in the employee database
+      const existingEmployee = await Employee.findOne({ email_id: req.body.email });
+  
+      if (!existingEmployee) {
+        return res.status(400).json({ emailNotFound: 'Email not found in employee database' });
+      }
+  
+      // Determine the role based on the employee's designation
+      const role = determineRoleFromDesignation(existingEmployee.designation);
+  
+      // Proceed with user registration
+      const newUser = new User({
+        name: req.body.name,
+        empId: req.body.empId,
+        role: role,
+        email: req.body.email,
+        password: req.body.password,
+      });
+  
+      // Hash the password before saving it to the database
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, async (err, hash) => {
+          if (err) {
+            console.log(err);
+            throw err;
+          }
+          newUser.password = hash;
+  
+          // Save the new user to the user database
+          try {
+            const savedUser = await newUser.save();
+            res.json(savedUser);
+          } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Internal server error' });
+          }
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
     }
+  });
 
-    User.findOne({ email: req.body.email })
-        .then(user => {
-            if (user) {
-                return res.status(400).json({ emailAlready: 'Email already exist' });
-            } else {
-                const newUser = new User({
-                    name: req.body.name,
-                    empId: req.body.empId,
-                    role: req.body.role,
-                    email: req.body.email,
-                    password: req.body.password
+  const LastLogin = require('../models/LastLogin');
 
-                });
-
-                bcrypt.genSalt(10, (err, salt) => {
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
-                        if (err) { console.log(err); }
-                        newUser.password = hash;
-                        newUser.save()
-                            .then(user => res.json(user))
-                            .catch(err => console.log(err))
-                    })
-                })
-            }
-        })
-
-})
-
-router.route('/login').post((req, res) => {
-
-    const { errors, isValid } = loginValidate(req.body);
-
-    if (!isValid) {
+  router.route('/login').post(async (req, res) => {
+    try {
+      const { errors, isValid } = loginValidate(req.body);
+  
+      if (!isValid) {
         return res.status(400).json(errors);
-    }
-
-    const email = req.body.email;
-    const password = req.body.password;
-
-    User.findOne({ email }).then(user => {
+      }
+  
+      const existingEmployee = await Employee.findOne({ email_id: req.body.email });
+  
+      if (!existingEmployee) {
+        return res.status(400).json({ emailNotFound: 'Email not found in Employee database' });
+      }
+  
+      const email = req.body.email;
+      const password = req.body.password;
+  
+      User.findOne({ email }).then(user => {
         if (!user) {
-            return res.status(404).json({ emailnotfound: 'Email Not Found' })
+          return res.status(404).json({ emailNotFound: 'Email Not Found' });
         }
-
-        bcrypt.compare(password, user.password)
-            .then(isMatch => {
-                if (isMatch) {
-
-                    const payload = {
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                        empId: user.empId,
-                        role: user.role
-                    };
-
-                    jwt.sign(
-                        payload, Key.key, {
-                        expiresIn: 900
-                    },
-                        (err, token) => {
-                            res.json({
-                                success: true,
-                                token: 'Bearer' + token
-                            })
-                        }
-                    )
-                } else {
-                    return res.status(400).json({ passwordinCorrect: 'Password Incorrect' })
+  
+        const role = determineRoleFromDesignation(existingEmployee.designation);
+  
+        bcrypt.compare(password, user.password).then(async (isMatch) => {
+          if (isMatch) {
+            try {
+              const lastLogin = new LastLogin({
+                userId: user._id,
+                loginTime: new Date(),
+              });
+  
+              await lastLogin.save();
+  
+              user.lastLogin = lastLogin._id;
+  
+              await user.save();
+  
+              const payload = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                empId: user.empId,
+                role: role,
+              };
+  
+              jwt.sign(
+                payload, Key.key, {
+                  expiresIn: 900,
+                },
+                (err, token) => {
+                  res.json({
+                    success: true,
+                    token: 'Bearer ' + token,
+                  });
                 }
-            })
-    })
+              );
+            } catch (error) {
+              console.error(error);
+              res.status(500).json({ message: 'Internal server error' });
+            }
+          } else {
+            return res.status(400).json({ passwordIncorrect: 'Password Incorrect' });
+          }
+        });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
+  
 
-
-})
 
 router.route('/users').get((req, res) => {
     User.find({}, 'name').sort([['name',1]])
@@ -115,6 +176,17 @@ router.route('/all').get((req, res) => {
         .then(user => res.json(user))
         .catch((err) => res.status(400).json('Error:' + err))
 })
+
+router.route('/last-login').get(async (req, res) => {
+    try {
+      const lastLogins = await LastLogin.find().populate('userId', 'name email'); // Assuming you have a reference to the user in LastLogin model
+  
+      res.json(lastLogins);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 
 
 router.route('/forget').post((req, res) => {

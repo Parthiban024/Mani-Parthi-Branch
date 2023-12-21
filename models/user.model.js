@@ -16,7 +16,7 @@ const UserSchema =  new Schema({
       },
       role:{
         type: String,
-        required: true,
+        required: false,
       },
       password: {
         type: String,
@@ -26,8 +26,13 @@ const UserSchema =  new Schema({
         type: Date,
         default: Date.now
       },
+      lastLogin: {
+        type: Schema.Types.ObjectId,
+        ref: 'LastLogin',
+      },
       resetToken:String,
       expireToken:Date,
+      
 });
 
 const User  = mongoose.model('users',UserSchema)

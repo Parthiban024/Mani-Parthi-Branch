@@ -392,8 +392,8 @@ export default function ColumnGroupingTable() {
   };
   const statusColors = {
     "POC": "#2196F3", // Blue
-    "NOT-Started":"#FF9800", 
-    "Training": "#FF9800",
+    "NOT-Started":"#979700",//dark yellow
+    "Training": "#9F00FF", // purple
     "In-Progress": "#FF9800", // orange
     "Completed-Won": "#8BC34A", // Light Green
     "Completed-Lost": "#FF5722", // Deep Orange
