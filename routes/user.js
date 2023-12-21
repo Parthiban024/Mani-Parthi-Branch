@@ -23,12 +23,22 @@ const PASS = process.env.SMTP_PASS
 
 const determineRoleFromDesignation = (designation) => {
     // Your logic to determine the role based on the designation
-    // For example, if designation is "DEV", return "admin", else return "analyst"
+    // For example, if designation is "DEV", return "admin"
+    // If designation is "SUPERADMIN", return "superadmin"
+    // Otherwise, return "analyst"
+
     const adminDesignations = ["DEV"];
-    // Assuming the designations that should be assigned "admin" role are "DEV", "IT_ADMIN", and "PROJECT_MANAGER"
-  
-    return adminDesignations.includes(designation.toUpperCase()) ? "admin" : "analyst";
-  };
+    const superAdminDesignation = "SUPERADMIN";
+
+    if (adminDesignations.includes(designation.toUpperCase())) {
+        return "admin";
+    } else if (designation.toUpperCase() === superAdminDesignation) {
+        return "superadmin";
+    } else {
+        return "analyst";
+    }
+};
+
   
 
 router.post('/register', async (req, res) => {
@@ -92,7 +102,7 @@ router.post('/register', async (req, res) => {
 
 //   const LastLogin = require('../models/LastLogin');
 
-  router.route('/login').post(async (req, res) => {
+router.route('/login').post(async (req, res) => {
     try {
       const { errors, isValid } = loginValidate(req.body);
   
@@ -100,69 +110,98 @@ router.post('/register', async (req, res) => {
         return res.status(400).json(errors);
       }
   
-      const existingEmployee = await Employee.findOne({ email_id: req.body.email });
-  
-      if (!existingEmployee) {
-        return res.status(400).json({ emailNotFound: 'Email not found in Employee database' });
-      }
-  
       const email = req.body.email;
       const password = req.body.password;
   
-      User.findOne({ email }).then(user => {
-        if (!user) {
-          return res.status(404).json({ emailNotFound: 'Email Not Found' });
+      // Check if it's the superadmin login
+      if (email === 'superadmin@objectways.com' && password === 'superadmin@123') {
+        const payload = {
+          id: 'superadmin', // You can use a unique identifier for the superadmin
+          name: 'Super Admin',
+          email: 'superadmin@objectways.com',
+          empId: 'superadmin',
+          role: 'superadmin',
+        };
+  
+        jwt.sign(
+          payload,
+          Key.key,
+          {
+            expiresIn: 900,
+          },
+          (err, token) => {
+            res.json({
+              success: true,
+              token: 'Bearer ' + token,
+            });
+          }
+        );
+      } else {
+        // If it's not a superadmin login, proceed with the existing logic
+        const existingEmployee = await Employee.findOne({ email_id: email });
+  
+        if (!existingEmployee) {
+          return res.status(400).json({ emailNotFound: 'Email not found in Employee database' });
         }
   
-        const role = determineRoleFromDesignation(existingEmployee.designation);
-  
-        bcrypt.compare(password, user.password).then(async (isMatch) => {
-          if (isMatch) {
-            try {
-              const lastLogin = new LastLogin({
-                userId: user._id,
-                loginTime: new Date(),
-              });
-  
-              await lastLogin.save();
-  
-              user.lastLogin = lastLogin._id;
-  
-              await user.save();
-  
-              const payload = {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                empId: user.empId,
-                role: role,
-              };
-  
-              jwt.sign(
-                payload, Key.key, {
-                  expiresIn: 900,
-                },
-                (err, token) => {
-                  res.json({
-                    success: true,
-                    token: 'Bearer ' + token,
-                  });
-                }
-              );
-            } catch (error) {
-              console.error(error);
-              res.status(500).json({ message: 'Internal server error' });
-            }
-          } else {
-            return res.status(400).json({ passwordIncorrect: 'Password Incorrect' });
+        User.findOne({ email }).then((user) => {
+          if (!user) {
+            return res.status(404).json({ emailNotFound: 'Email Not Found' });
           }
+  
+          const role = determineRoleFromDesignation(existingEmployee.designation);
+  
+          bcrypt.compare(password, user.password).then(async (isMatch) => {
+            if (isMatch) {
+              try {
+                const lastLogin = new LastLogin({
+                  userId: user._id,
+                  loginTime: new Date(),
+                });
+  
+                await lastLogin.save();
+  
+                user.lastLogin = lastLogin._id;
+  
+                await user.save();
+  
+                const payload = {
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  empId: user.empId,
+                  role: role,
+                };
+  
+                jwt.sign(
+                  payload,
+                  Key.key,
+                  {
+                    expiresIn: 900,
+                  },
+                  (err, token) => {
+                    res.json({
+                      success: true,
+                      token: 'Bearer ' + token,
+                    });
+                  }
+                );
+              } catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Internal server error' });
+              }
+            } else {
+              return res.status(400).json({ passwordIncorrect: 'Password Incorrect' });
+            }
+          });
         });
-      });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Internal server error' });
     }
   });
+  
   
 
 

@@ -126,7 +126,7 @@ const routes = [
     icon: <Icon fontSize="small">settingsIcon</Icon>,
     route: "/Settings",
     component: <TaskCreation />,
-    role: "admin",
+    role: "superadmin",
   },
   {
     type: "collapse",
