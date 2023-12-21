@@ -111,16 +111,16 @@ function App() {
           <Route exact path="/profile" element={<Profile/>}/>
           {/* <Route exact path="/attendance" element={<Attendance/>}/> */}
         </Route>
-        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin' || role === 'admin'))}/>}>
           <Route exact path="/task-report" element={<AdminReport/>} />
         </Route>
-        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        <Route element={<Protected isValid={(isLoggedIn&&role==='superadmin')}/>}>
           <Route exact path="/employees" element={<AllEmployee/>} />
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
           <Route exact path="/employee" element={<Employee/>} />
         </Route>
-        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin' || role === 'admin'))}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
         </Route>     
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
@@ -129,12 +129,12 @@ function App() {
         <Route element={<Protected isValid={(isLoggedIn&&role==='superadmin')}/>}>
           <Route exact path="/Settings" element={<TaskCreation/>} />
         </Route>
-        <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        <Route element={<Protected isValid={(isLoggedIn&&role==='superadmin')}/>}>
           <Route exact path="/LastLogin" element={<LastLogin/>} />
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/user-task" element={<UserReport/>} />
-        </Route> <Route element={<Protected isValid={(isLoggedIn&&role==='admin')}/>}>
+        </Route> <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin' || role === 'admin'))}/>}>
           <Route exact path="/project-entry" element={<BillingReport />} />
           <Route exact path="/project-entry/edit/:id" element={<Edit/>} />
           <Route exact path="/projects" element={<BillingTable />} />
@@ -145,7 +145,7 @@ function App() {
         exact
         path="*"
         element={
-          isLoggedIn && (role === 'analyst' || role === 'admin') ? (
+          isLoggedIn && (role === 'analyst' || role === 'admin' || role === 'superadmin') ? (
             <Dashboard/>
           ) : (
             <Navigate to="/dashboard" />

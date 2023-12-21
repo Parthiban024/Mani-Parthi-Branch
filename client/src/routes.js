@@ -41,6 +41,15 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Dashboard",
+    key: "dashboard",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/dashboard",
+    component: <Dashboard />,
+    role: "superadmin",
+  },
+  {
+    type: "collapse",
     name: "Employee Attendance",
     key: "employee-attendance",
     icon: <Icon fontSize="small">create_new_folder</Icon>,
@@ -50,12 +59,21 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Employee Attendance",
+    key: "employee-attendance",
+    icon: <Icon fontSize="small">create_new_folder</Icon>,
+    route: "/employee-attendance",
+    component: <EmployeeAtt/>,
+    role: "superadmin",
+  },
+  {
+    type: "collapse",
     name: "Employees",
     key: "employees",
     icon: <Icon fontSize="small">peopleIcon</Icon>,
     route: "/employees",
     component: <AllEmployee />,
-    role: "admin",
+    role: "superadmin",
   },
   {
     type: "collapse",
@@ -83,6 +101,15 @@ const routes = [
     route: "/task-report",
     component: <AdminReport />,
     role: "admin",
+  },
+  {
+    type: "collapse",
+    name: "Task Report",
+    key: "task-report",
+    icon: <Icon fontSize="small">switch_account</Icon>,
+    route: "/task-report",
+    component: <AdminReport />,
+    role: "superadmin",
   },
 
   // {
@@ -121,6 +148,15 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Projects",
+    key: "projects",
+    icon: <Icon fontSize="small">trending_up</Icon>,
+    route: "/projects",
+    component: <BillingTable />,
+    role: "superadmin",
+  },
+  {
+    type: "collapse",
     name: "Settings",
     key: "Settings",
     icon: <Icon fontSize="small">settingsIcon</Icon>,
@@ -135,7 +171,7 @@ const routes = [
     icon: <Icon fontSize="small">settingsIcon</Icon>,
     route: "/LastLogin",
     component: <LastLogin />,
-    role: "admin",
+    role: "superadmin",
   },
   // {
   //   type: "collapse",
