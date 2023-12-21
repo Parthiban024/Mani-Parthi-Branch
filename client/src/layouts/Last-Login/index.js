@@ -6,41 +6,39 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 const LastLogin = () => {
-  const [lastLogin, setLastLogin] = useState([]);
+  const [allLogins, setAllLogins] = useState([]);
 
   useEffect(() => {
-    const fetchLastLogins = async () => {
+    const fetchAllLogins = async () => {
       try {
-        // Replace '/api/auth/all-last-logins' with the correct endpoint from your backend
-        const response = await axios.get('/api/auth/LastLogin');
-        console.log('All Last Logins Data:', response.data);
-        setLastLogin(response.data);
+        const response = await axios.get('user/login');
+        setAllLogins(response.data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchLastLogins();
+    fetchAllLogins();
   }, []);
-
 
   return (
     <DashboardLayout>
     <DashboardNavbar />
     <div>
-      <h2>All Users Last Login Details</h2>
-      <ul>
-        {Array.isArray(lastLogin) && lastLogin.length > 0 ? (
-          lastLogin.map((login) => (
-            <li key={login._id}>
-              User: {login.userId.name}, Email: {login.userId.email}, Login Time: {new Date(login.loginTime).toLocaleString()}
-            </li>
-          ))
-        ) : (
-          <li>No last login details available</li>
-        )}
-      </ul>
-    </div>
+        <h2>All Users Last Login Details</h2>
+        <ul>
+          {Array.isArray(allLogins) && allLogins.length > 0 ? (
+            allLogins.map((login) => (
+              <li key={login._id}>
+                User: {login.name}, Email: {login.email}, Login Time:{' '}
+                {new Date(login.loginTime).toLocaleString()}
+              </li>
+            ))
+          ) : (
+            <li>No last login details available</li>
+          )}
+        </ul>
+      </div>
    </DashboardLayout>
   );
 };
