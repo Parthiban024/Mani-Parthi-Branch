@@ -10,6 +10,7 @@ import bodyParser from 'body-parser';
 // import Attendance from './models/attendance.js';
 import EmployeeUpload from './models/excelUpload.js';
 import { read, utils } from 'xlsx';
+import Employee from './models/excelUpload.js'; 
 
 
 import moment from 'moment';
@@ -117,37 +118,37 @@ app.use('/create', Task);
 //   });
 
 // MongoDB Schema
-const employeeSchema = new mongoose.Schema({
-  emp_id: String,
-  emp_name: String,
-  department: String,
-  email_id: String,
-  doj: String, // Assuming DOJ is a date field
-  gender: String,
-  dob: String, // Assuming DOB is a date field
-  status: String,
-  confirmation_date: String, // Assuming Confirmation Date is a date field
-  age_range: String,
-  manager_id: String,
-  manager_name: String,
-  phone_no: String,
-  blood_group: String,
-  employment_status: String,
-  pan_no: String,
-  uan_no: String,
-  marital_status: String,
-  bank_ac_no: String,
-  nationality: String,
-  age: String,
-  current_access_card_no: String,
-  residential_status: String,
-  location: String,
-  designation: String,
-  grade: String,
-  shift: String,
-});
+// const employeeSchema = new mongoose.Schema({
+//   emp_id: String,
+//   emp_name: String,
+//   department: String,
+//   email_id: String,
+//   doj: String, // Assuming DOJ is a date field
+//   gender: String,
+//   dob: String, // Assuming DOB is a date field
+//   status: String,
+//   confirmation_date: String, // Assuming Confirmation Date is a date field
+//   age_range: String,
+//   manager_id: String,
+//   manager_name: String,
+//   phone_no: String,
+//   blood_group: String,
+//   employment_status: String,
+//   pan_no: String,
+//   uan_no: String,
+//   marital_status: String,
+//   bank_ac_no: String,
+//   nationality: String,
+//   age: String,
+//   current_access_card_no: String,
+//   residential_status: String,
+//   location: String,
+//   designation: String,
+//   grade: String,
+//   shift: String,
+// });
 
-const Employee = mongoose.model('Employee', employeeSchema);
+// const Employee = mongoose.model('Employee', employeeSchema);
 
 app.post('/api/uploadData', async (req, res) => {
   try {

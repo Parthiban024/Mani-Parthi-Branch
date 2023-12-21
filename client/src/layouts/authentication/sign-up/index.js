@@ -37,6 +37,7 @@ function Cover(props) {
     password: "",
     password2: "",
     emailAlready: "",
+    emailNotFound:"",
   });
   const [red, setRed] = useState(false);
  const img="https://images.unsplash.com/photo-1471734134930-fdd4b1af533e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1749&q=80"
@@ -62,6 +63,7 @@ function Cover(props) {
         password: props.errors.password,
         password2: props.errors.password2,
         emailAlready: props.errors.emailAlready,
+        emailNotFound: props.errors.emailNotFound,
       });
     }
 
@@ -72,7 +74,9 @@ function Cover(props) {
       err.role &&
       err.empId &&
       err.password2 &&
+      err.emailNotFound &&
       err.emailAlready !== ""
+      
     ) {
       setRed(true);
     }
@@ -166,12 +170,8 @@ function Cover(props) {
                         >
                           <option aria-label="None" />
                           <option value="analyst">Analyst</option>
-                          {/* <option value="analyst">Team Leader</option> */}
-                          {/* <option value="admin">Admin</option> */}
+                          {/* <option value="Project Manager">Project Manager</option>*/}
                           <option value="admin">Admin</option>
-                          {/* <option value="Project Manager">Project Manager</option>
-    <option value="IT Admin">IT Admin</option>
-    <option value="HR">HR</option> */}
                         </Select>
                         <FormHelperText>{err.role}</FormHelperText>
                       </FormControl>
@@ -185,7 +185,7 @@ function Cover(props) {
                   value={values.email}
                   onChange={handleInputChange}
                   name="email"
-                  helperText={err.email || err.emailAlready}
+                  helperText={err.email || err.emailAlready || err.emailNotFound}
                   label="Email"
                   fullWidth
                 />

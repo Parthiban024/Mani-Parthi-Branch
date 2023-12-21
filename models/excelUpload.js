@@ -1,35 +1,35 @@
 import mongoose from 'mongoose';
 
 const employeeSchema = new mongoose.Schema({
-  empId: String,
-  empName: String,
-  DOJ: Date, // Assuming DOJ is a date field
+  emp_id: String,
+  emp_name: String,
+  department: String,
+  email_id: String,
+  doj: String, // Assuming DOJ is a date field
   gender: String,
-  DOB: Date, // Assuming DOB is a date field
-  emailId: String,
+  dob: String, // Assuming DOB is a date field
   status: String,
-  confirmationDate: Date, // Assuming Confirmation Date is a date field
-  ageRange: String,
-  managerId: String,
-  managerName: String,
-  phoneNo: String,
-  bloodGroup: String,
-  employmentStatus: String,
-  panNo: String,
-  uanNo: String,
-  maritalStatus: String,
-  bankAccountNo: String,
+  confirmation_date: String, // Assuming Confirmation Date is a date field
+  age_range: String,
+  manager_id: String,
+  manager_name: String,
+  phone_no: String,
+  blood_group: String,
+  employment_status: String,
+  pan_no: String,
+  uan_no: String,
+  marital_status: String,
+  bank_ac_no: String,
   nationality: String,
-  age: Number,
-  currentAccessCardNo: String,
-  residentialStatus: String,
+  age: String,
+  current_access_card_no: String,
+  residential_status: String,
   location: String,
   designation: String,
-  department: String,
   grade: String,
   shift: String,
     });
 
-const EmployeeUpload = mongoose.model('Employeeupload', employeeSchema);
+const Employee = mongoose.model('Employee', employeeSchema);
 
-export default EmployeeUpload;
+export default Employee;
