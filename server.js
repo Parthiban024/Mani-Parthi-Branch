@@ -153,7 +153,19 @@ app.post('/api/uploadData', async (req, res) => {
   try {
     const data = req.body;
 
-    await Employee.insertMany(data);
+    for (const employeeData of data) {
+      const existingEmployee = await Employee.findOne({ email_id: employeeData.email_id });
+
+      if (existingEmployee) {
+        // Merge existing employee data with the new data
+        const mergedData = { ...existingEmployee.toObject(), ...employeeData };
+        await Employee.findByIdAndUpdate(existingEmployee._id, mergedData);
+      } else {
+        // If no existing employee, create a new one
+        const newEmployee = new Employee(employeeData);
+        await newEmployee.save();
+      }
+    }
 
     res.status(200).json({ message: 'Data saved to MongoDB' });
   } catch (error) {
@@ -161,7 +173,6 @@ app.post('/api/uploadData', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
 // API to fetch data from MongoDB
 app.get('/api/fetchData', async (req, res) => {
   try {
