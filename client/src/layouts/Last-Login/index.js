@@ -12,7 +12,7 @@ const LastLogin = () => {
     const fetchLastLogins = async () => {
       try {
         // Replace '/api/auth/all-last-logins' with the correct endpoint from your backend
-        const response = await axios.get('/api/auth/all-last-login');
+        const response = await axios.get('/api/auth/LastLogin');
         console.log('All Last Logins Data:', response.data);
         setLastLogin(response.data);
       } catch (error) {

@@ -90,7 +90,7 @@ router.post('/register', async (req, res) => {
     }
   });
 
-  const LastLogin = require('../models/LastLogin');
+//   const LastLogin = require('../models/LastLogin');
 
   router.route('/login').post(async (req, res) => {
     try {
