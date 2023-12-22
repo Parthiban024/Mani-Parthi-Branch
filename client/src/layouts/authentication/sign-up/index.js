@@ -49,6 +49,7 @@ function Cover(props) {
     const { name, value } = e.target;
     setValues({
       ...values,
+      
       [name]: value,
     });
   };
@@ -57,7 +58,7 @@ function Cover(props) {
     if (props.errors) {
       setErr({
         name: props.errors.name,
-        role: props.errors.role,
+        // role: props.errors.role,
         empId: props.errors.empId,
         email: props.errors.email,
         password: props.errors.password,
@@ -71,7 +72,7 @@ function Cover(props) {
       err.email &&
       err.password &&
       err.name &&
-      err.role &&
+      // err.role &&
       err.empId &&
       err.password2 &&
       err.emailNotFound &&

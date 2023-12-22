@@ -1,24 +1,19 @@
 import mongoose from 'mongoose';
 
 const employeeSchema = new mongoose.Schema({
-  
-  emp_name: String,
   emp_id: String,
-  joined_on: String,
-  report_to: String,
-  designation: String,
+  emp_name: String,
+  // department: String,
   email_id: String,
-  date_of_birth: String,
+  manager_name: String,
+  designation: String,
+  doj: String, // Assuming DOJ is a date field
   gender: String,
-    // department: String,
-  // doj: String, // Assuming DOJ is a date field
-  // gender: String,
-  // dob: String, // Assuming DOB is a date field
+  dob: String, // Assuming DOB is a date field
   // status: String,
   // confirmation_date: String, // Assuming Confirmation Date is a date field
   // age_range: String,
   // manager_id: String,
-  // manager_name: String,
   // phone_no: String,
   // blood_group: String,
   // employment_status: String,
@@ -33,7 +28,6 @@ const employeeSchema = new mongoose.Schema({
   // location: String,
   // grade: String,
   // shift: String,
-  
     });
 
 const Employee = mongoose.model('Employee', employeeSchema);

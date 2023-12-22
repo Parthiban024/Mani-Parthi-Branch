@@ -15,7 +15,9 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 // import Footer from "examples/Footer";
 import { useSelector } from "react-redux";
+import InputAdornment from '@mui/material/InputAdornment';
 import axios from "axios";
+import MenuItem from "@mui/material/MenuItem";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import moment from "moment";
 import TextField from "@mui/material/TextField";
@@ -645,34 +647,84 @@ function Report() {
             />
           </MDBox>
           <MDBox
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              mt: 1,
-            }}
-          >
-            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">
-              Daily Log
-            </InputLabel>
-            {/* <InputLabel sx={{ mt: 1, mr: 34.5 }} htmlFor="minutes">Minutes</InputLabel> */}
-          </MDBox>
-          <MDBox sx={{ width: 250, p: 2 }}>
-            <TextField
-              type="time"
-              id="appt"
-              name="sessionOne"
-              sx={{ width: 305 }}
-              value={value.sessionOne}
-              onChange={handleInputchange}
-              InputProps={{
-                inputProps: {
-                  min: "00:00",
-                  max: "12:00",
-                },
-              }}
-            />
-          </MDBox>
+  sx={{
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    mt: 1,
+  }}
+>
+  <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">
+    Daily Log
+  </InputLabel>
+</MDBox>
+<MDBox sx={{ display: "flex", ml: 0.5 }}>
+  <FormControl sx={{ minWidth: 120 }}>
+    <TextField
+      id="sessionOneHours"
+      name="sessionOneHours"
+      value={value.sessionOne.split(":")[0]}
+      sx={{ width: 330, p: 1.5 }}
+      onChange={(e) =>
+        handleInputchange({
+          target: {
+            name: "sessionOne",
+            value: `${e.target.value}:${value.sessionOne.split(":")[1] || "00"}`,
+          },
+        })
+      }
+      variant="outlined"
+      select
+      SelectProps={{
+        native: true,
+        IconComponent: () => <></>,
+      }}
+    >
+      <option value="" disabled>
+        Hours
+      </option>
+      {[...Array(13).keys()].slice(1).map((hour) => (
+        <option key={hour} value={hour}>
+          {hour}
+        </option>
+      ))}
+    </TextField>
+  </FormControl>
+  <FormControl sx={{ minWidth: 120, mr:2.5 }}>
+    <TextField
+      id="sessionOneMinutes"
+      name="sessionOneMinutes"
+      value={value.sessionOne.split(":")[1] || ""}
+      sx={{ width: 330, p: 1.5 }}
+      onChange={(e) =>
+        handleInputchange({
+          target: {
+            name: "sessionOne",
+            value: `${value.sessionOne.split(":")[0]}:${e.target.value}`,
+          },
+        })
+      }
+      variant="outlined"
+      select
+      SelectProps={{
+        native: true,
+        IconComponent: () => <></>,
+      }}
+      // InputProps={{
+      //   startAdornment: <InputAdornment position="start">Minutes</InputAdornment>,
+      // }}
+    >
+      <option value="" disabled>
+        Minutes
+      </option>
+      <option value="00">00</option>
+      <option value="15">15</option>
+      <option value="30">30</option>
+      <option value="45">45</option>
+    </TextField>
+  </FormControl>
+</MDBox>
+
           <MDBox
             pt={3}
             px={2}

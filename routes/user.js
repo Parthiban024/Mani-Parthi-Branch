@@ -27,7 +27,7 @@ const determineRoleFromDesignation = (designation) => {
     // If designation is "SUPERADMIN", return "superadmin"
     // Otherwise, return "analyst"
 
-    const adminDesignations = ["DEV"];
+    const adminDesignations = ["PROJECT MANAGER"];
     const superAdminDesignation = "SUPERADMIN";
 
     if (adminDesignations.includes(designation.toUpperCase())) {

@@ -32,13 +32,11 @@ mongoose.connect(URI, {
 })
 
 app.use(cors());
-app.use(json());
+app.use(express.json({ limit: '5000mb' })); // adjust the limit as needed
 app.use(cookieParser());
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
+app.use(express.urlencoded({ limit: '5000mb', extended: false })); // adjust the limit as needed
 
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 // For Routing Purpose
@@ -154,19 +152,33 @@ app.post('/api/uploadData', async (req, res) => {
   try {
     const data = req.body;
 
+    // Extract email IDs from the incoming data
+    const emailIds = data.map(employeeData => employeeData.email_id);
+
+    // Find existing employees with the extracted email IDs
+    const existingEmployees = await Employee.find({ email_id: { $in: emailIds } });
+
+    // Create a map of existing employees for quick access
+    const existingEmployeeMap = new Map(existingEmployees.map(emp => [emp.email_id, emp]));
+
+    // Prepare an array for bulk insertion
+    const bulkInsertData = [];
+
     for (const employeeData of data) {
-      const existingEmployee = await Employee.findOne({ email_id: employeeData.email_id });
+      const existingEmployee = existingEmployeeMap.get(employeeData.email_id);
 
       if (existingEmployee) {
         // Merge existing employee data with the new data
         const mergedData = { ...existingEmployee.toObject(), ...employeeData };
-        await Employee.findByIdAndUpdate(existingEmployee._id, mergedData);
+        bulkInsertData.push({ updateOne: { filter: { _id: existingEmployee._id }, update: mergedData } });
       } else {
         // If no existing employee, create a new one
-        const newEmployee = new Employee(employeeData);
-        await newEmployee.save();
+        bulkInsertData.push({ insertOne: { document: employeeData } });
       }
     }
+
+    // Use insertMany for bulk insertion and updating
+    await Employee.bulkWrite(bulkInsertData);
 
     res.status(200).json({ message: 'Data saved to MongoDB' });
   } catch (error) {
@@ -174,6 +186,7 @@ app.post('/api/uploadData', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 // API to fetch data from MongoDB
 app.get('/api/fetchData', async (req, res) => {
   try {
