@@ -135,7 +135,7 @@ useEffect(() => {
   // Fetch initial data from MongoDB
   const fetchDataFromMongoDB = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/fetchData');
+      const response = await fetch('/allemp/fetchData');
       const fetchData = await response.json();
   
       // Filter out "__v" field from columns
@@ -217,7 +217,7 @@ useEffect(() => {
           setData(formattedData);
 
           // Save the data to MongoDB
-          const response = await fetch('http://localhost:5000/api/uploadData', {
+          const response = await fetch('/allemp/uploadData', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -320,7 +320,7 @@ useEffect(() => {
       }
   
       // Fetch the updated data from MongoDB
-      const fetchDataResponse = await fetch('http://localhost:5000/api/fetchData');
+      const fetchDataResponse = await fetch('/allemp/fetchData');
       const fetchData = await fetchDataResponse.json();
   
       setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
@@ -343,15 +343,15 @@ useEffect(() => {
   // ...
   
   const handleAddEmployee = async () => {
-    await handleApiRequest('http://localhost:5000/api/addEmployee', 'POST', newEmployeeData);
+    await handleApiRequest('/allemp/addEmployee', 'POST', newEmployeeData);
   };
   
   const handleDeleteEmployee = async (id) => {
-    await handleApiRequest(`http://localhost:5000/api/deleteEmployee/${id}`, 'DELETE');
+    await handleApiRequest(`/allemp/deleteEmployee/${id}`, 'DELETE');
   };
   
   const handleUpdateEmployee = async () => {
-    await handleApiRequest(`http://localhost:5000/api/updateEmployee/${selectedEmployeeId}`, 'PUT', newEmployeeData);
+    await handleApiRequest(`/allemp/updateEmployee/${selectedEmployeeId}`, 'PUT', newEmployeeData);
   };
   
 

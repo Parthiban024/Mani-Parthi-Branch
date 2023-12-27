@@ -10,7 +10,7 @@ import bodyParser from 'body-parser';
 // import Attendance from './models/attendance.js';
 import EmployeeUpload from './models/excelUpload.js';
 import { read, utils } from 'xlsx';
-import Employee from './models/excelUpload.js'; 
+// import Employee from './models/excelUpload.js'; 
 
 
 import moment from 'moment';
@@ -46,6 +46,7 @@ import Attendance from './routes/attendance.js';
 import Billing from './routes/billing.js'
 import Team from './routes/team.js'
 import Task from './routes/task.js'
+import AllEmployee from './routes/allEmployees.js'
 // For Routers
 app.use('/authentication/user', User);
 app.use('/analyst', Analyst);
@@ -53,6 +54,7 @@ app.use('/emp-attendance', Attendance);
 app.use('/billing', Billing);
 app.use('/team', Team);
 app.use('/create', Task);
+app.use('/allemp', AllEmployee);
 // app.post('/api/saveAttendance', async (req, res) => {
 //     try {
 //       const { checkInTime } = req.body;
@@ -148,98 +150,98 @@ app.use('/create', Task);
 
 // const Employee = mongoose.model('Employee', employeeSchema);
 
-app.post('/api/uploadData', async (req, res) => {
-  try {
-    const data = req.body;
+// app.post('/api/uploadData', async (req, res) => {
+//   try {
+//     const data = req.body;
 
-    // Extract email IDs from the incoming data
-    const emailIds = data.map(employeeData => employeeData.email_id);
+//     // Extract email IDs from the incoming data
+//     const emailIds = data.map(employeeData => employeeData.email_id);
 
-    // Find existing employees with the extracted email IDs
-    const existingEmployees = await Employee.find({ email_id: { $in: emailIds } });
+//     // Find existing employees with the extracted email IDs
+//     const existingEmployees = await Employee.find({ email_id: { $in: emailIds } });
 
-    // Create a map of existing employees for quick access
-    const existingEmployeeMap = new Map(existingEmployees.map(emp => [emp.email_id, emp]));
+//     // Create a map of existing employees for quick access
+//     const existingEmployeeMap = new Map(existingEmployees.map(emp => [emp.email_id, emp]));
 
-    // Prepare an array for bulk insertion
-    const bulkInsertData = [];
+//     // Prepare an array for bulk insertion
+//     const bulkInsertData = [];
 
-    for (const employeeData of data) {
-      const existingEmployee = existingEmployeeMap.get(employeeData.email_id);
+//     for (const employeeData of data) {
+//       const existingEmployee = existingEmployeeMap.get(employeeData.email_id);
 
-      if (existingEmployee) {
-        // Merge existing employee data with the new data
-        const mergedData = { ...existingEmployee.toObject(), ...employeeData };
-        bulkInsertData.push({ updateOne: { filter: { _id: existingEmployee._id }, update: mergedData } });
-      } else {
-        // If no existing employee, create a new one
-        bulkInsertData.push({ insertOne: { document: employeeData } });
-      }
-    }
+//       if (existingEmployee) {
+//         // Merge existing employee data with the new data
+//         const mergedData = { ...existingEmployee.toObject(), ...employeeData };
+//         bulkInsertData.push({ updateOne: { filter: { _id: existingEmployee._id }, update: mergedData } });
+//       } else {
+//         // If no existing employee, create a new one
+//         bulkInsertData.push({ insertOne: { document: employeeData } });
+//       }
+//     }
 
-    // Use insertMany for bulk insertion and updating
-    await Employee.bulkWrite(bulkInsertData);
+//     // Use insertMany for bulk insertion and updating
+//     await Employee.bulkWrite(bulkInsertData);
 
-    res.status(200).json({ message: 'Data saved to MongoDB' });
-  } catch (error) {
-    console.error('Error saving data to MongoDB', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+//     res.status(200).json({ message: 'Data saved to MongoDB' });
+//   } catch (error) {
+//     console.error('Error saving data to MongoDB', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
 
-// API to fetch data from MongoDB
-app.get('/api/fetchData', async (req, res) => {
-  try {
-    const employees = await Employee.find({});
-    const columns = Object.keys(Employee.schema.paths).filter((col) => col !== '_id');
-    const rows = employees.map((emp) => ({ ...emp.toObject(), id: emp._id }));
+// // API to fetch data from MongoDB
+// app.get('/api/fetchData', async (req, res) => {
+//   try {
+//     const employees = await Employee.find({});
+//     const columns = Object.keys(Employee.schema.paths).filter((col) => col !== '_id');
+//     const rows = employees.map((emp) => ({ ...emp.toObject(), id: emp._id }));
 
-    res.status(200).json({ columns, rows });
-  } catch (error) {
-    console.error('Error fetching data from MongoDB', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+//     res.status(200).json({ columns, rows });
+//   } catch (error) {
+//     console.error('Error fetching data from MongoDB', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
 
-// API to add employee to MongoDB
-app.post('/api/addEmployee', async (req, res) => {
-  try {
-    const newEmployeeData = req.body;
-    const newEmployee = new Employee(newEmployeeData);
-    await newEmployee.save();
+// // API to add employee to MongoDB
+// app.post('/api/addEmployee', async (req, res) => {
+//   try {
+//     const newEmployeeData = req.body;
+//     const newEmployee = new Employee(newEmployeeData);
+//     await newEmployee.save();
 
-    res.status(200).json({ message: 'Employee added successfully' });
-  } catch (error) {
-    console.error('Error adding employee to MongoDB', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+//     res.status(200).json({ message: 'Employee added successfully' });
+//   } catch (error) {
+//     console.error('Error adding employee to MongoDB', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
 
-// API to delete employee from MongoDB
-app.delete('/api/deleteEmployee/:id', async (req, res) => {
-  const { id } = req.params;
+// // API to delete employee from MongoDB
+// app.delete('/api/deleteEmployee/:id', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    await Employee.findByIdAndDelete(id);
-    res.status(200).json({ message: 'Employee deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting employee from MongoDB', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-// API to update employee in MongoDB
-app.put('/api/updateEmployee/:id', async (req, res) => {
-  const { id } = req.params;
-  const updatedEmployeeData = req.body;
+//   try {
+//     await Employee.findByIdAndDelete(id);
+//     res.status(200).json({ message: 'Employee deleted successfully' });
+//   } catch (error) {
+//     console.error('Error deleting employee from MongoDB', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
+// // API to update employee in MongoDB
+// app.put('/api/updateEmployee/:id', async (req, res) => {
+//   const { id } = req.params;
+//   const updatedEmployeeData = req.body;
 
-  try {
-    await Employee.findByIdAndUpdate(id, updatedEmployeeData);
-    res.status(200).json({ message: 'Employee updated successfully' });
-  } catch (error) {
-    console.error('Error updating employee in MongoDB', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+//   try {
+//     await Employee.findByIdAndUpdate(id, updatedEmployeeData);
+//     res.status(200).json({ message: 'Employee updated successfully' });
+//   } catch (error) {
+//     console.error('Error updating employee in MongoDB', error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// });
 //    For build
 app.use(express.static(path.join(__dirname, 'client/build')))
 app.get("*", (req, res) => {
