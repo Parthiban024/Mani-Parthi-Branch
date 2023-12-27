@@ -226,7 +226,7 @@ export default function ColumnGroupingTable() {
       .post("/billing/new", billData)
       .then((res) => {
         toast.success(res.data);
-        axios.get(`/billing?empId=${empId}`).then((response) => {
+        axios.get(`/billing/`).then((response) => {
           setData(response.data);
         });
         axios.get("/create/fetch/addteam-data").then((response) => {
@@ -311,24 +311,8 @@ export default function ColumnGroupingTable() {
   //   });
   // }, []);
 
-  useEffect(() => {
-    axios.get(`/billing?empId=${empId}`).then((response) => {
-      // Update initial data
-      setInitialData(response.data);
-      setData(response.data);
-    });
-    axios.get("/create/fetch/addteam-data").then((response) => {
-      setTeamList(response.data);
-    });
-    axios.get("/create/fetch/manager-data").then((response) => {
-      setManagers(response.data);
-    });
-  }, []); // Remove dependencies from the dependency array
-
-
-  
   // useEffect(() => {
-  //   axios.get(`/billing/`).then((response) => {
+  //   axios.get(`/billing?empId=${empId}`).then((response) => {
   //     // Update initial data
   //     setInitialData(response.data);
   //     setData(response.data);
@@ -339,7 +323,23 @@ export default function ColumnGroupingTable() {
   //   axios.get("/create/fetch/manager-data").then((response) => {
   //     setManagers(response.data);
   //   });
-  // }, []);
+  // }, []); // Remove dependencies from the dependency array
+
+
+  
+  useEffect(() => {
+    axios.get(`/billing/admin`).then((response) => {
+      // Update initial data
+      setInitialData(response.data);
+      setData(response.data);
+    });
+    axios.get("/create/fetch/addteam-data").then((response) => {
+      setTeamList(response.data);
+    });
+    axios.get("/create/fetch/manager-data").then((response) => {
+      setManagers(response.data);
+    });
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
 

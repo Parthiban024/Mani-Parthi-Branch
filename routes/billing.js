@@ -5,6 +5,13 @@ import Billing from '../models/billing.model.js'
 
 //Find All Data in Billing
 router.route('/').get((req,res)=>{
+    const empId = req.query.empId;
+    Billing.find({ empId: empId }).sort([["reportDate",1]])
+    .then(billing=>res.json(billing))
+    .catch(err=> res.status(400).json('Error:'+err))
+})
+// //Find All Data in Billing
+router.route('/admin').get((req,res)=>{
     Billing.find().sort([["reportDate",1]])
     .then(billing=>res.json(billing))
     .catch(err=> res.status(400).json('Error:'+err))

@@ -34,8 +34,10 @@ import Employee from "./layouts/employeeReport";
 import Attendance from "layouts/Attendance";
 import EmployeeAtt from "layouts/Emp-Attendance";
 import TaskCreation from "layouts/Task-creation";
-import LastLogin from "layouts/Last-Login";
+import AdminProjects from "layouts/adminProjects"
+// import LastLogin from "layouts/Last-Login";
 import AllEmployee from "layouts/All-Employees";
+import ProjectEdit from "layouts/ProjectEditAdmin"
 import 'layouts/Attendance/calendar.css';
 import { from } from "stylis";
 
@@ -122,16 +124,22 @@ function App() {
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin' || role === 'admin'))}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
-        </Route>     
+        </Route>  
+        <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin'))}/>}>
+          <Route exact path="/projects-admin" element={<AdminProjects/>} />
+        </Route>    
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/attendance" element={<Attendance/>} />
         </Route>
         <Route element={<Protected isValid={(isLoggedIn&&role==='superadmin')}/>}>
           <Route exact path="/Settings" element={<TaskCreation/>} />
         </Route>
-        <Route element={<Protected isValid={(isLoggedIn&&role==='superadmin')}/>}>
+        {/* <Route element={<Protected isValid={(isLoggedIn&&role==='superadmin')}/>}>
           <Route exact path="/LastLogin" element={<LastLogin/>} />
-        </Route>
+        </Route> */}
+
+        .
+        
         <Route element={<Protected isValid={(isLoggedIn&&role==='analyst')}/>}>
           <Route exact path="/user-task" element={<UserReport/>} />
         </Route> <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin' || role === 'admin'))}/>}>

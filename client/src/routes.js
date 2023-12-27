@@ -15,6 +15,8 @@ import Attendance from "layouts/Attendance";
 import TaskCreation from "layouts/employeeReport"
 import LastLogin from "layouts/Last-Login";
 import AllEmployee from "layouts/All-Employees"
+import AdminProjects from "layouts/adminProjects"
+import ProjectEdit from "layouts/ProjectEditAdmin"
 import SettingsIcon from "@mui/icons-material/Settings";
 import PeopleIcon from "@mui/icons-material/People";
 // @mui icons
@@ -111,6 +113,15 @@ const routes = [
     component: <AdminReport />,
     role: "superadmin",
   },
+  {
+    type: "collapse",
+    name: "Projects",
+    key: "projects-admin",
+    icon: <Icon fontSize="small">trending_up</Icon>,
+    route: "/projects-admin",
+    component: <AdminProjects />,
+    role: "superadmin",
+  },
 
   // {
   //   type: "collapse",
@@ -146,15 +157,15 @@ const routes = [
     component: <BillingTable />,
     role: "admin",
   },
-  {
-    type: "collapse",
-    name: "Projects",
-    key: "projects",
-    icon: <Icon fontSize="small">trending_up</Icon>,
-    route: "/projects",
-    component: <BillingTable />,
-    role: "superadmin",
-  },
+  // {
+  //   type: "collapse",
+  //   name: "Projects",
+  //   key: "projects",
+  //   icon: <Icon fontSize="small">trending_up</Icon>,
+  //   route: "/projects",
+  //   component: <BillingTable />,
+  //   role: "superadmin",
+  // },
   {
     type: "collapse",
     name: "Settings",
@@ -164,15 +175,15 @@ const routes = [
     component: <TaskCreation />,
     role: "superadmin",
   },
-  {
-    type: "collapse",
-    name: "LastLogin",
-    key: "LastLogin",
-    icon: <Icon fontSize="small">settingsIcon</Icon>,
-    route: "/LastLogin",
-    component: <LastLogin />,
-    role: "superadmin",
-  },
+  // {
+  //   type: "collapse",
+  //   name: "LastLogin",
+  //   key: "LastLogin",
+  //   icon: <Icon fontSize="small">settingsIcon</Icon>,
+  //   route: "/LastLogin",
+  //   component: <LastLogin />,
+  //   role: "superadmin",
+  // },
   // {
   //   type: "collapse",
   //   name: "Create Team",

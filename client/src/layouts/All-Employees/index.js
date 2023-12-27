@@ -415,7 +415,7 @@ useEffect(() => {
 
             {isLoading && <CircularProgress />}
             {!isLoading && (
-              <div style={{ height: 370, width: '100%' }}>
+              <div style={{ height: 770, width: '100%' }}>
       <DataGrid
   rows={data}
   rowsPerPageOptions={[5, 10, 25, 50, 100]}
