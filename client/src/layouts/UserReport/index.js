@@ -145,7 +145,7 @@ function Report() {
   };
 
   useEffect(() => {
-    axios.get("/billing/").then((response) => {
+    axios.get("/billing/admin").then((response) => {
       const projects = response.data.map((item) => item.projectname);
       const managers = response.data
         .map((item) => item.jobs?.managerTeam)

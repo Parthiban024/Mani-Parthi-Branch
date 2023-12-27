@@ -19,6 +19,7 @@ import AdminProjects from "layouts/adminProjects"
 import ProjectEdit from "layouts/ProjectEditAdmin"
 import SettingsIcon from "@mui/icons-material/Settings";
 import PeopleIcon from "@mui/icons-material/People";
+import AllReport from "./layouts/IdleReport"
 // @mui icons
 import Icon from "@mui/material/Icon";
 
@@ -31,6 +32,15 @@ const routes = [
     route: "/dashboard",
     component: <Dashboard />,
     role: "analyst",
+  },
+  {
+    type: "collapse",
+    name: "AllReport",
+    key: "allreport",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/allreport",
+    component: <AllReport />,
+    role: "superadmin",
   },
   {
     type: "collapse",

@@ -37,6 +37,7 @@ import TaskCreation from "layouts/Task-creation";
 import AdminProjects from "layouts/adminProjects"
 // import LastLogin from "layouts/Last-Login";
 import AllEmployee from "layouts/All-Employees";
+import AllReport from "./layouts/IdleReport"
 import ProjectEdit from "layouts/ProjectEditAdmin"
 import 'layouts/Attendance/calendar.css';
 import { from } from "stylis";
@@ -125,6 +126,9 @@ function App() {
         <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin' || role === 'admin'))}/>}>
           <Route exact path="/employee-attendance" element={<EmployeeAtt/>} />
         </Route>  
+        <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin'))}/>}>
+          <Route exact path="/allreport" element={<AllReport/>} />
+        </Route> 
         <Route element={<Protected isValid={(isLoggedIn&&(role === 'superadmin'))}/>}>
           <Route exact path="/projects-admin" element={<AdminProjects/>} />
         </Route>    

@@ -144,3 +144,19 @@ abbr[title] {
     border-radius: 0.5rem;
     box-shadow: 0rem 1.25rem 1.6875rem 0rem rgba(0, 0, 0, 0.05);
 }
+
+.date-picker-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .date-picker-label {
+    margin-right: 10px;
+  }
+  
+  .chart-container {
+    height: 400px;
+    overflow-y: auto;
+  }
+  

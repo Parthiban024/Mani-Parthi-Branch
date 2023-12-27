@@ -28,6 +28,35 @@ router.route('/').get((req,res)=>{
 //     .catch((err)=>res.status(400).json('Error:'+err))
 // })
 
+router.route('/fetch/taskwise').get(async (req, res) => {
+    try {
+      const sDate = new Date(req.query.sDate);
+      const eDate = new Date(req.query.eDate);
+  
+      const taskWiseData = await Analyst.aggregate([
+        {
+          $match: {
+            dateTask: { $gte: sDate, $lte: eDate },
+          },
+        },
+        {
+          $group: {
+            _id: {
+              projectName: '$projectName',
+              task: '$task',
+            },
+            count: { $sum: 1 },
+          },
+        },
+      ]);
+  
+      res.json(taskWiseData);
+    } catch (error) {
+      console.error('Error fetching task-wise data:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+
 router.route('/add').post((req,res)=>{
     const name = req.body
     const newData = new Analyst(name)
