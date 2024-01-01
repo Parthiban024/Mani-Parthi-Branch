@@ -31,15 +31,12 @@ import MDButton from "components/MDButton";
 const excelRowSchema = {
   emp_id: '',
   emp_name: '',
-  doj: '',
-  gender: '',
-  dob: '',
   email_id: '',
   // status: '',
   // confirmation_date: Date,
   // age_range: '',
   // manager_id: '',
-  manager_name: '',
+  report_to: '',
   // phone_no: '',
   // blood_group: '',
   // employment_status: '',
@@ -70,15 +67,12 @@ function Employees() {
   const [newEmployeeData, setNewEmployeeData] = useState({
     emp_id: '',
     emp_name: '',
-    doj: '',
-    gender: '',
-    dob: '',
     email_id: '',
     // status: '',
     // confirmation_date: Date,
     // age_range: '',
     // manager_id: '',
-    manager_name: '',
+    report_to: '',
     // phone_no: '',
     // blood_group: '',
     // employment_status: '',
@@ -267,15 +261,12 @@ useEffect(() => {
     setNewEmployeeData({
       emp_id: '',
       emp_name: '',
-      doj: '',
-      gender: '',
-      dob: '',
       email_id: '',
       // status: '',
       // confirmation_date: Date,
       // age_range: '',
       // manager_id: '',
-      manager_name: '',
+      report_to: '',
       // phone_no: '',
       // blood_group: '',
       // employment_status: '',
@@ -503,7 +494,7 @@ useEffect(() => {
                 minWidth: "120px",
                 gap: "10px"
               }}>
-            <TextField
+            {/* <TextField
               label="Doj" 
               value={newEmployeeData.doj}
               type='text'
@@ -512,14 +503,14 @@ useEffect(() => {
               }
               fullWidth
               margin="normal"
-            />
-            <TextField
+            /> */}
+            {/* <TextField
               label="Gender"
               value={newEmployeeData.gender}
               onChange={(e) => setNewEmployeeData({ ...newEmployeeData, gender: e.target.value })}
               fullWidth
               margin="normal"
-            />
+            /> */}
              </div>
              <div        style={{
                 display: "flex",
@@ -531,14 +522,14 @@ useEffect(() => {
                 minWidth: "120px",
                 gap: "10px"
               }}>
-            <TextField
+            {/* <TextField
               label="Dob"
               type='text'
               value={newEmployeeData.dob}
               onChange={(e) => setNewEmployeeData({ ...newEmployeeData, dob: e.target.value })}
               fullWidth
               margin="normal"
-            />
+            /> */}
             <TextField
               label="Email Id"
               type='email'
@@ -613,8 +604,8 @@ useEffect(() => {
               }}>
             <TextField
               label="Manager Name"
-              value={newEmployeeData.manager_name}
-              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, manager_name: e.target.value })}
+              value={newEmployeeData.report_to}
+              onChange={(e) => setNewEmployeeData({ ...newEmployeeData, report_to: e.target.value })}
               fullWidth
               margin="normal"
             />
