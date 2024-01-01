@@ -61,35 +61,44 @@ router.route('/').get((req,res)=>{
 //   }
 // });
 
+// Fetch distinct project names
 router.route('/projectNames').get((req, res) => {
   Analyst.distinct('projectName')
-    .then(projectNames => res.json(projectNames))
-    .catch(err => res.status(400).json('Error:' + err));
+    .then((projectNames) => res.json(projectNames))
+    .catch((err) => res.status(400).json('Error:' + err));
 });
 
-router.route('/fetch/taskwise').get((req, res) => {
-  const { sDate, eDate, projectName } = req.query;
+// Fetch task-wise data for a specific project within a date range
+router.route('/fetch/taskwise').get(async (req, res) => {
+  try {
+    const { sDate, eDate, projectName } = req.query;
 
-  Analyst.aggregate([
-    {
-      $match: {
-        dateTask: {
-          $gte: new Date(sDate),
-          $lte: new Date(eDate),
+    const result = await Analyst.aggregate([
+      {
+        $match: {
+          dateTask: { $gte: new Date(sDate), $lte: new Date(eDate) },
+          projectName: projectName,
         },
-        projectName: projectName,
       },
-    },
-    {
-      $group: {
-        _id: { task: '$task' },
-        count: { $sum: 1 },
+      {
+        $group: {
+          _id: { date: { $dateToString: { format: '%Y-%m-%d', date: '$dateTask' } }, task: '$task' },
+          count: { $sum: 1 },
+        },
       },
-    },
-  ])
-    .then(taskwiseData => res.json(taskwiseData))
-    .catch(err => res.status(400).json('Error:' + err));
+    ]);
+
+    res.json(result);
+  } catch (error) {
+    console.error('Error fetching taskwise data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
+
+
+  
+  
 
 
 router.route('/add').post((req,res)=>{
