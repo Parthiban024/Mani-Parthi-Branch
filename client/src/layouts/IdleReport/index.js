@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
-import { Card, CardContent, CardHeader, Grid, TextField, Button } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, TextField, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
@@ -21,55 +21,84 @@ const TaskWiseBarChart = () => {
 
   const [startDate, setStartDate] = useState(getCurrentMonthStartDate());
   const [endDate, setEndDate] = useState(getCurrentMonthEndDate());
+  const [projectNames, setProjectNames] = useState([]);
+  const [xAxisLabels, setXAxisLabels] = useState([]);
+  const [selectedProject, setSelectedProject] = useState('');
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [],
   });
 
-  const [tableData, setTableData] = useState([]); // New state for table data
-  const [showTable, setShowTable] = useState(false); // Flag to control table visibility
+  const [tableData, setTableData] = useState([]);
+  const [showTable, setShowTable] = useState(false);
 
+  useEffect(() => {
+    const fetchProjectNames = async () => {
+      try {
+        const response = await axios.get('/analyst/projectNames');
+        const projectNames = response.data;
+        setProjectNames(projectNames);
+      } catch (error) {
+        console.error('Error fetching project names:', error);
+      }
+    };
+
+    fetchProjectNames();
+  }, []);
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!selectedProject) {
+          // If no project is selected, clear the chart data
+          setChartData({
+            labels: [],
+            datasets: [],
+          });
+          setTableData([]);
+          return;
+        }
+
         const response = await axios.get('/analyst/fetch/taskwise', {
           params: {
             sDate: startDate.toISOString().split('T')[0],
             eDate: endDate.toISOString().split('T')[0],
+            projectName: selectedProject,
           },
         });
 
         const data = response.data;
 
-        const projectNames = [...new Set(data.map((item) => item._id.projectName))];
         const taskLabels = [...new Set(data.map((item) => item._id.task))];
+        const dateLabels = [...new Set(data.map((item) => formatDate(item._id.dateTask)))]; // Assuming you have a function formatDate to format dates
 
-        const datasets = projectNames.map((projectName) => {
-          const counts = taskLabels.map((task) => {
-            const matchingItem = data.find(
-              (item) => item._id.projectName === projectName && item._id.task === task
-            );
-            return matchingItem ? matchingItem.count : 0;
-          });
+        setXAxisLabels(dateLabels);
 
-          return {
-            label: projectName,
-            data: counts,
+        const datasets = [
+          {
+            label: selectedProject,
+            data: taskLabels.map((task) => {
+              const matchingItem = data.find((item) => item._id.task === task);
+              return matchingItem ? matchingItem.count : 0;
+            }),
             backgroundColor: getRandomColor(),
-          };
-        });
+          },
+        ];
 
         setChartData({
-          labels: taskLabels,
+          labels: dateLabels,
           datasets: datasets,
         });
 
         // Prepare table data
-        const tableData = data.map((item, index) => ({
+        const tableData = taskLabels.map((task, index) => ({
           id: index + 1,
-          projectName: item._id.projectName,
-          task: item._id.task,
-          count: item.count,
+          task: task,
+          count: datasets[0].data[index],
         }));
 
         setTableData(tableData);
@@ -79,7 +108,7 @@ const TaskWiseBarChart = () => {
     };
 
     fetchData();
-  }, [startDate, endDate]);
+  }, [startDate, endDate, selectedProject]);
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -113,7 +142,7 @@ const TaskWiseBarChart = () => {
             </CardHeader>
             <CardContent>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <TextField
                     label="Start Date"
                     type="date"
@@ -122,7 +151,7 @@ const TaskWiseBarChart = () => {
                     fullWidth
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={4}>
                   <TextField
                     label="End Date"
                     type="date"
@@ -130,6 +159,21 @@ const TaskWiseBarChart = () => {
                     onChange={(event) => setEndDate(new Date(event.target.value))}
                     fullWidth
                   />
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <FormControl fullWidth>
+                    <InputLabel>Project Name</InputLabel>
+                    <Select
+                      value={selectedProject}
+                      onChange={(event) => setSelectedProject(event.target.value)}
+                    >
+                      {projectNames.map((project) => (
+                        <MenuItem key={project} value={project}>
+                          {project}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
               </Grid>
               <Grid style={{
@@ -176,9 +220,8 @@ const TaskWiseBarChart = () => {
                     rows={tableData}
                     columns={[
                       { field: 'id', headerName: 'ID', width: 30 },
-                      { field: 'projectName', headerName: 'Project Name', width: 150,flex: 1 },
-                      { field: 'task', headerName: 'Task', width: 200,flex: 1 },
-                      { field: 'count', headerName: 'Members Count', width: 150,flex: 1 },
+                      { field: 'task', headerName: 'Task', width: 200, flex: 1 },
+                      { field: 'count', headerName: 'Members Count', width: 150, flex: 1 },
                     ]}
                     pageSize={5}
                     rowsPerPageOptions={[5, 10, 20]}
