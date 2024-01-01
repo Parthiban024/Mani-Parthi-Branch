@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Bar, Pie } from 'react-chartjs-2';
-import { Card, CardContent, CardHeader, Grid, TextField, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { CardActionArea, CardActions, IconButton } from '@mui/material';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import { Box, Typography } from '@mui/material';
+import DatePicker from '@mui/lab/DatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import Autocomplete from '@mui/material/Autocomplete';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  TextField,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
 import MDButton from 'components/MDButton';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import WorkIcon from '@mui/icons-material/Work';
 import * as XLSX from 'xlsx';
 
 const TaskWiseBarChart = () => {
@@ -31,15 +46,17 @@ const TaskWiseBarChart = () => {
   const [tableData, setTableData] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+  // New state variables
   const [idleNonBillableCount, setIdleNonBillableCount] = useState(0);
   const [idleBillableCount, setIdleBillableCount] = useState(0);
   const [productionCount, setProductionCount] = useState(0);
 
+  // New state variable for Pie Chart
   const [pieChartData, setPieChartData] = useState({
     labels: ['Idle - Non Billable', 'Idle - Billable', 'Production'],
     datasets: [
       {
-        data: [idleNonBillableCount, idleBillableCount, productionCount],
+        data: [0, 0, 0], // Initial percentages set to 0
         backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
         hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
       },
@@ -60,10 +77,40 @@ const TaskWiseBarChart = () => {
     fetchProjectNames();
   }, []);
 
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  useEffect(() => {
+    const fetchPieChartData = () => {
+      const total = idleNonBillableCount + idleBillableCount + productionCount;
+
+      const percentages = [
+        (idleNonBillableCount / total) * 100,
+        (idleBillableCount / total) * 100,
+        (productionCount / total) * 100,
+      ];
+
+      setPieChartData((prevData) => ({
+        ...prevData,
+        datasets: [
+          {
+            data: percentages,
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+            hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+          },
+        ],
+      }));
+    };
+
+    fetchPieChartData();
+  }, [idleNonBillableCount, idleBillableCount, productionCount]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!selectedProject) {
+        if (!startDate || !endDate)  {
           setChartData({
             labels: [],
             datasets: [],
@@ -72,37 +119,46 @@ const TaskWiseBarChart = () => {
           setIdleNonBillableCount(0);
           setIdleBillableCount(0);
           setProductionCount(0);
-          setPieChartData({
-            labels: ['Idle - Non Billable', 'Idle - Billable', 'Production'],
-            datasets: [
-              {
-                data: [0, 0, 0],
-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-              },
-            ],
-          });
           return;
         }
 
-        const response = await axios.get('/analyst/fetch/taskwise', {
-          params: {
-            sDate: startDate.toISOString().split('T')[0],
-            eDate: endDate.toISOString().split('T')[0],
-            projectName: selectedProject,
-          },
+        let response;
+        if (selectedProject) {
+          response = await axios.get('/analyst/fetch/taskwise', {
+            params: {
+              sDate: startDate.toISOString().split('T')[0],
+              eDate: endDate.toISOString().split('T')[0],
+              projectName: selectedProject,
+            },
+          });
+        } else {
+          // Fetch data for all projects
+          response = await axios.get('/analyst/fetch/taskwise', {
+            params: {
+              sDate: startDate.toISOString().split('T')[0],
+              eDate: endDate.toISOString().split('T')[0],
+            },
+          });
+        }
+        const data = response.data;
+
+        const uniqueDates = [...new Set(data.map((item) => item._id.date))];
+        const formattedDates = uniqueDates.map(date => {
+          const formattedDate = new Date(date);
+          return formattedDate.getDate(); // Only get the day part
         });
 
-        const data = response.data;
-        const uniqueDates = [...new Set(data.map((item) => item._id.date))];
         const uniqueTasks = [...new Set(data.map((item) => item._id.task))];
 
         const datasets = uniqueTasks.map((task) => {
           const taskData = data.filter((item) => item._id.task === task);
           return {
             label: task,
-            data: uniqueDates.map((date) => {
-              const matchingItem = taskData.find((item) => item._id.date === date);
+            data: formattedDates.map((date) => {
+              const matchingItem = taskData.find((item) => {
+                const itemDate = new Date(item._id.date);
+                return itemDate.getDate() === date;
+              });
               return matchingItem ? matchingItem.count : 0;
             }),
             backgroundColor: getRandomColor(),
@@ -131,7 +187,7 @@ const TaskWiseBarChart = () => {
         setProductionCount(productionCount);
 
         setChartData({
-          labels: uniqueDates,
+          labels: formattedDates,
           datasets: datasets,
         });
 
@@ -142,17 +198,6 @@ const TaskWiseBarChart = () => {
         }));
 
         setTableData(tableData);
-
-        setPieChartData({
-          labels: ['Idle - Non Billable', 'Idle - Billable', 'Production'],
-          datasets: [
-            {
-              data: [idleNonBillableCount, idleBillableCount, productionCount],
-              backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-              hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-            },
-          ],
-        });
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -197,20 +242,30 @@ const TaskWiseBarChart = () => {
       }
 
       const wb = XLSX.utils.book_new();
+
       const uniqueDates = [...new Set(data.map((item) => item._id.date))];
+      const formattedDates = uniqueDates.map(date => {
+        const formattedDate = new Date(date);
+        return formattedDate.getDate(); // Only get the day part
+      });
+
       const uniqueTasks = [...new Set(data.map((item) => item._id.task))];
+
       const datasets = uniqueTasks.map((task) => {
         const taskData = data.filter((item) => item._id.task === task);
         return {
           label: task,
-          data: uniqueDates.map((date) => {
-            const matchingItem = taskData.find((item) => item._id.date === date);
+          data: formattedDates.map((date) => {
+            const matchingItem = taskData.find((item) => {
+              const itemDate = new Date(item._id.date);
+              return itemDate.getDate() === date;
+            });
             return matchingItem ? matchingItem.count : 0;
           }),
         };
       });
 
-      const wsData = [['Task', ...uniqueDates]];
+      const wsData = [['Task', ...formattedDates]];
 
       datasets.forEach((dataset) => {
         const row = [dataset.label, ...dataset.data];
@@ -219,6 +274,7 @@ const TaskWiseBarChart = () => {
 
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       XLSX.utils.book_append_sheet(wb, ws, selectedProject);
+
       XLSX.writeFile(wb, 'TaskWiseUserCount.xlsx');
     } catch (error) {
       console.error('Error exporting data:', error);
@@ -233,89 +289,168 @@ const TaskWiseBarChart = () => {
     <DashboardLayout>
       <DashboardNavbar />
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={12}>
+  {/* Filters Container */}
+  <Box
+    display="flex"
+    justifyContent="space-between"
+    alignItems="center"
+    mt={2}
+    mb={2}
+    p={2}
+  >
+    {/* Start Date Filter */}
+    <Grid item xs={12} md={4} >
+      <TextField
+        label="Start Date"
+        sx={{ backgroundColor: '#fff', borderRadius: '8px',}}
+        type="date"
+        value={startDate.toISOString().split('T')[0]}
+        onChange={(event) => setStartDate(new Date(event.target.value))}
+        fullWidth
+        variant="outlined"
+        color="secondary"
+      />
+    </Grid>
+    <Grid item xs={12} md={4} >
+      <TextField
+        label="End Date"
+        type="date"
+        sx={{ backgroundColor: '#fff', borderRadius: '8px', marginLeft: '5px'}}
+        value={endDate.toISOString().split('T')[0]}
+        onChange={(event) => setEndDate(new Date(event.target.value))}
+        fullWidth
+        variant="outlined"
+        color="secondary"
+      />
+    </Grid>
+    <Grid item xs={12} md={4} sx={{  padding: '8px'  }}>
+      <Autocomplete
+        value={selectedProject}
+        sx={{ backgroundColor: '#fff', borderRadius: '8px', marginLeft: '3px'}}
+        onChange={(event, newValue) => setSelectedProject(newValue)}
+        options={projectNames}
+        renderInput={(params) => (
+          <TextField {...params} label="Project Name" fullWidth variant="outlined" color="secondary" />
+        )}
+      />
+    </Grid>
+  </Box>
+</Grid>
+
+
+<Grid item xs={12} md={4}>
           <Card>
-            <CardHeader>
-              <h2>Percentage Distribution</h2>
-            </CardHeader>
-            <CardContent>
-              {pieChartData.labels.length > 0 && (
-                <Pie
-                  data={pieChartData}
-                  options={{
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      legend: {
-                        display: true,
-                        position: 'top',
-                      },
-                    },
+            <CardActionArea>
+              <CardActions sx={{ position: 'relative' }}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    transform: 'translate(35%, -40%)',
                   }}
-                />
-              )}
-            </CardContent>
+                >
+                  {/* Material-UI icon for Idle - Non Billable */}
+                  <IconButton>
+                    <AccessTimeIcon fontSize="large" style={{ color: '#FF6384' }} />
+                  </IconButton>
+                </Box>
+              </CardActions>
+              <CardContent>
+                <h3>Idle - Non Billable Count</h3>
+                <p>{idleNonBillableCount}</p>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
+        {/* ... (rest of your code) */}
+        <Grid item xs={12} md={4}>
           <Card>
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={4}>
-                  <h3>Idle - Non Billable Count</h3>
-                  <p>{idleNonBillableCount}</p>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <h3>Idle - Billable Count</h3>
-                  <p>{idleBillableCount}</p>
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <h3>Production Count</h3>
-                  <p>{productionCount}</p>
-                </Grid>
-              </Grid>
-            </CardContent>
+            <CardActionArea>
+              <CardActions sx={{ position: 'relative' }}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    transform: 'translate(35%, -40%)',
+                  }}
+                >
+                  {/* Material-UI icon for Idle - Billable */}
+                  <IconButton>
+                    <AssessmentIcon fontSize="large" style={{ color: '#36A2EB' }} />
+                  </IconButton>
+                </Box>
+              </CardActions>
+              <CardContent>
+                <h3>Idle - Billable Count</h3>
+                <p>{idleBillableCount}</p>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
-        <Grid item xs={12}>
+        {/* ... (rest of your code) */}
+        <Grid item xs={12} md={4}>
           <Card>
-            <CardHeader>
-              <h2>Task-wise User Count</h2>
-            </CardHeader>
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    label="Start Date"
-                    type="date"
-                    value={startDate.toISOString().split('T')[0]}
-                    onChange={(event) => setStartDate(new Date(event.target.value))}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    label="End Date"
-                    type="date"
-                    value={endDate.toISOString().split('T')[0]}
-                    onChange={(event) => setEndDate(new Date(event.target.value))}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <FormControl fullWidth>
-                    <InputLabel>Project Name</InputLabel>
-                    <Select value={selectedProject} onChange={handleProjectChange}>
-                      {projectNames.map((project) => (
-                        <MenuItem key={project} value={project}>
-                          {project}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-              </Grid>
-              <Grid
+            <CardActionArea>
+              <CardActions sx={{ position: 'relative' }}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    transform: 'translate(35%, -40%)',
+                  }}
+                >
+                  {/* Material-UI icon for Production */}
+                  <IconButton>
+                    <WorkIcon fontSize="large" style={{ color: '#FFCE56' }} />
+                  </IconButton>
+                </Box>
+              </CardActions>
+              <CardContent>
+                <h3>Production Count</h3>
+                <p>{productionCount}</p>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
+
+
+
+
+<Grid container spacing={2} m={3}>
+  <Grid item xs={12} md={4}>
+    <Card>
+      <CardHeader>
+        <h3>Percentage Distribution</h3>
+      </CardHeader>
+      <CardContent>
+        <Doughnut
+          data={pieChartData}
+          options={{
+            plugins: {
+              tooltip: {
+                enabled: true,
+                callbacks: {
+                  label: (context) => {
+                    const label = context.label || '';
+                    const value = context.formattedValue || '';
+                    return `${label}: ${value}%`;
+                  },
+                },
+              },
+            },
+          }}
+        />
+      </CardContent>
+    </Card>
+  </Grid>
+
+  <Grid item xs={12} md={8}>
+    <Card>
+    <Grid
                 style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -324,7 +459,9 @@ const TaskWiseBarChart = () => {
                   textAlign: 'center',
                   minHeight: '10px',
                   minWidth: '120px',
-                  marginTop: '20px',
+                  marginLeft:"20px",
+                  marginRight:"20px",
+                  marginTop: '30px',
                 }}
               >
                 <MDButton variant="contained" color="primary" onClick={handleViewTable}>
@@ -334,45 +471,52 @@ const TaskWiseBarChart = () => {
                   Export
                 </MDButton>
               </Grid>
-              {chartData.labels.length > 0 && (
-                <div style={{ height: '400px', overflowY: 'auto', marginTop: '20px' }}>
-                  <Bar
-                    data={chartData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      scales: {
-                        x: { stacked: true },
-                        y: { stacked: true },
-                      },
-                      plugins: {
-                        legend: {
-                          display: true,
-                          position: 'top',
-                        },
-                      },
-                    }}
-                  />
-                </div>
-              )}
-              {showTable && (
-                <div style={{ height: 400, width: '100%', marginTop: '20px' }}>
-                  <DataGrid
-                    rows={tableData}
-                    columns={[
-                      { field: 'id', headerName: 'ID', width: 30 },
-                      { field: 'task', headerName: 'Task', width: 200, flex: 1 },
-                      { field: 'count', headerName: 'Members Count', width: 150, flex: 1 },
-                    ]}
-                    pageSize={5}
-                    rowsPerPageOptions={[5, 10, 20]}
-                    pagination
-                  />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
+      <CardHeader>
+        <h3>Task-wise User Count</h3>
+      </CardHeader>
+      <CardContent>
+      {chartData.labels.length > 0 && (
+  <div style={{ height: '250px', overflowY: 'auto' }}>
+    <Bar
+      data={chartData}
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true },
+          y: { stacked: true },
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+          },
+        },
+        barThickness: 30, // Adjust the value to your desired thickness
+      }}
+    />
+  </div>
+)}
+        {showTable && (
+          <div style={{ height: 400, width: '100%', marginTop: '20px' }}>
+            <DataGrid
+              rows={tableData}
+              columns={[
+                { field: 'id', headerName: 'ID', width: 30 },
+                { field: 'task', headerName: 'Task', width: 200, flex: 1 },
+                { field: 'count', headerName: 'Members Count', width: 150, flex: 1 },
+              ]}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 20]}
+              pagination
+            />
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  </Grid>
+</Grid>
+
       </Grid>
     </DashboardLayout>
   );

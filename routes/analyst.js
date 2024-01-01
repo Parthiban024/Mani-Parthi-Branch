@@ -68,21 +68,28 @@ router.route('/projectNames').get((req, res) => {
     .catch((err) => res.status(400).json('Error:' + err));
 });
 
-// Fetch task-wise data for a specific project within a date range
 router.route('/fetch/taskwise').get(async (req, res) => {
   try {
     const { sDate, eDate, projectName } = req.query;
 
+    let matchCondition = {
+      dateTask: { $gte: new Date(sDate), $lte: new Date(eDate) },
+    };
+
+    if (projectName) {
+      matchCondition.projectName = projectName;
+    }
+
     const result = await Analyst.aggregate([
       {
-        $match: {
-          dateTask: { $gte: new Date(sDate), $lte: new Date(eDate) },
-          projectName: projectName,
-        },
+        $match: matchCondition,
       },
       {
         $group: {
-          _id: { date: { $dateToString: { format: '%Y-%m-%d', date: '$dateTask' } }, task: '$task' },
+          _id: {
+            date: { $dateToString: { format: '%Y-%m-%d', date: '$dateTask' } },
+            task: '$task',
+          },
           count: { $sum: 1 },
         },
       },
@@ -94,7 +101,6 @@ router.route('/fetch/taskwise').get(async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 
   
