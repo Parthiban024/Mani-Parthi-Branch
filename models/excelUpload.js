@@ -3,13 +3,14 @@ import mongoose from 'mongoose';
 const employeeSchema = new mongoose.Schema({
   emp_id: String,
   emp_name: String,
+
   // department: String,
   email_id: String,
-  manager_name: String,
   designation: String,
-  doj: String, // Assuming DOJ is a date field
-  gender: String,
-  dob: String, // Assuming DOB is a date field
+  report_to: String,
+  // doj: String, // Assuming DOJ is a date field
+  // gender: String,
+  // dob: String, // Assuming DOB is a date field
   // status: String,
   // confirmation_date: String, // Assuming Confirmation Date is a date field
   // age_range: String,

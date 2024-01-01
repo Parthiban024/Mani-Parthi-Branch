@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, Grid, TextField, Button } from '@mui/mat
 import { DataGrid } from '@mui/x-data-grid';
 import DashboardLayout from 'examples/LayoutContainers/DashboardLayout';
 import DashboardNavbar from 'examples/Navbars/DashboardNavbar';
+import MDButton from "components/MDButton";
 import * as XLSX from 'xlsx';
 
 const TaskWiseBarChart = () => {
@@ -131,12 +132,23 @@ const TaskWiseBarChart = () => {
                   />
                 </Grid>
               </Grid>
-              <Button variant="contained" color="primary" onClick={exportChartDataToExcel}>
-                Export Data to Excel
-              </Button>
-              <Button variant="contained" color="primary" onClick={handleViewTable}>
-                {showTable ? 'Hide Table' : 'View in Table'}
-              </Button>
+              <Grid style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                borderRadius: "10px",
+                textAlign: "center",
+                minHeight: "10px",
+                minWidth: "120px",
+                marginTop: "20px"
+              }}>
+                <MDButton variant="contained" color="primary" onClick={handleViewTable}>
+                  {showTable ? 'Hide Table' : 'View in Table'}
+                </MDButton>
+                <MDButton variant="gradient" color="success" onClick={exportChartDataToExcel}>
+                  Export
+                </MDButton>
+              </Grid>
               {chartData.labels.length > 0 && (
                 <div style={{ height: '400px', overflowY: 'auto', marginTop: '20px' }}>
                   <Bar
@@ -163,10 +175,10 @@ const TaskWiseBarChart = () => {
                   <DataGrid
                     rows={tableData}
                     columns={[
-                      { field: 'id', headerName: 'ID', width: 70 },
-                      { field: 'projectName', headerName: 'Project Name', width: 200 },
-                      { field: 'task', headerName: 'Task', width: 200 },
-                      { field: 'count', headerName: 'Count', width: 150 },
+                      { field: 'id', headerName: 'ID', width: 30 },
+                      { field: 'projectName', headerName: 'Project Name', width: 150,flex: 1 },
+                      { field: 'task', headerName: 'Task', width: 200,flex: 1 },
+                      { field: 'count', headerName: 'Members Count', width: 150,flex: 1 },
                     ]}
                     pageSize={5}
                     rowsPerPageOptions={[5, 10, 20]}
