@@ -72,7 +72,7 @@ import axios from 'axios';
  
  
 export const registerUser = (userData) => dispatch =>{
-    axios.post('/api/user/register',userData)
+    axios.post('user/register',userData)
     .then(res=> window.location = '/authentication/sign-in')
     .catch(err=>dispatch(
         {
