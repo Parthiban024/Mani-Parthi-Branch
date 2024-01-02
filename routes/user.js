@@ -52,7 +52,7 @@ router.post("/register", async (req, res) => {
     if (existingUser) {
       return res
         .status(400)
-        .json({ emailAlready: "Email not found in employee database" });
+        .json({ emailAlready: "Email already registered" });
     }
 
     // Check if the email exists in the employee database

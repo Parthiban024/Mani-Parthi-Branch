@@ -8,17 +8,12 @@ import * as React from "react";
 import { DataGrid, GridToolbar, GridPagination } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import { useState, useMemo, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-// import Footer from "examples/Footer";
 import { useSelector } from "react-redux";
-import InputAdornment from '@mui/material/InputAdornment';
 import axios from "axios";
-import MenuItem from "@mui/material/MenuItem";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import moment from "moment";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -27,20 +22,10 @@ import Drawer from "@mui/material/Drawer";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import { useSelect } from "@mui/base";
 import { ToastContainer, toast } from "react-toastify";
 import InputLabel from "@mui/material/InputLabel";
-import Pagination from "@mui/material/Pagination";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import dayjs, { Dayjs } from "dayjs";
-import Stack from "@mui/material/Stack";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
@@ -48,9 +33,6 @@ function Report() {
   // task page code start
   const [data, setData] = useState([]);
   const [disable, setDisable] = useState(true);
-  // const [seconds, setSeconds] = useState({ TotalTime: "", ActiveTime: "", EntityTime: "" });
-  // const [timeData, setTimeData] = useState({ TotalTime: "", ActiveTime: "", EntityTime: "" });
-  // const [count, setCount] = useState({ aTotal: "" });
   const [teamlist, setTeamlist] = useState([]);
   const [taskList, setTaskList] = useState([]);
   const [projectNames, setProjectNames] = useState([]);
@@ -64,10 +46,6 @@ function Report() {
     managerTask: "",
     dateTask: "",
     sessionOne: "",
-    // sessionMinute: ""
-    // sessionTwo: 0,
-    // others: 0,
-    // comments: "",
   };
   const [value, setValue] = useState(initialvalues);
   const handleTeamchange = (event, value) => setTeamlist(value);
@@ -81,15 +59,7 @@ function Report() {
     }));
   };
 
-  // const handleInputchange = (e) => {
-  //   if (e.target) {
-  //     const { name, value: inputValue } = e.target;
-  //     setValue((prevValue) => ({
-  //       ...prevValue,
-  //       [name]: inputValue,
-  //     }));
-  //   }
-  // };
+
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Function to handle opening the drawer
@@ -185,54 +155,6 @@ function Report() {
     });
   }, [value.projectName]);
 
-  // file handling         29/11/2023
-  // const handlingFileUpload = (e) => {
-  //   const { files } = e.target;
-  //   setData([]);
-  // console.log(files);
-  // console.log(files[0]);
-  //   papa.parse(files[0], {
-  //     header: true,
-  //     column: true,
-  //     complete(results) {
-  //       setData((existing) => [...existing, ...results.data]);
-  //       return results.data;
-  //     },
-  //   });
-  //   disable?setDisable(!disable):null
-  // };
-
-  // file handling
-  // const handlingFileUpload = (e) => {
-  //   const { files } = e.target;
-  //   setData([]);
-  //   papa.parse(files[0], {
-  //     header: true,
-  //     column: true,
-  //     complete(results) {
-  //       setData((existing) => [...existing, ...results.data]);
-  //       return results.data;
-  //     },
-  //   });
-  //   setDisable(!disable); // Updated this line
-  // };
-
-  // useEffect(() => {
-  //   var assTotal =
-  //   values.sessionOne + values.sessionTwo + values.others;
-  //   setCount({
-  //     ...count,
-  //     aTotal: assTotal,
-  //   });
-  // }, [values]);
-  // const calculateTotal = (value) => {
-  //   const sessionOne = parseInt(value.sessionOne, 10) || 0;
-  //   const sessionTwo = parseInt(value.sessionTwo, 10) || 0;
-  //   const others = parseInt(value.others, 10) || 0;
-
-  //   const total = sessionOne + sessionTwo + others;
-  //   return isNaN(total) ? '' : total;
-  // };
 
   // Upload Data
   const submit = (e) => {
@@ -248,15 +170,6 @@ function Report() {
       dateTask: value.dateTask,
       // dailyLog: values.dailyLog,
       sessionOne: value.sessionOne,
-      // sessionMinute: value.sessionMinute,
-      // sessionTwo: value.sessionTwo,
-      // others: value.others,
-      // comments: value.comments,
-      // total: calculateTotal(value),
-
-      // TotalTime: timeData.TotalTime,
-      // ActiveTime: timeData.ActiveTime,
-      // EntityTime: timeData.EntityTime,
     };
 
     axios
@@ -325,14 +238,14 @@ function Report() {
       setInitialData(response.data);
     });
   }, [empId]);
-  
+
 
   // Fetch data when a new task is submitted
   const fetchData = () => {
     console.log("Start Date:", values.startDate);
     console.log("End Date:", values.endDate);
     console.log("Team List:", teamList);
-  
+
     axios
       .get(
         `analyst/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
@@ -342,7 +255,7 @@ function Report() {
       })
       .catch((err) => console.log(`Error:${err}`));
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
@@ -421,13 +334,6 @@ function Report() {
       width: 110,
       editable: false,
     },
-    // {
-    //   field: "sessionMinute",
-    //   headerName: "Minutes",
-    //   width: 110,
-    //   editable: false,
-
-    // },
   ];
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -438,20 +344,20 @@ function Report() {
     const reversedRowsData =
       report.length === 0
         ? initialData
-            .slice()
-            .reverse()
-            .map((item, index) => ({
-              ...item,
-              id: index + 1,
-              name: item.name,
-              team: item.team,
-              date: moment(item.createdAt).format("DD-MM-YYYY"),
-              projectName: item.projectName,
-              task: item.task,
-              managerTask: item.managerTask,
-              sessionOne: item.sessionOne,
-              // sessionMinute: item.sessionMinute,
-            }))
+          .slice()
+          .reverse()
+          .map((item, index) => ({
+            ...item,
+            id: index + 1,
+            name: item.name,
+            team: item.team,
+            date: moment(item.createdAt).format("DD-MM-YYYY"),
+            projectName: item.projectName,
+            task: item.task,
+            managerTask: item.managerTask,
+            sessionOne: item.sessionOne,
+            // sessionMinute: item.sessionMinute,
+          }))
         : report.slice().reverse() || [];
 
     setReversedRows(reversedRowsData);
@@ -570,8 +476,8 @@ function Report() {
                 value.projectName === "Not assigned-CV"
                   ? "CV"
                   : value.projectName === "Not assigned-NLP"
-                  ? "NLP"
-                  : value.team
+                    ? "NLP"
+                    : value.team
               }
               onChange={(event, newValue) => {
                 setValue({
@@ -582,8 +488,27 @@ function Report() {
               renderInput={(params) => <TextField {...params} />}
             />
           </MDBox>
-          <MDBox sx={{ width: 250, p: 2 }}>
-            <InputLabel htmlFor="task">Task</InputLabel>
+          <MDBox
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              mt: 1,
+            }}
+          >
+            <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="task">
+              Task
+            </InputLabel>
+            <InputLabel sx={{ mt: 1, ml: 21.5 }} htmlFor="hour">
+              Hour
+            </InputLabel>
+            <InputLabel sx={{ mt: 1, mr: 14.4 }} htmlFor="minute">
+              Minute
+            </InputLabel>
+          </MDBox>
+          <MDBox
+            sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
+          >
             <Autocomplete
               disablePortal
               id="task"
@@ -592,10 +517,72 @@ function Report() {
                 (task) => task.createTask
               )}
               onChange={handleTaskChange}
-              sx={{ width: 626, mt: 1 }}
+              sx={{ width: "46%", mt: 1 }}
               renderInput={(params) => <TextField {...params} />}
             />
+            <FormControl sx={{ minWidth: 120, width: "24%", ml: 1 }}>
+              <TextField
+                id="sessionOneHours"
+                name="sessionOneHours"
+                value={value.sessionOne.split(":")[0]}
+                sx={{ width: "100%", p: 1.5 }}
+                onChange={(e) =>
+                  handleInputchange({
+                    target: {
+                      name: "sessionOne",
+                      value: `${e.target.value}:${value.sessionOne.split(":")[1] || "00"}`,
+                    },
+                  })
+                }
+                variant="outlined"
+                select
+                SelectProps={{
+                  native: true,
+                  IconComponent: () => <></>,
+                }}
+              >
+                <option value="" disabled>
+                  Hours
+                </option>
+                {[...Array(13).keys()].slice(1).map((hour) => (
+                  <option key={hour} value={hour}>
+                    {hour}
+                  </option>
+                ))}
+              </TextField>
+            </FormControl>
+            <FormControl sx={{ minWidth: 120, width: "24%" }}>
+              <TextField
+                id="sessionOneMinutes"
+                name="sessionOneMinutes"
+                value={value.sessionOne.split(":")[1] || ""}
+                sx={{ width: "100%", p: 1.5 }}
+                onChange={(e) =>
+                  handleInputchange({
+                    target: {
+                      name: "sessionOne",
+                      value: `${value.sessionOne.split(":")[0]}:${e.target.value}`,
+                    },
+                  })
+                }
+                variant="outlined"
+                select
+                SelectProps={{
+                  native: true,
+                  IconComponent: () => <></>,
+                }}
+              >
+                <option value="" disabled>
+                  Minutes
+                </option>
+                <option value="00">00</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+              </TextField>
+            </FormControl>
           </MDBox>
+
           <MDBox
             sx={{
               display: "flex",
@@ -646,84 +633,6 @@ function Report() {
               onChange={handleInputchange}
             />
           </MDBox>
-          <MDBox
-  sx={{
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    mt: 1,
-  }}
->
-  <InputLabel sx={{ mt: 1, ml: 2 }} htmlFor="hour">
-    Daily Log
-  </InputLabel>
-</MDBox>
-<MDBox sx={{ display: "flex", ml: 0.5 }}>
-  <FormControl sx={{ minWidth: 120 }}>
-    <TextField
-      id="sessionOneHours"
-      name="sessionOneHours"
-      value={value.sessionOne.split(":")[0]}
-      sx={{ width: 330, p: 1.5 }}
-      onChange={(e) =>
-        handleInputchange({
-          target: {
-            name: "sessionOne",
-            value: `${e.target.value}:${value.sessionOne.split(":")[1] || "00"}`,
-          },
-        })
-      }
-      variant="outlined"
-      select
-      SelectProps={{
-        native: true,
-        IconComponent: () => <></>,
-      }}
-    >
-      <option value="" disabled>
-        Hours
-      </option>
-      {[...Array(13).keys()].slice(1).map((hour) => (
-        <option key={hour} value={hour}>
-          {hour}
-        </option>
-      ))}
-    </TextField>
-  </FormControl>
-  <FormControl sx={{ minWidth: 120, mr:2.5 }}>
-    <TextField
-      id="sessionOneMinutes"
-      name="sessionOneMinutes"
-      value={value.sessionOne.split(":")[1] || ""}
-      sx={{ width: 330, p: 1.5 }}
-      onChange={(e) =>
-        handleInputchange({
-          target: {
-            name: "sessionOne",
-            value: `${value.sessionOne.split(":")[0]}:${e.target.value}`,
-          },
-        })
-      }
-      variant="outlined"
-      select
-      SelectProps={{
-        native: true,
-        IconComponent: () => <></>,
-      }}
-      // InputProps={{
-      //   startAdornment: <InputAdornment position="start">Minutes</InputAdornment>,
-      // }}
-    >
-      <option value="" disabled>
-        Minutes
-      </option>
-      <option value="00">00</option>
-      <option value="15">15</option>
-      <option value="30">30</option>
-      <option value="45">45</option>
-    </TextField>
-  </FormControl>
-</MDBox>
 
           <MDBox
             pt={3}
