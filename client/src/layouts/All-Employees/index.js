@@ -56,6 +56,7 @@ const excelRowSchema = {
 };
 
 function Employees() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -63,7 +64,6 @@ function Employees() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([]);
-
   const [newEmployeeData, setNewEmployeeData] = useState({
     emp_id: '',
     emp_name: '',
@@ -129,7 +129,7 @@ useEffect(() => {
   // Fetch initial data from MongoDB
   const fetchDataFromMongoDB = async () => {
     try {
-      const response = await fetch('/allemp/fetchData');
+      const response = await fetch(`${apiUrl}/fetchData`);
       const fetchData = await response.json();
   
       // Filter out "__v" field from columns
@@ -211,7 +211,7 @@ useEffect(() => {
           setData(formattedData);
 
           // Save the data to MongoDB
-          const response = await fetch('/allemp/uploadData', {
+          const response = await fetch(`${apiUrl}/uploadData`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ useEffect(() => {
             setSnackbarMessage('Data saved to MongoDB');
 
             // Fetch the data from MongoDB
-            const fetchDataResponse = await fetch('http://localhost:5000/api/fetchData');
+            const fetchDataResponse = await fetch(`${apiUrl}/fetchData`);
             const fetchData = await fetchDataResponse.json();
 
             setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
@@ -311,7 +311,7 @@ useEffect(() => {
       }
   
       // Fetch the updated data from MongoDB
-      const fetchDataResponse = await fetch('/allemp/fetchData');
+      const fetchDataResponse = await fetch(`${apiUrl}/fetchData`);
       const fetchData = await fetchDataResponse.json();
   
       setColumns(fetchData.columns.map((col) => ({ field: col, headerName: col, width: 150 })));
@@ -334,15 +334,15 @@ useEffect(() => {
   // ...
   
   const handleAddEmployee = async () => {
-    await handleApiRequest('/allemp/addEmployee', 'POST', newEmployeeData);
+    await handleApiRequest(`${apiUrl}/addEmployee`, 'POST', newEmployeeData);
   };
   
   const handleDeleteEmployee = async (id) => {
-    await handleApiRequest(`/allemp/deleteEmployee/${id}`, 'DELETE');
+    await handleApiRequest(`${apiUrl}/deleteEmployee/${id}`, 'DELETE');
   };
   
   const handleUpdateEmployee = async () => {
-    await handleApiRequest(`/allemp/updateEmployee/${selectedEmployeeId}`, 'PUT', newEmployeeData);
+    await handleApiRequest(`${apiUrl}/updateEmployee/${selectedEmployeeId}`, 'PUT', newEmployeeData);
   };
   
 

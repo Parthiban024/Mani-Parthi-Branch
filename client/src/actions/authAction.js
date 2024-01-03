@@ -70,9 +70,9 @@ import jwt_decode from 'jwt-decode';
 import {GET_ERRORS,SET_CURRENT_USER,USER_LOADING} from  './types';
 import axios from 'axios';
  
- 
+const apiUrl = process.env.REACT_APP_API_URL;
 export const registerUser = (userData) => dispatch =>{
-    axios.post('user/register',userData)
+    axios.post(`${apiUrl}/register`,userData)
     .then(res=> window.location = '/authentication/sign-in')
     .catch(err=>dispatch(
         {
@@ -84,7 +84,7 @@ export const registerUser = (userData) => dispatch =>{
  
 export const loginUser = userData => dispatch => {
     axios
-    .post('user/login', userData)
+    .post(`${apiUrl}/login`, userData)
     .then(res=>{
          // Save to localStorage
  

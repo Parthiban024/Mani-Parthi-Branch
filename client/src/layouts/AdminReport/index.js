@@ -32,6 +32,8 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Paper from "@mui/material/Paper";
 
 function AdminReport() {
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   const initialValues = {
     startDate: "",
     endDate: "",
@@ -56,7 +58,7 @@ function AdminReport() {
 
   const allReport = (e) => {
     axios
-      .get("analyst/")
+      .get(`${apiUrl}/analyst`)
       .then((res) => {
         setReport(res.data);
       })
@@ -115,7 +117,7 @@ function AdminReport() {
     // console.log(name !== "");
     if (name == null && team == null) {
       axios
-        .get("analyst/fetch/report/date/?sDate=" + sDate + "&eDate=" + eDate)
+        .get(`${apiUrl}/fetch/report/date/?sDate=` + sDate + "&eDate=" + eDate)
         .then((res) => {
           setReport(res.data);
         })
@@ -123,7 +125,7 @@ function AdminReport() {
     } else if (name === null) {
       axios
         .get(
-          `analyst/fetch/report/team/?sDate=${sDate}&eDate=${eDate}&team=${team}`
+          `${apiUrl}/fetch/report/team/?sDate=${sDate}&eDate=${eDate}&team=${team}`
         )
         .then((res) => {
           // console.log(res.data);
@@ -133,7 +135,7 @@ function AdminReport() {
     } else if (team === null) {
       axios
         .get(
-          `analyst/fetch/report/user/?sDate=${sDate}&eDate=${eDate}&name=${name}`
+          `${apiUrl}/fetch/report/user/?sDate=${sDate}&eDate=${eDate}&name=${name}`
         )
         .then((res) => {
           // console.log(res.data);
@@ -143,7 +145,7 @@ function AdminReport() {
     } else {
       axios
         .get(
-          `analyst/fetch/report/?sDate=${sDate}&eDate=${eDate}&name=${name}&team=${team}`
+          `${apiUrl}/fetch/report/?sDate=${sDate}&eDate=${eDate}&name=${name}&team=${team}`
         )
         .then((res) => {
           // console.log(res.data);
@@ -163,7 +165,7 @@ function AdminReport() {
   }, []);
 
   const userName = () => {
-    axios.get("authentication/user/users").then((res) => {
+    axios.get(`${apiUrl}/users`).then((res) => {
       setName(res.data);
     });
     // console.log(name);

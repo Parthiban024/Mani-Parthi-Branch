@@ -13,6 +13,8 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 
 const TaskCreation = () => {
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [task, setTask] = useState({
     createTask: "",
   });
@@ -30,15 +32,15 @@ const TaskCreation = () => {
   const [managerData, setManagerData] = useState([]);
 
   const fetchData = () => {
-    axios.get("/create/fetch/task-data").then((response) => {
+    axios.get(`${apiUrl}/fetch/task-data`).then((response) => {
       setTaskData(response.data);
     });
 
-    axios.get("/create/fetch/addteam-data").then((response) => {
+    axios.get(`${apiUrl}/fetch/addteam-data`).then((response) => {
       setTeamData(response.data);
     });
 
-    axios.get("/create/fetch/manager-data").then((response) => {
+    axios.get(`${apiUrl}/fetch/manager-data`).then((response) => {
       setManagerData(response.data);
     });
   };
@@ -87,7 +89,7 @@ const TaskCreation = () => {
     };
 
     axios
-      .post("/create/new", taskData)
+      .post(`${apiUrl}/task/new`, taskData)
       .then((res) => {
         toast.success(res.data);
         updateData();
@@ -110,10 +112,10 @@ const TaskCreation = () => {
     };
 
     axios
-      .post("/create/add-manager/new", managerData)
+      .post(`${apiUrl}/add-manager/new`, managerData)
       .then((res) => {
         toast.success(res.data);
-        axios.get("/create/fetch/addteam-data").then((response) => {
+        axios.get(`${apiUrl}/fetch/addteam-data`).then((response) => {
           setTeamData(response.data);
         });
         updateData();
@@ -136,10 +138,10 @@ const TaskCreation = () => {
     };
 
     axios
-      .post("/create/add-team/new", teamData)
+      .post(`${apiUrl}/add-team/new`, teamData)
       .then((res) => {
         toast.success(res.data);
-        axios.get("/create/fetch/manager-data").then((response) => {
+        axios.get(`${apiUrl}/fetch/manager-data`).then((response) => {
           setManagerData(response.data);
         });
         updateData();
@@ -152,7 +154,7 @@ const TaskCreation = () => {
 
   const handleDeleteTask = (id) => {
     axios
-      .delete("/create/delete/task/" + id)
+      .delete(`${apiUrl}/delete/task/` + id)
       .then((res) => {
         toast.warn(res.data);
         updateData();
@@ -162,7 +164,7 @@ const TaskCreation = () => {
 
   const handleDeleteManager = (id) => {
     axios
-      .delete("/create/delete/manager/" + id)
+      .delete(`${apiUrl}/delete/manager/` + id)
       .then((res) => {
         toast.warn(res.data);
         updateData();
@@ -172,7 +174,7 @@ const TaskCreation = () => {
 
   const handleDeleteTeam = (id) => {
     axios
-      .delete("/create/delete/team/" + id)
+      .delete(`${apiUrl}/delete/team/` + id)
       .then((res) => {
         toast.warn(res.data);
         updateData();

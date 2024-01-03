@@ -132,7 +132,7 @@ function createData(
 const rowData = [];
 
 axios
-  .get("/billing/")
+  .get("http://localhost:5000/billing/")
   .then((res) => rowData[res.data])
   .catch((err) => console.log(err));
 console.log(rowData);

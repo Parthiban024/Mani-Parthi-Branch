@@ -18,6 +18,7 @@ import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
 
 function Attendance() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const name = useSelector((state) => state.auth.user.name);
   const empId = useSelector((state) => state.auth.user.empId);
 
@@ -26,7 +27,7 @@ function Attendance() {
   const [endDate, setEndDate] = useState(null);
 
   useEffect(() => {
-    fetch(`/emp-attendance`)
+    fetch(`${apiUrl}/emp-attendance`)
       .then((response) => response.json())
       .then((data) => {
         const mappedData = data.map((item, index) => ({ ...item, id: index + 1 }));

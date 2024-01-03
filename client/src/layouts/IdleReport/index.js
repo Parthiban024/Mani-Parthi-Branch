@@ -24,6 +24,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import * as XLSX from 'xlsx';
 
 const TaskWiseBarChart = () => {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const getCurrentMonthStartDate = () => {
     const currentDate = new Date();
     return new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -66,7 +67,7 @@ const TaskWiseBarChart = () => {
   useEffect(() => {
     const fetchProjectNames = async () => {
       try {
-        const response = await axios.get('/analyst/projectNames');
+        const response = await axios.get(`${apiUrl}/projectNames`);
         const projectNames = response.data;
         setProjectNames(projectNames);
       } catch (error) {
@@ -124,7 +125,7 @@ const TaskWiseBarChart = () => {
 
         let response;
         if (selectedProject) {
-          response = await axios.get('/analyst/fetch/taskwise', {
+          response = await axios.get(`${apiUrl}/fetch/taskwise`, {
             params: {
               sDate: startDate.toISOString().split('T')[0],
               eDate: endDate.toISOString().split('T')[0],
@@ -133,7 +134,7 @@ const TaskWiseBarChart = () => {
           });
         } else {
           // Fetch data for all projects
-          response = await axios.get('/analyst/fetch/taskwise', {
+          response = await axios.get(`${apiUrl}/fetch/taskwise`, {
             params: {
               sDate: startDate.toISOString().split('T')[0],
               eDate: endDate.toISOString().split('T')[0],
@@ -226,7 +227,7 @@ const TaskWiseBarChart = () => {
         return;
       }
 
-      const response = await axios.get('/analyst/fetch/taskwise', {
+      const response = await axios.get(`${apiUrl}/fetch/taskwise`, {
         params: {
           sDate: startDate.toISOString().split('T')[0],
           eDate: endDate.toISOString().split('T')[0],

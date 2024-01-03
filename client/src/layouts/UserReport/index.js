@@ -30,6 +30,8 @@ import Paper from "@mui/material/Paper";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 function Report() {
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   // task page code start
   const [data, setData] = useState([]);
   const [disable, setDisable] = useState(true);
@@ -115,12 +117,12 @@ function Report() {
   };
 
   useEffect(() => {
-    axios.get("/billing/admin").then((response) => {
+    axios.get(`${apiUrl}/admin`).then((response) => {
       const projects = response.data.map((item) => item.projectname);
       const managers = response.data
         .map((item) => item.jobs?.managerTeam)
         .filter(Boolean);
-      axios.get("/create/fetch/task-data").then((response) => {
+      axios.get(`${apiUrl}/fetch/task-data`).then((response) => {
         setTaskList(response.data);
       });
       setProjectNames(projects);
@@ -173,14 +175,14 @@ function Report() {
     };
 
     axios
-      .post("/analyst/add", userData)
+      .post(`${apiUrl}/add`, userData)
       .then(() => {
         toast.success("Successfully Data Submitted 👌");
         closeDrawer();
         // Fetch data again after submitting a new task
         fetchData();
         axios
-          .get(`/analyst/fetch/userdata/?empId=${empId}`)
+          .get(`${apiUrl}/fetch/userdata/?empId=${empId}`)
           .then((response) => {
             setInitialData(response.data);
           });
@@ -234,7 +236,7 @@ function Report() {
   // Fetch initial data without filter
   // Fetch initial data
   useEffect(() => {
-    axios.get(`/analyst/fetch/userdata/?empId=${empId}`).then((response) => {
+    axios.get(`${apiUrl}/fetch/userdata/?empId=${empId}`).then((response) => {
       setInitialData(response.data);
     });
   }, [empId]);
@@ -248,7 +250,7 @@ function Report() {
 
     axios
       .get(
-        `analyst/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
+        `${apiUrl}/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
       )
       .then((res) => {
         setReport(res.data);
@@ -267,7 +269,7 @@ function Report() {
     fetchData();
     axios
       .get(
-        `analyst/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
+        `${apiUrl}/fetch/user-data/?sDate=${values.startDate}&eDate=${values.endDate}&empId=${empId}&team=${teamList}`
       )
       .then((res) => {
         setReport(res.data);
