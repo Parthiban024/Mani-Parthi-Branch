@@ -7,6 +7,8 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import Dialog from "@mui/material/Dialog";
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import MDInput from "components/MDInput";
 import IconButton from "@mui/material/IconButton";
@@ -19,6 +21,7 @@ import Box from "@mui/material/Box";
 // import FormControl from "@mui/material/FormControl";
 // import Select from "@mui/material/Select";
 import { useState, useEffect, useMemo } from "react";
+import Button from '@material-ui/core/Button';
 import "react-datepicker/dist/react-datepicker.css";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -252,7 +255,7 @@ function AdminReport() {
       filterable: false,
       width: 100,
       renderCell: (params) => (
-        <IconButton onClick={() => openDialog(params.row)}>
+        <IconButton style={{ color: '#2196f3' }} onClick={() => openDialog(params.row)}>
           <VisibilityIcon />
         </IconButton>
       ),
@@ -494,54 +497,107 @@ function AdminReport() {
           </Box>
         </Card>
       </Grid>
-      <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="md">
+      <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="lg">
+  <DialogTitle
+    style={{
+      background: "#2196f3",
+      color: "white",
+      fontSize: "1.2rem",
+      padding: "20px",
+    }}
+  >
+    {"Task List"}
+  </DialogTitle>
   <DialogContent>
-    <IconButton
-      edge="end"
-      color="inherit"
-      onClick={closeDialog}
-      aria-label="close"
-      sx={{ position: "absolute", right: 8, top: 8 }}
-    >
-      <CloseIcon />
-    </IconButton>
     {selectedUserData && (
-      <div style={{ padding: '16px' }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '16px', color: '#fff', backgroundColor: '#3a87ea', padding: '8px' }}>
-          Employee Details
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          style={{ fontSize: "1rem", marginTop: "10px", padding: "10px" }}
+        >
+          <strong style={{ fontSize: "18px" }}>
+            Project Name:
+          </strong>{" "}
+          {selectedUserData.projectName}
         </Typography>
-        <Typography>
-          <strong style={{ display: 'inline-block', width: '150px' }}>Emp ID:</strong> {selectedUserData.empId}
-        </Typography>
-        <Typography>
-          <strong style={{ display: 'inline-block', width: '150px' }}>Team:</strong> {selectedUserData.team}
-        </Typography>
-        <Typography>
-          <strong style={{ display: 'inline-block', width: '150px' }}>Project Name:</strong> {selectedUserData.projectName}
-        </Typography>
-        <Typography>
-          <strong style={{ display: 'inline-block', width: '150px' }}>Manager Task:</strong> {selectedUserData.managerTask}
-        </Typography>
-        <Typography>
-          <strong style={{ display: 'inline-block', width: '150px' }}>Date Task:</strong> {new Date(selectedUserData.dateTask).toLocaleDateString()}
-        </Typography>
-
-        <Typography variant="h5" sx={{ fontWeight: 'bold', marginTop: '16px', marginBottom: '8px', textAlign: 'center', color: '#fff', backgroundColor: '#3a87ea', padding: '8px' }}>
-        Task List
-        </Typography>
-        {selectedUserData.sessionOne.map((session, index) => (
-          <div key={index} style={{ marginLeft: '20px', marginBottom: '10px' }}>
-            <Typography>
-              <strong style={{ display: 'inline-block', width: '150px' }}>Task:</strong> {session.task}
-            </Typography>
-            <Typography>
-              <strong style={{ display: 'inline-block', width: '150px' }}>Hours:</strong> {session.sessionOne}
-            </Typography>
-          </div>
-        ))}
+        <div
+          style={{
+            maxHeight: "300px", // Set a fixed height for the scrollable area
+            overflow: "auto",  // Enable scrolling
+            marginTop: "10px",
+          }}
+        >
+          <table
+            style={{
+              width: "600px",
+              borderCollapse: "collapse",
+              fontSize: "1rem",
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  style={{
+                    padding: "8px",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    minWidth: "150px",
+                  }}
+                >
+                  Task Name
+                </th>
+                <th
+                  style={{
+                    padding: "8px",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    minWidth: "150px",
+                  }}
+                >
+                  Total Hours
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedUserData.sessionOne.map((session, index) => (
+                <tr key={index}>
+                  <td
+                    style={{
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    {session.task}
+                  </td>
+                  <td
+                    style={{
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {session.sessionOne}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     )}
   </DialogContent>
+  <DialogActions>
+    <Button onClick={closeDialog} color="primary">
+      Cancel
+    </Button>
+  </DialogActions>
 </Dialog>
 
       <Grid item xs={12} mb={10}>
@@ -633,6 +689,7 @@ function AdminReport() {
                               display: "flex",
                               marginLeft: "auto",
                               alignItems: "center",
+                              padding: "10px"
                             }}
                           >
                             <MDButton
@@ -640,7 +697,7 @@ function AdminReport() {
                               variant="outlined"
                               color="error"
                               size="small"
-                              style={{ marginRight: "13px", marginTop: "15px" }}
+                              style={{ marginRight: "13px" }}
                               onClick={allReport}
                             >
                               &nbsp;All Report

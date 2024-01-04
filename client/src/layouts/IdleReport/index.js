@@ -111,7 +111,7 @@ const TaskWiseBarChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (!startDate || !endDate)  {
+        if (!startDate || !endDate) {
           setChartData({
             labels: [],
             datasets: [],
@@ -195,7 +195,8 @@ const TaskWiseBarChart = () => {
         const tableData = uniqueTasks.map((task, index) => ({
           id: index + 1,
           task: task,
-          ...datasets[index],
+          count: datasets[index].data.reduce((sum, value) => sum + value, 0),
+          // Include count property in the tableData
         }));
 
         setTableData(tableData);
@@ -290,57 +291,96 @@ const TaskWiseBarChart = () => {
     <DashboardLayout>
       <DashboardNavbar />
       <Grid container spacing={2}>
-      <Grid item xs={12} md={12}>
-  {/* Filters Container */}
-  <Box
-    display="flex"
-    justifyContent="space-between"
-    alignItems="center"
-    mt={2}
-    mb={2}
-    p={2}
-  >
-    {/* Start Date Filter */}
-    <Grid item xs={12} md={4} >
-      <TextField
-        label="Start Date"
-        sx={{ backgroundColor: '#fff', borderRadius: '8px',}}
-        type="date"
-        value={startDate.toISOString().split('T')[0]}
-        onChange={(event) => setStartDate(new Date(event.target.value))}
-        fullWidth
-        variant="outlined"
-        color="secondary"
-      />
-    </Grid>
-    <Grid item xs={12} md={4} >
-      <TextField
-        label="End Date"
-        type="date"
-        sx={{ backgroundColor: '#fff', borderRadius: '8px', marginLeft: '5px'}}
-        value={endDate.toISOString().split('T')[0]}
-        onChange={(event) => setEndDate(new Date(event.target.value))}
-        fullWidth
-        variant="outlined"
-        color="secondary"
-      />
-    </Grid>
-    <Grid item xs={12} md={4} sx={{  padding: '8px'  }}>
-      <Autocomplete
-        value={selectedProject}
-        sx={{ backgroundColor: '#fff', borderRadius: '8px', marginLeft: '3px'}}
-        onChange={(event, newValue) => setSelectedProject(newValue)}
-        options={projectNames}
-        renderInput={(params) => (
-          <TextField {...params} label="Project Name" fullWidth variant="outlined" color="secondary" />
-        )}
-      />
-    </Grid>
-  </Box>
-</Grid>
 
+        <Grid item xs={12} md={12}>
+        <MDButton
+                  variant="outlined"
+                  color="success"
+                  sx={{
+                    width: "fit-content",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "7px 7px", // Adjust top and bottom padding
+                    marginLeft: "auto",
+                    minHeight: "0px", // Adjust the height as needed
 
-<Grid item xs={12} md={4}>
+                  }} onClick={exportChartDataToExcel}>
+                  Export Analytics
+                </MDButton>
+          {/* Filters Container */}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mt={1}
+            mb={2}
+            p={0}
+          >
+            {/* Start Date Filter */}
+            <Grid item xs={12} md={4} >
+              <TextField
+                label="Start Date"
+                sx={{ backgroundColor: '#fff', borderRadius: '8px', }}
+                type="date"
+                value={startDate.toISOString().split('T')[0]}
+                onChange={(event) => setStartDate(new Date(event.target.value))}
+                fullWidth
+                variant="outlined"
+                color="secondary"
+              />
+            </Grid>
+            <Grid item xs={12} md={4} >
+              <TextField
+                label="End Date"
+                type="date"
+                sx={{ backgroundColor: '#fff', borderRadius: '8px', marginLeft: '5px' }}
+                value={endDate.toISOString().split('T')[0]}
+                onChange={(event) => setEndDate(new Date(event.target.value))}
+                fullWidth
+                variant="outlined"
+                color="secondary"
+              />
+            </Grid>
+            <Grid item xs={12} md={4} sx={{ padding: '8px' }}>
+              <Autocomplete
+                value={selectedProject}
+                sx={{ backgroundColor: '#fff', borderRadius: '8px', marginLeft: '3px' }}
+                onChange={(event, newValue) => setSelectedProject(newValue)}
+                options={projectNames}
+                renderInput={(params) => (
+                  <TextField {...params} label="Project Name" fullWidth variant="outlined" color="secondary" />
+                )}
+              />
+            </Grid>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Card>
+            <CardActionArea>
+              <CardActions sx={{ position: 'relative' }}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    transform: 'translate(35%, -40%)',
+                  }}
+                >
+                  {/* Material-UI icon for Idle - Non Billable */}
+                  <IconButton>
+                    <AccessTimeIcon fontSize="large" style={{ color: '#FF6384' }} />
+                  </IconButton>
+                </Box>
+              </CardActions>
+              <CardContent>
+                <h3>Empoyees</h3>
+                <p>1837</p>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} md={3}>
           <Card>
             <CardActionArea>
               <CardActions sx={{ position: 'relative' }}>
@@ -366,7 +406,7 @@ const TaskWiseBarChart = () => {
           </Card>
         </Grid>
         {/* ... (rest of your code) */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           <Card>
             <CardActionArea>
               <CardActions sx={{ position: 'relative' }}>
@@ -392,7 +432,7 @@ const TaskWiseBarChart = () => {
           </Card>
         </Grid>
         {/* ... (rest of your code) */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3}>
           <Card>
             <CardActionArea>
               <CardActions sx={{ position: 'relative' }}>
@@ -421,102 +461,99 @@ const TaskWiseBarChart = () => {
 
 
 
-<Grid container spacing={2} m={3}>
-  <Grid item xs={12} md={4}>
-    <Card>
-      <CardHeader>
-        <h3>Percentage Distribution</h3>
-      </CardHeader>
-      <CardContent>
-        <Doughnut
-          data={pieChartData}
-          options={{
-            plugins: {
-              tooltip: {
-                enabled: true,
-                callbacks: {
-                  label: (context) => {
-                    const label = context.label || '';
-                    const value = context.formattedValue || '';
-                    return `${label}: ${value}%`;
-                  },
-                },
-              },
-            },
-          }}
-        />
-      </CardContent>
-    </Card>
-  </Grid>
-
-  <Grid item xs={12} md={8}>
-    <Card>
-    <Grid
+        <Grid container spacing={2} m={3}>
+          <Grid item xs={12} md={8}>
+            <Card>
+              <Grid
                 style={{
                   display: 'flex',
-                  justifyContent: 'space-between',
+                  justifyContent: 'start',
                   fontSize: '0.7rem',
                   borderRadius: '10px',
                   textAlign: 'center',
-                  minHeight: '10px',
                   minWidth: '120px',
-                  marginLeft:"20px",
-                  marginRight:"20px",
-                  marginTop: '30px',
+                  marginLeft: '10px',
+                  marginRight: '20px',
+                  marginTop: '15px',
                 }}
               >
-                <MDButton variant="contained" color="primary" onClick={handleViewTable}>
-                  {showTable ? 'Hide Table' : 'View in Table'}
-                </MDButton>
-                <MDButton variant="gradient" color="success" onClick={exportChartDataToExcel}>
-                  Export
-                </MDButton>
+                {/* <MDButton variant="contained" color="primary" onClick={handleViewTable}>
+                {showTable ? 'Hide Table' : 'View in Table'}
+              </MDButton> */}
+           <CardHeader title="Task-wise Bar Chart" />
+        
               </Grid>
-      <CardHeader>
-        <h3>Task-wise User Count</h3>
-      </CardHeader>
-      <CardContent>
-      {chartData.labels.length > 0 && (
-  <div style={{ height: '250px', overflowY: 'auto' }}>
-    <Bar
-      data={chartData}
-      options={{
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { stacked: true },
-          y: { stacked: true },
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top',
+            
+              <CardContent>
+                {chartData.labels.length > 0 && (
+                  <div style={{ height: '250px', overflowY: 'auto' }}>
+                    <Bar
+                      data={chartData}
+                      options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                          x: { stacked: true },
+                          y: { stacked: true },
+                        },
+                        plugins: {
+                          legend: {
+                            display: true,
+                            position: 'top',
+                          },
+                        },
+                        barThickness: 30, // Adjust the value to your desired thickness
+                      }}
+                    />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={4}>
+  <Card>
+  <CardHeader title="Percentage Distribution" />
+    <CardContent>
+      <Doughnut
+        data={pieChartData}
+        options={{
+          plugins: {
+            tooltip: {
+              enabled: true,
+              callbacks: {
+                label: (context) => {
+                  const label = context.label || '';
+                  const value = context.formattedValue || '';
+                  return `${label}: ${value}%`;
+                },
+              },
+            },
           },
-        },
-        barThickness: 30, // Adjust the value to your desired thickness
-      }}
-    />
-  </div>
-)}
-        {showTable && (
-          <div style={{ height: 400, width: '100%', marginTop: '20px' }}>
-            <DataGrid
-              rows={tableData}
-              columns={[
-                { field: 'id', headerName: 'ID', width: 30 },
-                { field: 'task', headerName: 'Task', width: 200, flex: 1 },
-                { field: 'count', headerName: 'Members Count', width: 150, flex: 1 },
-              ]}
-              pageSize={5}
-              rowsPerPageOptions={[5, 10, 20]}
-              pagination
-            />
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  </Grid>
+        }}
+      />
+    </CardContent>
+  </Card>
 </Grid>
+
+
+          {/* DataGrid table */}
+          <Grid item xs={12} md={12} >
+            <div style={{ height: 400, width: '100%', marginTop: '20px', backgroundColor: "#fff" }} >
+              <DataGrid
+                rows={tableData}
+                columns={[
+                  { field: 'id', headerName: 'ID', width: 30 },
+                  { field: 'task', headerName: 'Task', width: 200, flex: 1 },
+                  { field: 'count', headerName: 'Employee Count', width: 150, flex: 1 },
+                  // Include a new column for the count
+                ]}
+                pageSize={5}
+                rowsPerPageOptions={[5, 10, 20]}
+                pagination
+              />
+            </div>
+          </Grid>
+        </Grid>
 
       </Grid>
     </DashboardLayout>
