@@ -6,9 +6,14 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
+import Dialog from "@mui/material/Dialog";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import MDInput from "components/MDInput";
+import IconButton from "@mui/material/IconButton";
 import * as React from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 // import IconButton from "@material-ui/core/IconButton";
 // import FormControl from "@mui/material/FormControl";
@@ -44,6 +49,8 @@ function AdminReport() {
   const [empName, setEmpName] = useState(null);
   const [teamList, setTeamList] = useState(null);
   const [report, setReport] = useState([]);
+  const [selectedUserData, setSelectedUserData] = useState(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -170,7 +177,16 @@ function AdminReport() {
     });
     // console.log(name);
   };
+  const openDialog = (userData) => {
+    setSelectedUserData(userData);
+    setDialogOpen(true);
+  };
 
+  // Function to handle closing the dialog
+  const closeDialog = () => {
+    setSelectedUserData(null);
+    setDialogOpen(false);
+  };
   // tabel report
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -205,14 +221,14 @@ function AdminReport() {
       editable: false,
       flex: 1,
     },
-    {
-      field: "task",
-      headerName: "Task",
-      // type: 'number',
-      width: 200,
-      editable: false,
-      flex: 1.5,
-    },
+    // {
+    //   field: "task",
+    //   headerName: "Task",
+    //   // type: 'number',
+    //   width: 200,
+    //   editable: false,
+    //   flex: 1.5,
+    // },
     {
       field: "managerTask",
       headerName: "Project Manager",
@@ -221,13 +237,25 @@ function AdminReport() {
       editable: false,
       flex: 1,
     },
+    // {
+    //   field: "sessionOne",
+    //   headerName: "Hours",
+    //   // type: 'number',
+    //   width: 150,
+    //   editable: false,
+    //   flex: 1,
+    // },
     {
-      field: "sessionOne",
-      headerName: "Hours",
-      // type: 'number',
-      width: 150,
-      editable: false,
-      flex: 1,
+      field: "view",
+      headerName: "View",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      renderCell: (params) => (
+        <IconButton onClick={() => openDialog(params.row)}>
+          <VisibilityIcon />
+        </IconButton>
+      ),
     },
     // {
     //   field: "sessionTwo",
@@ -466,6 +494,56 @@ function AdminReport() {
           </Box>
         </Card>
       </Grid>
+      <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="md">
+  <DialogContent>
+    <IconButton
+      edge="end"
+      color="inherit"
+      onClick={closeDialog}
+      aria-label="close"
+      sx={{ position: "absolute", right: 8, top: 8 }}
+    >
+      <CloseIcon />
+    </IconButton>
+    {selectedUserData && (
+      <div style={{ padding: '16px' }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '16px', color: '#fff', backgroundColor: '#3a87ea', padding: '8px' }}>
+          Employee Details
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Emp ID:</strong> {selectedUserData.empId}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Team:</strong> {selectedUserData.team}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Project Name:</strong> {selectedUserData.projectName}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Manager Task:</strong> {selectedUserData.managerTask}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Date Task:</strong> {new Date(selectedUserData.dateTask).toLocaleDateString()}
+        </Typography>
+
+        <Typography variant="h5" sx={{ fontWeight: 'bold', marginTop: '16px', marginBottom: '8px', textAlign: 'center', color: '#fff', backgroundColor: '#3a87ea', padding: '8px' }}>
+        Task List
+        </Typography>
+        {selectedUserData.sessionOne.map((session, index) => (
+          <div key={index} style={{ marginLeft: '20px', marginBottom: '10px' }}>
+            <Typography>
+              <strong style={{ display: 'inline-block', width: '150px' }}>Task:</strong> {session.task}
+            </Typography>
+            <Typography>
+              <strong style={{ display: 'inline-block', width: '150px' }}>Hours:</strong> {session.sessionOne}
+            </Typography>
+          </div>
+        ))}
+      </div>
+    )}
+  </DialogContent>
+</Dialog>
+
       <Grid item xs={12} mb={10}>
         {/* <IconButton  onClick={openDrawer} color="primary" aria-label="Filter">
       <FilterListIcon />

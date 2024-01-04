@@ -4,6 +4,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
 import MDInput from "components/MDInput";
+import CardContent from "@mui/material/CardContent";
 import * as React from "react";
 import { DataGrid, GridToolbar, GridPagination } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
@@ -14,6 +15,7 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import Dialog from "@mui/material/Dialog";
 import moment from "moment";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -27,6 +29,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import DialogContent from "@mui/material/DialogContent";
 import Paper from "@mui/material/Paper";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import Popper from "@mui/material/Popper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 function Report() {
@@ -37,6 +40,8 @@ function Report() {
   const [disable, setDisable] = useState(true);
   const [teamlist, setTeamlist] = useState([]);
   const [taskList, setTaskList] = useState([]);
+  const [selectedUserData, setSelectedUserData] = useState(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
   const [projectNames, setProjectNames] = useState([]);
   const [managers, setManagers] = useState([]);
   const name = useSelector((state) => state.auth.user.name);
@@ -51,7 +56,14 @@ function Report() {
   };
   const [value, setValue] = useState(initialvalues);
   const handleTeamchange = (event, value) => setTeamlist(value);
-  const handleTaskChange = (event, value) => setTaskList(value);
+  const handleTaskChange = (index, event, value) => {
+    const newTasks = [...tasks];
+    newTasks[index].task = value; // Assuming you want to update the 'task' property here
+  
+    // Update the state with the new tasks
+    setTasks(newTasks);
+  };
+  
   const handleInputchange = (e) => {
     const { name, value: inputValue } = e.target;
 
@@ -61,6 +73,29 @@ function Report() {
     }));
   };
 
+  const [tasks, setTasks] = useState([
+    {
+      task: "",
+      sessionOneHours: "",
+      sessionOneMinutes: "",
+    },
+  ]);
+
+  const handleTaskInputChange = (index, event) => {
+    const newTasks = [...tasks];
+    newTasks[index][event.target.name] = event.target.value;
+    setTasks(newTasks);
+  };
+
+  const handleAddTaskField = () => {
+    setTasks([...tasks, { task: "", sessionOneHours: "", sessionOneMinutes: "" }]);
+  };
+
+  const handleRemoveTaskField = (index) => {
+    const newTasks = [...tasks];
+    newTasks.splice(index, 1);
+    setTasks(newTasks);
+  };
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -161,38 +196,42 @@ function Report() {
   // Upload Data
   const submit = (e) => {
     e.preventDefault();
+  
+    // const tasksData = tasks.map((task) => ({
+    //   task: task.task,
+    //   sessionOne: `${task.sessionOneHours}:${task.sessionOneMinutes || "00"}`,
+    // }));
+  
     const userData = {
       name,
       empId,
-      team: value.team, // Use value.team instead of teamlist
-      task: taskList,
+      team: value.team,
       projectName: value.projectName,
-      // task: values.task,
       managerTask: value.managerTask,
       dateTask: value.dateTask,
-      // dailyLog: values.dailyLog,
-      sessionOne: value.sessionOne,
+      sessionOne: tasks.map((task) => ({
+        task: task.task,
+        sessionOne: `${task.sessionOneHours}:${task.sessionOneMinutes || "00"}`,
+      })),
     };
-
+  
     axios
       .post(`${apiUrl}/add`, userData)
       .then(() => {
         toast.success("Successfully Data Submitted 👌");
         closeDrawer();
-        // Fetch data again after submitting a new task
         fetchData();
         axios
           .get(`${apiUrl}/fetch/userdata/?empId=${empId}`)
           .then((response) => {
             setInitialData(response.data);
           });
-        // setReport((prevReport) => [userData, ...prevReport]);
       })
       .catch((err) =>
         toast.error(`Try Again Followed Error Acquired: ${err}☹️`)
       );
   };
-
+  
   const listtask = ["CV", "NLP", "CM"];
 
   const tasklist = [
@@ -241,7 +280,16 @@ function Report() {
     });
   }, [empId]);
 
+  const openDialog = (userData) => {
+    setSelectedUserData(userData);
+    setDialogOpen(true);
+  };
 
+  // Function to handle closing the dialog
+  const closeDialog = () => {
+    setSelectedUserData(null);
+    setDialogOpen(false);
+  };
   // Fetch data when a new task is submitted
   const fetchData = () => {
     console.log("Start Date:", values.startDate);
@@ -316,13 +364,13 @@ function Report() {
       editable: false,
       flex: 1,
     },
-    {
-      field: "task",
-      headerName: "Task",
-      width: 150,
-      editable: false,
-      flex: 1,
-    },
+    // {
+    //   field: "task",
+    //   headerName: "Task",
+    //   width: 150,
+    //   editable: false,
+    //   flex: 1,
+    // },
     {
       field: "managerTask",
       headerName: "Project Manager",
@@ -330,11 +378,23 @@ function Report() {
       editable: false,
       flex: 1,
     },
+    // {
+    //   field: "sessionOne",
+    //   headerName: "Hours",
+    //   width: 110,
+    //   editable: false,
+    // },
     {
-      field: "sessionOne",
-      headerName: "Hours",
-      width: 110,
-      editable: false,
+      field: "view",
+      headerName: "View",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      renderCell: (params) => (
+        <IconButton onClick={() => openDialog(params.row)}>
+          <VisibilityIcon />
+        </IconButton>
+      ),
     },
   ];
   const columns = [
@@ -405,6 +465,57 @@ function Report() {
           Create Task
         </MDButton>
       </div>
+
+      <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="md">
+  <DialogContent>
+    <IconButton
+      edge="end"
+      color="inherit"
+      onClick={closeDialog}
+      aria-label="close"
+      sx={{ position: "absolute", right: 8, top: 8 }}
+    >
+      <CloseIcon />
+    </IconButton>
+    {selectedUserData && (
+      <div style={{ padding: '16px' }}>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', textAlign: 'center', marginBottom: '16px', color: '#fff', backgroundColor: '#3a87ea', padding: '8px' }}>
+          Employee Details
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Emp ID:</strong> {selectedUserData.empId}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Team:</strong> {selectedUserData.team}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Project Name:</strong> {selectedUserData.projectName}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Manager Task:</strong> {selectedUserData.managerTask}
+        </Typography>
+        <Typography>
+          <strong style={{ display: 'inline-block', width: '150px' }}>Date Task:</strong> {new Date(selectedUserData.dateTask).toLocaleDateString()}
+        </Typography>
+
+        <Typography variant="h5" sx={{ fontWeight: 'bold', marginTop: '16px', marginBottom: '8px', textAlign: 'center', color: '#fff', backgroundColor: '#3a87ea', padding: '8px' }}>
+        Task List
+        </Typography>
+        {selectedUserData.sessionOne.map((session, index) => (
+          <div key={index} style={{ marginLeft: '20px', marginBottom: '10px' }}>
+            <Typography>
+              <strong style={{ display: 'inline-block', width: '150px' }}>Task:</strong> {session.task}
+            </Typography>
+            <Typography>
+              <strong style={{ display: 'inline-block', width: '150px' }}>Hours:</strong> {session.sessionOne}
+            </Typography>
+          </div>
+        ))}
+      </div>
+    )}
+  </DialogContent>
+</Dialog>
+
       <Drawer
         anchor="right"
         PaperProps={{
@@ -507,35 +618,33 @@ function Report() {
             <InputLabel sx={{ mt: 1, mr: 14.4 }} htmlFor="minute">
               Minute
             </InputLabel>
+            <IconButton onClick={handleAddTaskField}>
+          <AddCircleOutlineIcon />
+        </IconButton>
           </MDBox>
+          {tasks.map((task, index) => (
           <MDBox
             sx={{ display: "flex", flexDirection: "row", justifyContent: "center" }}
           >
-            <Autocomplete
-              disablePortal
-              id="task"
-              name="createTask"
-              options={(Array.isArray(taskList) ? taskList : []).map(
-                (task) => task.createTask
-              )}
-              onChange={handleTaskChange}
-              sx={{ width: "46%", mt: 1 }}
-              renderInput={(params) => <TextField {...params} />}
-            />
+   <Autocomplete
+      disablePortal
+      id={`task_${index}`} // Unique ID for each Autocomplete
+      name={`createTask_${index}`} // Unique name for each Autocomplete
+      options={(Array.isArray(taskList) ? taskList : []).map(
+        (task) => task.createTask
+      )}
+      onChange={(event, value) => handleTaskChange(index, event, value)}
+      sx={{ width: "46%", mt: 1 }}
+      renderInput={(params) => <TextField {...params} />}
+    />
             <FormControl sx={{ minWidth: 120, width: "24%", ml: 1 }}>
               <TextField
                 id="sessionOneHours"
                 name="sessionOneHours"
-                value={value.sessionOne.split(":")[0]}
+                // value={value.sessionOne.split(":")[0]}
                 sx={{ width: "100%", p: 1.5 }}
-                onChange={(e) =>
-                  handleInputchange({
-                    target: {
-                      name: "sessionOne",
-                      value: `${e.target.value}:${value.sessionOne.split(":")[1] || "00"}`,
-                    },
-                  })
-                }
+                value={task.sessionOneHours}
+                onChange={(e) => handleTaskInputChange(index, e)}
                 variant="outlined"
                 select
                 SelectProps={{
@@ -557,16 +666,10 @@ function Report() {
               <TextField
                 id="sessionOneMinutes"
                 name="sessionOneMinutes"
-                value={value.sessionOne.split(":")[1] || ""}
+                // value={value.sessionOne.split(":")[1] || ""}
                 sx={{ width: "100%", p: 1.5 }}
-                onChange={(e) =>
-                  handleInputchange({
-                    target: {
-                      name: "sessionOne",
-                      value: `${value.sessionOne.split(":")[0]}:${e.target.value}`,
-                    },
-                  })
-                }
+                value={task.sessionOneMinutes}
+                onChange={(e) => handleTaskInputChange(index, e)}
                 variant="outlined"
                 select
                 SelectProps={{
@@ -583,8 +686,11 @@ function Report() {
                 <option value="45">45</option>
               </TextField>
             </FormControl>
+            <IconButton onClick={() => handleRemoveTaskField(index)}>
+            <CloseIcon />
+          </IconButton>
           </MDBox>
-
+       ))}
           <MDBox
             sx={{
               display: "flex",

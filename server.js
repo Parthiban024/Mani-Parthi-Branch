@@ -909,7 +909,6 @@ app.get('/projectNames', async (req, res) => {
 });
 
 app.get('/fetch/taskwise', async (req, res) => {
-
   try {
     const { sDate, eDate, projectName } = req.query;
 
@@ -926,10 +925,13 @@ app.get('/fetch/taskwise', async (req, res) => {
         $match: matchCondition,
       },
       {
+        $unwind: '$sessionOne', // Unwind the sessionOne array
+      },
+      {
         $group: {
           _id: {
             date: { $dateToString: { format: '%Y-%m-%d', date: '$dateTask' } },
-            task: '$task',
+            task: '$sessionOne.task', // Access the task field within sessionOne
           },
           count: { $sum: 1 },
         },
@@ -944,18 +946,22 @@ app.get('/fetch/taskwise', async (req, res) => {
 });
 
 
-  
-  
 
 
 app.post('/add', (req,res)=>{
-    const name = req.body
-    const newData = new Analyst(name)
-    console.log(name)
-    newData.save()
-    .then(()=>res.json('Data Saved!!!'))
-    .catch(err=>res.status(400).json('Error:'+err))
-})
+  const userData = req.body;
+  const newData = new Analyst(userData);
+console.log(userData)
+  newData.save()
+    .then(() => {
+      console.log('Data Saved!!!');
+      res.json('Data Saved!!!');
+    })
+    .catch((err) => {
+      console.error('Error saving data:', err);
+      res.status(400).json('Error:' + err);
+    });
+});
 
 app.get('/fetch/src/:min/:max', (req,res)=>{
     const min = req.params.min
@@ -1342,16 +1348,16 @@ try {
 }
 });
 
-// app.use(express.static(path.join(__dirname, 'client/build')))
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
-// });
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+app.use(express.static(path.join(__dirname, 'client/build')))
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
 });
+
+// app.use(express.static(path.join(__dirname, 'public')));
+
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// });
 
 app.listen(port, () => {
   console.log(`Server Running On Port : ${port}`);
