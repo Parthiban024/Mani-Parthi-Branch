@@ -17,6 +17,8 @@ import Box from "@mui/material/Box";
 import './calendar.css'
 
 function Attendance() {
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   const dispatch = useDispatch();
   const [checkinTime, setCheckinTime] = useState(sessionStorage.getItem("checkinTime") || "");
   const [checkoutTime, setCheckoutTime] = useState(sessionStorage.getItem("checkoutTime") || "");
@@ -76,7 +78,7 @@ function Attendance() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/emp-attendance/fetch/att-data?empId=${empId}`);
+      const response = await fetch(`${apiUrl}/fetch/att-data?empId=${empId}`);
 
       if (!response.ok) {
         throw new Error(`Error fetching data: ${response.statusText}`);
@@ -182,7 +184,7 @@ function Attendance() {
       sessionStorage.setItem("total", `${overAll.hours()}hrs : ${overAll.minutes()}mins`);
 
       // Send check-out time to the server
-      const response = await fetch("/emp-attendance/att", {
+      const response = await fetch(`${apiUrl}/att`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

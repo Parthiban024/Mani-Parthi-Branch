@@ -7,7 +7,6 @@ import Key from "../config/key.js";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-
 import loginValidate from "../validation/login.js";
 import registerValidate from "../validation/register.js";
 import LastLogin from "../models/LastLogin.js";

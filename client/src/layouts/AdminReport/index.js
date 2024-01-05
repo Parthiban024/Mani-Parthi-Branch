@@ -6,14 +6,22 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import MDInput from "components/MDInput";
+import IconButton from "@mui/material/IconButton";
 import * as React from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 // import IconButton from "@material-ui/core/IconButton";
 // import FormControl from "@mui/material/FormControl";
 // import Select from "@mui/material/Select";
 import { useState, useEffect, useMemo } from "react";
+import Button from '@material-ui/core/Button';
 import "react-datepicker/dist/react-datepicker.css";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -32,6 +40,8 @@ import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Paper from "@mui/material/Paper";
 
 function AdminReport() {
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   const initialValues = {
     startDate: "",
     endDate: "",
@@ -42,6 +52,8 @@ function AdminReport() {
   const [empName, setEmpName] = useState(null);
   const [teamList, setTeamList] = useState(null);
   const [report, setReport] = useState([]);
+  const [selectedUserData, setSelectedUserData] = useState(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +68,7 @@ function AdminReport() {
 
   const allReport = (e) => {
     axios
-      .get("analyst/")
+      .get(`${apiUrl}/analyst`)
       .then((res) => {
         setReport(res.data);
       })
@@ -115,7 +127,7 @@ function AdminReport() {
     // console.log(name !== "");
     if (name == null && team == null) {
       axios
-        .get("analyst/fetch/report/date/?sDate=" + sDate + "&eDate=" + eDate)
+        .get(`${apiUrl}/fetch/report/date/?sDate=` + sDate + "&eDate=" + eDate)
         .then((res) => {
           setReport(res.data);
         })
@@ -123,7 +135,7 @@ function AdminReport() {
     } else if (name === null) {
       axios
         .get(
-          `analyst/fetch/report/team/?sDate=${sDate}&eDate=${eDate}&team=${team}`
+          `${apiUrl}/fetch/report/team/?sDate=${sDate}&eDate=${eDate}&team=${team}`
         )
         .then((res) => {
           // console.log(res.data);
@@ -133,7 +145,7 @@ function AdminReport() {
     } else if (team === null) {
       axios
         .get(
-          `analyst/fetch/report/user/?sDate=${sDate}&eDate=${eDate}&name=${name}`
+          `${apiUrl}/fetch/report/user/?sDate=${sDate}&eDate=${eDate}&name=${name}`
         )
         .then((res) => {
           // console.log(res.data);
@@ -143,7 +155,7 @@ function AdminReport() {
     } else {
       axios
         .get(
-          `analyst/fetch/report/?sDate=${sDate}&eDate=${eDate}&name=${name}&team=${team}`
+          `${apiUrl}/fetch/report/?sDate=${sDate}&eDate=${eDate}&name=${name}&team=${team}`
         )
         .then((res) => {
           // console.log(res.data);
@@ -163,12 +175,21 @@ function AdminReport() {
   }, []);
 
   const userName = () => {
-    axios.get("authentication/user/users").then((res) => {
+    axios.get(`${apiUrl}/users`).then((res) => {
       setName(res.data);
     });
     // console.log(name);
   };
+  const openDialog = (userData) => {
+    setSelectedUserData(userData);
+    setDialogOpen(true);
+  };
 
+  // Function to handle closing the dialog
+  const closeDialog = () => {
+    setSelectedUserData(null);
+    setDialogOpen(false);
+  };
   // tabel report
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
@@ -203,14 +224,14 @@ function AdminReport() {
       editable: false,
       flex: 1,
     },
-    {
-      field: "task",
-      headerName: "Task",
-      // type: 'number',
-      width: 200,
-      editable: false,
-      flex: 1.5,
-    },
+    // {
+    //   field: "task",
+    //   headerName: "Task",
+    //   // type: 'number',
+    //   width: 200,
+    //   editable: false,
+    //   flex: 1.5,
+    // },
     {
       field: "managerTask",
       headerName: "Project Manager",
@@ -219,13 +240,25 @@ function AdminReport() {
       editable: false,
       flex: 1,
     },
+    // {
+    //   field: "sessionOne",
+    //   headerName: "Hours",
+    //   // type: 'number',
+    //   width: 150,
+    //   editable: false,
+    //   flex: 1,
+    // },
     {
-      field: "sessionOne",
-      headerName: "Hours",
-      // type: 'number',
-      width: 150,
-      editable: false,
-      flex: 1,
+      field: "view",
+      headerName: "View",
+      sortable: false,
+      filterable: false,
+      width: 100,
+      renderCell: (params) => (
+        <IconButton style={{ color: '#2196f3' }} onClick={() => openDialog(params.row)}>
+          <VisibilityIcon />
+        </IconButton>
+      ),
     },
     // {
     //   field: "sessionTwo",
@@ -464,6 +497,109 @@ function AdminReport() {
           </Box>
         </Card>
       </Grid>
+      <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="lg">
+  <DialogTitle
+    style={{
+      background: "#2196f3",
+      color: "white",
+      fontSize: "1.2rem",
+      padding: "20px",
+    }}
+  >
+    {"Task List"}
+  </DialogTitle>
+  <DialogContent>
+    {selectedUserData && (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography
+          style={{ fontSize: "1rem", marginTop: "10px", padding: "10px" }}
+        >
+          <strong style={{ fontSize: "18px" }}>
+            Project Name:
+          </strong>{" "}
+          {selectedUserData.projectName}
+        </Typography>
+        <div
+          style={{
+            maxHeight: "300px", // Set a fixed height for the scrollable area
+            overflow: "auto",  // Enable scrolling
+            marginTop: "10px",
+          }}
+        >
+          <table
+            style={{
+              width: "600px",
+              borderCollapse: "collapse",
+              fontSize: "1rem",
+            }}
+          >
+            <thead>
+              <tr>
+                <th
+                  style={{
+                    padding: "8px",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    minWidth: "150px",
+                  }}
+                >
+                  Task Name
+                </th>
+                <th
+                  style={{
+                    padding: "8px",
+                    border: "1px solid #ccc",
+                    borderRadius: "8px",
+                    minWidth: "150px",
+                  }}
+                >
+                  Total Hours
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedUserData.sessionOne.map((session, index) => (
+                <tr key={index}>
+                  <td
+                    style={{
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                    }}
+                  >
+                    {session.task}
+                  </td>
+                  <td
+                    style={{
+                      padding: "8px",
+                      border: "1px solid #ccc",
+                      borderRadius: "8px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {session.sessionOne}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={closeDialog} color="primary">
+      Cancel
+    </Button>
+  </DialogActions>
+</Dialog>
+
       <Grid item xs={12} mb={10}>
         {/* <IconButton  onClick={openDrawer} color="primary" aria-label="Filter">
       <FilterListIcon />
@@ -553,6 +689,7 @@ function AdminReport() {
                               display: "flex",
                               marginLeft: "auto",
                               alignItems: "center",
+                              padding: "10px"
                             }}
                           >
                             <MDButton
@@ -560,7 +697,7 @@ function AdminReport() {
                               variant="outlined"
                               color="error"
                               size="small"
-                              style={{ marginRight: "13px", marginTop: "15px" }}
+                              style={{ marginRight: "13px" }}
                               onClick={allReport}
                             >
                               &nbsp;All Report

@@ -165,7 +165,7 @@ function Report() {
         // total:count.jTotal
       }
     }
-    axios.post('/billing/new', billData)
+    axios.post('http://localhost:5000/new', billData)
       .then((res) => toast.success(res.data))
       .then(() => window.location = '/project-report')
       .catch(err => toast.error(err))

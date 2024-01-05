@@ -37,6 +37,8 @@ import SelfImprovementIcon from "@mui/icons-material/SelfImprovement";
 import DirectionsRunIcon from "@mui/icons-material/DirectionsRun";
 
 export default function ColumnGroupingTable() {
+
+  const apiUrl = process.env.REACT_APP_API_URL;
   // drawer code
   const columns = [
     { field: "projectname", headerName: "Projectname", flex: 1 },
@@ -223,17 +225,17 @@ export default function ColumnGroupingTable() {
     };
 
     axios
-      .post("/billing/new", billData)
+      .post(`${apiUrl}/new`, billData)
       .then((res) => {
         toast.success(res.data);
-        axios.get(`/billing/`).then((response) => {
+        axios.get(`${apiUrl}/billing/`).then((response) => {
           setData(response.data);
         });
-        axios.get("/create/fetch/addteam-data").then((response) => {
+        axios.get(`${apiUrl}/fetch/addteam-data`).then((response) => {
           setTeamList(response.data);
         });
 
-        axios.get("/create/fetch/manager-data").then((response) => {
+        axios.get(`${apiUrl}/fetch/manager-data`).then((response) => {
           setManagers(response.data);
         });
       })
@@ -273,7 +275,7 @@ export default function ColumnGroupingTable() {
 
   const handleDelete = (id) => {
     axios
-      .delete("/billing/" + id)
+      .delete(`${apiUrl}/billing/` + id)
       .then((res) => toast.warn(res.data))
       .catch((err) => console.log(err));
     setData(data.filter((el) => el._id !== id));
@@ -328,15 +330,15 @@ export default function ColumnGroupingTable() {
 
   
   useEffect(() => {
-    axios.get(`/billing/admin`).then((response) => {
+    axios.get(`${apiUrl}/admin`).then((response) => {
       // Update initial data
       setInitialData(response.data);
       setData(response.data);
     });
-    axios.get("/create/fetch/addteam-data").then((response) => {
+    axios.get(`${apiUrl}/fetch/addteam-data`).then((response) => {
       setTeamList(response.data);
     });
-    axios.get("/create/fetch/manager-data").then((response) => {
+    axios.get(`${apiUrl}/fetch/manager-data`).then((response) => {
       setManagers(response.data);
     });
   }, []);
@@ -349,7 +351,7 @@ export default function ColumnGroupingTable() {
 
     if (team == null) {
       axios
-        .get("billing/fetch/date/?sDate=" + sDate + "&eDate=" + eDate)
+        .get(`${apiUrl}/fetch/date/?sDate=` + sDate + "&eDate=" + eDate)
         .then((res) => {
           setData(res.data);
         })
@@ -357,7 +359,7 @@ export default function ColumnGroupingTable() {
     } else {
       axios
         .get(
-          "billing/fetch/report/?sDate=" +
+          `${apiUrl}/fetch/report/?sDate=` +
           sDate +
           "&eDate=" +
           eDate +

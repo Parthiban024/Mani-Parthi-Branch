@@ -128,11 +128,11 @@ function createData(
     jcDate,
   };
 }
-
+const apiUrl = process.env.REACT_APP_API_URL;
 const rowData = [];
 
 axios
-  .get("/billing/")
+  .get(`${apiUrl}/billing/`)
   .then((res) => rowData[res.data])
   .catch((err) => console.log(err));
 console.log(rowData);
@@ -346,7 +346,7 @@ export default function ColumnGroupingTable() {
       },
     };
     axios
-      .post("/billing/new", billData)
+      .post(`${apiUrl}/new`, billData)
       .then((res) => toast.success(res.data))
       // .then(() => (window.location = "/project-report"))
       .catch((err) => toast.error(err));
@@ -440,7 +440,7 @@ export default function ColumnGroupingTable() {
   };
   const handleDelete = (id) => {
     axios
-      .delete("/billing/" + id)
+      .delete(`${apiUrl}/billing/` + id)
       .then((res) => toast.warn(res.data))
       .catch((err) => console.log(err));
     setData(data.filter((el) => el._id !== id));
@@ -477,7 +477,7 @@ export default function ColumnGroupingTable() {
 
     if (team == null) {
       axios
-        .get("billing/fetch/date/?sDate=" + sDate + "&eDate=" + eDate)
+        .get(`${apiUrl}/fetch/date/?sDate=` + sDate + "&eDate=" + eDate)
         .then((res) => {
           setData(res.data);
         })
@@ -485,7 +485,7 @@ export default function ColumnGroupingTable() {
     } else {
       axios
         .get(
-          "billing/fetch/report/?sDate=" +
+          `${apiUrl}/fetch/report/?sDate=` +
           sDate +
           "&eDate=" +
           eDate +
@@ -501,7 +501,7 @@ export default function ColumnGroupingTable() {
   };
   const allReport = (e) => {
     axios
-      .get("/billing/")
+      .get(`${apiUrl}/billing/`)
       .then((res) => setData(res.data))
       .catch((err) => console.log(err));
   };

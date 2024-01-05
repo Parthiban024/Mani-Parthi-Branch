@@ -27,6 +27,7 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 
 function Edit() {
+  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [count, setCount] = useState({ aTotal: "" });
   const [bill, setBill] = useState({
@@ -105,7 +106,7 @@ function Edit() {
   const { id } = useParams();
   useEffect(() => {
     axios
-      .get("/billing/" + id)
+      .get(`${apiUrl}/billing/` + id)
       .then((res) => {
         setBill({
           ...bill,
@@ -143,7 +144,7 @@ function Edit() {
       },
     };
     axios
-      .post("/billing/update/" + id, billData)
+      .post(`${apiUrl}/update/` + id, billData)
       .then((res) => toast.success(res.data))
       // .then(() => (window.location = "/projects"))
       .catch((err) => toast.error(err));
